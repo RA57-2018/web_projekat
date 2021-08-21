@@ -2,16 +2,16 @@ package beans;
 
 public class UserType {
 
-	private TypeUser type;
+	private String type;
 	private double discount;
 	private int score;
 	
 	public UserType() {}
 	
-	public TypeUser getType() {
+	public String getType() {
 		return type;
 	}
-	public void setType(TypeUser type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 	public double getDiscount() {

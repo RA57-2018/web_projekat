@@ -1,5 +1,0 @@
-package beans;
-
-public enum Status {
-	PROCESSING,PREPARATION,ONHOLD,INTRANSPORT,DELIVERED,CANCELED;
-}

@@ -12,7 +12,7 @@ public class Order {
 	private Date date; // i vreme?
 	private double price;
 	private User user;
-	private Status status;
+	private String status;
 	
 	public Order() {}
 	
@@ -52,10 +52,10 @@ public class Order {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public Status getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(Status status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	

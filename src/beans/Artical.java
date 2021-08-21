@@ -4,7 +4,7 @@ public class Artical {
 
 	private String name;
 	private double price;
-	private TypeArtical typeArtical;
+	private String typeArtical;
 	private Restaurant restaurant;
 	private String quantity;
 	private String description;
@@ -24,10 +24,10 @@ public class Artical {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public TypeArtical getTypeArtical() {
+	public String getTypeArtical() {
 		return typeArtical;
 	}
-	public void setTypeArtical(TypeArtical typeArtical) {
+	public void setTypeArtical(String typeArtical) {
 		this.typeArtical = typeArtical;
 	}
 	public Restaurant getRestaurant() {

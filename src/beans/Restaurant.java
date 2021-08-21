@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Restaurant {
 
 	private String name;
-	private TypeRestaurant type;
+	private String type;
 	private ArrayList<Artical> articals;
 	private boolean status;
 	private Location location;
@@ -19,10 +19,10 @@ public class Restaurant {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public TypeRestaurant getType() {
+	public String getType() {
 		return type;
 	}
-	public void setType(TypeRestaurant type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 	public boolean isStatus() {
