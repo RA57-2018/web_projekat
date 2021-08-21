@@ -3,6 +3,9 @@ package beans;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,5 +41,30 @@ public class DAOBuyer {
 	        }
 	    }
 		return null;
+	}
+	
+	
+	public Buyer addBuyer(Buyer buyer) {
+		buyer.setPoints(0);
+		UserType type = new UserType();
+		type.setType("normal");
+		type.setDiscount(0);
+		type.setScore(0);
+		buyer.setType(type);
+		buyers.put(buyer.getUsername(),buyer);
+		try {
+			this.writeBuyers();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return buyer;
+	}
+	
+	public void writeBuyers() throws IOException{
+		Gson gson = new Gson();
+		FileWriter fw = new FileWriter("files/buyers.json");
+		gson.toJson(this.buyers, fw);
+		fw.flush();
+		fw.close();
 	}
 }

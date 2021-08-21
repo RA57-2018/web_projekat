@@ -9,7 +9,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import beans.Buyer;
 import beans.DAOBuyer;
 
 public class FoodDeliveryMain {
@@ -36,6 +38,18 @@ public class FoodDeliveryMain {
 			}
 			response.add(userN);
 			return g.toJson(response);
+		});
+		
+		
+		post("/registration", (req, res)-> {
+			
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			Buyer buyer = gsonReg.fromJson(reqBody, Buyer.class);
+			buyerDAO.addBuyer(buyer);
+			return true;
+			
 		});
 
 	}
