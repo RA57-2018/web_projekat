@@ -10,14 +10,12 @@ public abstract class User {
 	private String name;
 	private String surname;
 	private String gender;
-	private Date birthDate;
+	private String birthDate;
 	private String role;
 	private ArrayList<Order> orders;
 	private Basket basket;
 	private Restaurant restaurant;
 	private ArrayList<Order> deliveryOrders;
-	private int points;
-	private UserType type;
 	
 	public User() {}
 	
@@ -51,10 +49,10 @@ public abstract class User {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public Date getBirthDate() {
+	public String getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
 	}
 	public String getRole() {
@@ -87,18 +85,5 @@ public abstract class User {
 	public void setDeliveryOrders(ArrayList<Order> deliveryOrders) {
 		this.deliveryOrders = deliveryOrders;
 	}
-	public int getPoints() {
-		return points;
-	}
-	public void setPoints(int points) {
-		this.points = points;
-	}
-	public UserType getType() {
-		return type;
-	}
-	public void setType(UserType type) {
-		this.type = type;
-	}
-	
 	
 }

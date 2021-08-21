@@ -1,21 +1,41 @@
 package rest;
 
 import static spark.Spark.get;
+import static spark.Spark.post;
 import static spark.Spark.port;
 import static spark.Spark.staticFiles;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import com.google.gson.Gson;
+
+import beans.DAOBuyer;
 
 public class FoodDeliveryMain {
+	
+	private static Gson g = new Gson();
+	private static DAOBuyer buyerDAO = new DAOBuyer();
 
 	public static void main(String[] args) throws Exception {
 		
-port(8080);
+	port(8080);
 		
 		staticFiles.externalLocation(new File("./static").getCanonicalPath()); 
 		
-		get("/test", (req, res) -> {
-			return "Works";
+		post("/login", (req, res)-> {
+			String name  = req.queryParams("username");
+			String pass = req.queryParams("password");
+			
+			String userN = " ";
+			ArrayList<String> response = new ArrayList<String>();
+			if(buyerDAO.findBuyer(name, pass) != null) {
+					userN = name;
+					response.add(userN);
+					response.add("buyer");
+			}
+			response.add(userN);
+			return g.toJson(response);
 		});
 
 	}
