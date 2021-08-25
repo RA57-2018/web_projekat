@@ -7,7 +7,7 @@ public class Restaurant {
 	private String name;
 	private String type;
 	private ArrayList<Artical> articals;
-	private boolean status;
+	private String status;
 	private Location location;
 	private String logo;
 	
@@ -25,10 +25,10 @@ public class Restaurant {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public boolean isStatus() {
+	public String isStatus() {
 		return status;
 	}
-	public void setStatus(boolean status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	public Location getLocation() {

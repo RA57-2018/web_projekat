@@ -7,32 +7,22 @@ Vue.component("login", {
         showErrorMessage: false,
     };	    
 	},
-	methods: {
-        login(e) {
-
-            axios
-              .post('/login',{},{params:{username:this.userName,password:this.passWord}}
-              )
-	          .then(function(response){
-                  
-                if(JSON.parse(JSON.stringify(response.data))[0]===" "){
-                    alert("Pogresno korisnicko ime ili lozinka");  
-                }
-                else{
-                    localStorage.setItem('name', JSON.parse(JSON.stringify(response.data))[0]);
-                    localStorage.setItem("role", JSON.parse(JSON.stringify(response.data))[1]);
-
-                }
-              });
-               
-          },
-  
+    methods: {
+    formSubmit: function (e) {
+      e.preventDefault();
+      this.errors = null;
+        axios
+        .post('/login', {username: this.userName, password: this.passWord})
+        .then(response => (	alert("Prijava uspesna!")));
+     
     },
+
+  },
 	template: `
      <div>
          <h2>Ulogujte se!</h2>
       
-             <form @submit="login" action="#/">      
+             <form @submit="formSubmit">      
         
              <div class="container">
                 <label><b>Korisnicko ime</b></label><br />

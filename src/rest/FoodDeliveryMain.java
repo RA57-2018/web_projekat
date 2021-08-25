@@ -13,11 +13,13 @@ import com.google.gson.GsonBuilder;
 
 import beans.Buyer;
 import beans.DAOBuyer;
+import beans.DAORestaurant;
 
 public class FoodDeliveryMain {
 	
 	private static Gson g = new Gson();
 	private static DAOBuyer buyerDAO = new DAOBuyer();
+	private static DAORestaurant restaurantDAO = new DAORestaurant();
 
 	public static void main(String[] args) throws Exception {
 		
@@ -50,6 +52,10 @@ public class FoodDeliveryMain {
 			buyerDAO.addBuyer(buyer);
 			return true;
 			
+		});
+		
+		get("/", (req, res) -> {
+			return g.toJson(restaurantDAO.getRestaurants().values());
 		});
 
 	}

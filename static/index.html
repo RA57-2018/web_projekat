@@ -2,18 +2,14 @@
 <html>
 
 <head>
-	<link href="css/index.css" rel="stylesheet" />
+	<link href="/css/toast.css" rel="stylesheet" />
+    <link href="/css/index.css" rel="stylesheet" />
 	<meta charset="utf-8"/>
 </head> 
 
 <body>
 <div id="deliverFood">
-
-<h3><ul>
-  <li style="float:left"><a href="/">Pocetna</a></li>
-  <li><a href="#/registration">Registracija</a></li>
-  <li><a href="#/login">Logovanje</a></li>
-</ul></h3>
+      <header-page></header-page>
 
 	  <router-view></router-view>
 </div>
@@ -23,10 +19,12 @@
 <script src="js/axios.js"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/toast.js"></script>
-<script src="app/deliverFood.js"></script>
+<script src="componentsJS/deliverFood.js"></script>
 <script src="app/app.js"></script>
-<script src="app/Login.js"></script>
-<script src="app/Registration.js"></script>
+<script src="componentsJS/Login.js"></script>
+<script src="componentsJS/Registration.js"></script>
+<script src="componentsJS/headerPage.js"></script>
+<script src="componentsJS/homePage.js"></script>
 
 </body>
 </html>
