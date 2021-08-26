@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import beans.Buyer;
 import beans.DAOBuyer;
 import beans.DAORestaurant;
+import beans.Restaurant;
 
 public class FoodDeliveryMain {
 	
@@ -56,6 +57,17 @@ public class FoodDeliveryMain {
 		
 		get("/", (req, res) -> {
 			return g.toJson(restaurantDAO.getRestaurants().values());
+		});
+		
+		post("/add-restaurant", (req, res)-> {
+			
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().create();
+			
+			Restaurant restaurant = gsonReg.fromJson(reqBody, Restaurant.class);
+			restaurantDAO.addRestaurants(restaurant);
+			return true;
+			
 		});
 
 	}

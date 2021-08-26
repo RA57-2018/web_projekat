@@ -15,6 +15,9 @@ Vue.component("deliver-food", {
           <li>
               <a href="/#/login">Prijava</a>
           </li>
+          <li>
+              <a href="/#/add-restaurant">Dodaj restoran</a>
+          </li>
 		</ul>
 	</div>
 

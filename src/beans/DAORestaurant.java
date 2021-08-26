@@ -3,6 +3,8 @@ package beans;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
@@ -28,6 +30,27 @@ public class DAORestaurant {
 		BufferedReader br = new BufferedReader(new FileReader("files/restaurants.json"));
 		this.restaurants = gson.fromJson(br, token);
 	}
+    
+    public void writeRestaurants() throws IOException{
+		Gson gson = new Gson();
+		FileWriter fw = new FileWriter("files/restaurants.json");
+		gson.toJson(this.restaurants, fw);
+		fw.flush();
+		fw.close();
+	}
+    
+    public Restaurant addRestaurants(Restaurant restaurant) {
+		restaurant.setStatus("otvoren");
+		Location location = new Location();
+		restaurant.setLocation(location);
+		restaurants.put(restaurant.getName(),restaurant);
+		try {
+			this.writeRestaurants();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return restaurant;
+    }
 
 	public HashMap<String, Restaurant> getRestaurants() {
 		return restaurants;

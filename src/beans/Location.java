@@ -4,7 +4,10 @@ public class Location {
 
 	private double longitude;
 	private double latitude;
-	private Address address;
+	private String streetName;
+	private int number;
+	private String city;
+	private int postalCode;
 	
 	public Location() {}
 	
@@ -20,11 +23,37 @@ public class Location {
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
-	public Address getAddress() {
-		return address;
+
+	public String getStreetName() {
+		return streetName;
 	}
-	public void setAddress(Address address) {
-		this.address = address;
+
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
+	}
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public int getPostalCode() {
+		return postalCode;
+	}
+
+	public void setPostalCode(int postalCode) {
+		this.postalCode = postalCode;
 	}
 	
 }

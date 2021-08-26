@@ -2,6 +2,7 @@ const DeliverFood = { template: '<deliver-food></deliver-food>' }
 const Login = { template: '<login></login>' }
 const Registration = { template: '<registration></registration>' }
 const HomePage = { template: '<home-page></home-page>' }
+const AddRestaurant = { template: '<add-restaurant></add-restaurant>' }
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -9,7 +10,8 @@ const router = new VueRouter({
 	    { path: '/', component: DeliverFood},
 	    { path: '/login', component: Login},
 	    { path: '/registration', component: Registration},
-	    { path: '/home-page', component: HomePage}
+	    { path: '/home-page', component: HomePage},
+	    { path: '/add-restaurant', component: AddRestaurant}
 	  ]
 });
 
