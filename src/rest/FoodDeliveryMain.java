@@ -12,7 +12,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import beans.Buyer;
+import beans.DAOAdministrator;
 import beans.DAOBuyer;
+import beans.DAODeliverer;
+import beans.DAOManager;
 import beans.DAORestaurant;
 import beans.Restaurant;
 
@@ -21,6 +24,9 @@ public class FoodDeliveryMain {
 	private static Gson g = new Gson();
 	private static DAOBuyer buyerDAO = new DAOBuyer();
 	private static DAORestaurant restaurantDAO = new DAORestaurant();
+	private static DAOAdministrator administratorDAO = new DAOAdministrator();
+	private static DAOManager managerDAO = new DAOManager();
+	private static DAODeliverer delivererDAO = new DAODeliverer();
 
 	public static void main(String[] args) throws Exception {
 		
@@ -30,14 +36,28 @@ public class FoodDeliveryMain {
 		
 		post("/login", (req, res)-> {
 			String name  = req.queryParams("username");
-			String pass = req.queryParams("password");
+			String pass = req.queryParams("password");			
 			
 			String userN = " ";
 			ArrayList<String> response = new ArrayList<String>();
 			if(buyerDAO.findBuyer(name, pass) != null) {
-					userN = name;
-					response.add(userN);
-					response.add("buyer");
+			    userN = name;
+				response.add(userN);
+				response.add("buyer");
+			}
+			else if(administratorDAO.findAdministrator(name, pass) != null){
+				userN = name;
+				response.add(userN);
+				response.add("administrator");
+			}
+			else if(managerDAO.findManager(name, pass) != null){
+				userN = name;
+				response.add(userN);
+				response.add("manager");
+			}else if(delivererDAO.findDeliverer(name, pass) != null){
+				userN = name;
+				response.add(userN);
+				response.add("deliverer");
 			}
 			response.add(userN);
 			return g.toJson(response);

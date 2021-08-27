@@ -1,24 +1,42 @@
 Vue.component("deliver-food", {
 	data: function () {
 		  return {
-
+            username: "",
+	        role: "",
+	        activeUser: false,
       }  
 	},
+    methods: {
+    logout: function (event) {
+            event.preventDefault();
+            localStorage.removeItem('role');
+            localStorage.removeItem('uName');
+            router.replace({ path: `/` })
+			
+       },
+    },
 	template: ` 
 
 	<div>
-		<div>
+	
+	<div>
 	   <ul>
-          <li>
-              <a href="/#/registration">Registracija</a>
+	      <li style="float:left">
+	         <a href="/#/">Pocetna stranica</a>
+	      </li>
+	       <li v-if="activeUser!=true">
+                <a href="/#/registration">Registracija</a>
+            </li>
+            <li v-if="activeUser != true">
+                <a href="/#/login">Prijava</a>
+            </li>
+          <li v-if="activeUser == true && role =='buyer'">
+            <a href="/" @click="logout">Odjava</a>
           </li>
-          <li>
-              <a href="/#/login">Prijava</a>
-          </li>
-          <li>
-              <a href="/#/add-restaurant">Dodaj restoran</a>
-          </li>
-		</ul>
+          <li v-if="activeUser == true && role =='buyer'">
+            <a href="/#/add-restaurant">Dodaj restoran</a>
+          </li>        
+	   </ul>
 	</div>
 
 	<h1>Dostava hrane</h1>

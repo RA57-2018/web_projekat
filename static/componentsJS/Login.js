@@ -3,23 +3,41 @@ Vue.component("login", {
     data: function () {
       return {
         userName: null,
-        passWord:null,
+        passWord: null,
         showErrorMessage: false,
+        role: "",
+	    activeUser: false,
     };	    
 	},
-    methods: {
+    methods: {      
     formSubmit: function (e) {
       e.preventDefault();
       this.errors = null;
         axios
-        .post('/login', {username: this.userName, password: this.passWord})
-        .then(response => (	alert("Prijava uspesna!")));
-     
-    },
+        .post('/login',{},{params:{username:this.userName,password:this.passWord}})
+        .then(function(response){                
+                if(JSON.parse(JSON.stringify(response.data))[0]===" "){
+                    alert("Pogresno korisnicko ime ili lozinka!");                    
+                }
+                else{
+                    alert("Prijava uspesna!")
+                    localStorage.setItem('uName', JSON.parse(JSON.stringify(response.data))[0]);
+                    localStorage.setItem('role', JSON.parse(JSON.stringify(response.data))[1]);
+                    router.replace({ path: `/home-page` })
+                }
+              });       	     
+      },
 
-  },
+    },
 	template: `
      <div>
+     
+     <ul>
+        <li v-if="activeUser != true" style="float:left">
+            <a href="/#/">Pocetna stranica</a>
+        </li>
+    </ul>
+     
          <h2>Ulogujte se!</h2>
       
              <form @submit="formSubmit">      

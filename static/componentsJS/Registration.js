@@ -21,22 +21,26 @@ Vue.component("registration", {
 				alert("Neophodno je uneti sve podatke!")
 				e.preventDefault();
 			}else if(this.passwordConfirmation != this.password){
-        this.showErrorMessage = true;
+                this.showErrorMessage = true;
 				alert("Lozinke moraju biti iste!")
 				e.preventDefault();
       }else{
         axios
         .post('/registration', {name: this.name, surname: this.surname,username: this.username,
-        						password: this.password,gender : this.gender,
-        						dateBirth : this.date
-                    })
-        .then(response => (	alert("Registracija uspesna!")));
+        						password: this.password, gender : this.gender,
+        						dateBirth : this.date })
+        .then(function(response){ 
+        			alert("Registracija uspesna!")
+                    localStorage.setItem('uName', JSON.parse(JSON.stringify(response.data))[0]);
+                    localStorage.setItem('role', JSON.parse(JSON.stringify(response.data))[1]);
+                    router.replace({ path: `/` })
+           });
       }
 
       
     },
 
-  },
+   },
    template: ` 
    <div>
    <form @submit="formSubmit">
@@ -66,12 +70,12 @@ Vue.component("registration", {
         <div>
             <input type="radio" v-model="gender" value="zenski" >
                <label>Zenski</label>
-        </div>
+        </div><br />
         
         <label><b>Datum rodjenja</b></label><br />
               <div>
               <input v-model="date" type="date">
-              </div>
+              </div><br />
             
         <input type="submit" value="Registruj se">
              
