@@ -86,5 +86,16 @@ public class DAODeliverer {
 		fw.flush();
 		fw.close();
 	}
+	
+	public Deliverer addDeliverer(Deliverer deliverer) {
+
+		deliverers.put(deliverer.getUsername(),deliverer);
+		try {
+			this.writeDeliverer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return deliverer;
+	}
 
 }

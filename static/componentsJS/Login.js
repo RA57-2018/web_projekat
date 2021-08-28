@@ -49,7 +49,7 @@ Vue.component("login", {
                 <label><b>Lozinka</b></label><br />
                 <input type="password" placeholder="Unesite lozinku" required v-model="passWord"><br />
             
-                <input type="submit" value="Uloguj se">
+                <input class="inp" type="submit" value="Uloguj se">
                 
               </div>
               

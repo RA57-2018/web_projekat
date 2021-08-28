@@ -41,6 +41,9 @@ Vue.component("home-page", {
         </li>
         <li v-if="activeUser == true && (role =='administrator' |  role =='buyer' |  role =='manager' |  role =='deliverer')">
             <a href="/#/profile">Profil</a>
+        </li> 
+        <li v-if="activeUser == true && role =='administrator'">
+            <a href="/#/add-employee">Dodaj radnika</a>
         </li>        
 	</ul>
 

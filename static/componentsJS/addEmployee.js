@@ -1,5 +1,5 @@
-Vue.component("registration", {
-  name: "registration",
+Vue.component("add-employee", {
+  name: "add-employee",
   data: function () {
     return {
       name: null,
@@ -9,17 +9,18 @@ Vue.component("registration", {
       passwordConfirmation: null,
       date: null,
       gender: null,
+      rol: null,
       showErrorMessage: false,
   };
   },
     methods: {
     Cancel: function(){
-            router.replace({ path: `/` })
+            router.replace({ path: `/home-page` })
     },
     formSubmit: function (e) {
       e.preventDefault();
       this.errors = null;
-			if(!this.name || !this.surname || !this.username || !this.password || !this.passwordConfirmation || !this.date || !this.gender){
+			if(!this.name || !this.surname || !this.username || !this.password || !this.passwordConfirmation || !this.date || !this.gender || !this.rol){
 				this.showErrorMessage = true;
 				alert("Neophodno je uneti sve podatke!")
 				e.preventDefault();
@@ -29,14 +30,12 @@ Vue.component("registration", {
 				e.preventDefault();
       }else{
         axios
-        .post('/registration', {name: this.name, surname: this.surname,username: this.username,
+        .post('/addEmployee', {name: this.name, surname: this.surname,username: this.username,
         						password: this.password, gender : this.gender,
-        						dateBirth : this.date })
+        						dateBirth : this.date, role: this.rol },{params:{username:this.userName,password:this.passWord,role:this.rol}})
         .then(function(response){ 
-        			alert("Registracija uspesna!")
-                    localStorage.setItem('uName', JSON.parse(JSON.stringify(response.data))[0]);
-                    localStorage.setItem('role', JSON.parse(JSON.stringify(response.data))[1]);
-                    router.replace({ path: `/` })
+        			alert("Uspesno dodat radnik!")
+        			router.replace({ path: `/home-page` })
            });
       }
 
@@ -79,9 +78,20 @@ Vue.component("registration", {
               <div>
               <input v-model="date" type="date">
               </div><br />
-          
-        <button @click="Cancel" type="button">Nazad</button>  
-        <input class="inp" type="submit" value="Registruj se">
+        
+        <label><b>Uloga</b></label>
+        <div>
+           <input type="radio" v-model="rol" value="menadzer">
+               <label>Menadzer</label>
+        </div>
+              <label></label>
+        <div>
+            <input type="radio" v-model="rol" value="dostavljac" >
+               <label>Dostavljac</label>
+        </div><br />
+            
+        <button @click="Cancel" type="button">Nazad</button>
+        <input class="inp" type="submit" value="Dodaj">
              
    </div>
    </form> 

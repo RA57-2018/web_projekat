@@ -86,5 +86,16 @@ public class DAOManager {
 		fw.flush();
 		fw.close();
 	}
+	
+	public Manager addManager(Manager manager) {
+
+		managers.put(manager.getUsername(),manager);
+		try {
+			this.writeManager();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return manager;
+	}
 
 }

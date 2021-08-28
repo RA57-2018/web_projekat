@@ -94,7 +94,7 @@ Vue.component("profile", {
         </div><br />
            
 
-        <button @click="Cancel" type="button">Odustani</button>
+        <button @click="Cancel" type="button">Nazad</button>
         <button @click="Edit" type="button">Izmeni</button>
         <button type="submit">Sacuvaj</button>
 

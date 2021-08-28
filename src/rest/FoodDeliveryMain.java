@@ -155,6 +155,25 @@ public class FoodDeliveryMain {
 			return true;
 			
 		});
+		
+		
+        post("/addEmployee", (req, res)-> {
+        		
+			String rol = req.queryParams("role");
+			
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			if(rol.equals("menadzer")) {
+				Manager manager = gsonReg.fromJson(reqBody, Manager.class);
+				managerDAO.addManager(manager);
+			}else if(rol.equals("dostavljac")) {
+				Deliverer deliverer = gsonReg.fromJson(reqBody, Deliverer.class);
+				delivererDAO.addDeliverer(deliverer);
+			}
+			return true;
+			
+		});
 
 	}
 
