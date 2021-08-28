@@ -11,13 +11,17 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import beans.Administrator;
 import beans.Buyer;
 import beans.DAOAdministrator;
 import beans.DAOBuyer;
 import beans.DAODeliverer;
 import beans.DAOManager;
 import beans.DAORestaurant;
+import beans.Deliverer;
+import beans.Manager;
 import beans.Restaurant;
+import beans.User;
 
 public class FoodDeliveryMain {
 	
@@ -86,6 +90,68 @@ public class FoodDeliveryMain {
 			
 			Restaurant restaurant = gsonReg.fromJson(reqBody, Restaurant.class);
 			restaurantDAO.addRestaurants(restaurant);
+			return true;
+			
+		});
+		
+		get("/profile", (req, res)->{
+			String name =  req.queryParams("username");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			User u = null;
+			u = buyerDAO.findBuyerProfile(name);
+			if(u != null) {
+				return gsonReg.toJson(u);
+			}
+			else
+			{
+				u = administratorDAO.findAdministratorProfile(name);
+				if(u != null) {
+					return gsonReg.toJson(u);
+				}else {
+					u = managerDAO.findManagerProfile(name);
+					if(u != null) {
+						return gsonReg.toJson(u);
+					}else {
+						u = delivererDAO.findDelivererProfile(name);
+						if(u != null) {
+							return gsonReg.toJson(u);
+						}
+					}	
+				}	
+			}
+			return gsonReg.toJson(u);
+		});
+		
+		
+		post("/updateProfile", (req, res)-> {
+			String name =  req.queryParams("username");
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			User u = null;
+			u = administratorDAO.findAdministratorProfile(name);
+			if(u != null) {
+				Administrator administrator = gsonReg.fromJson(reqBody, Administrator.class);
+				administratorDAO.changeAdministrator(name,administrator);
+			}else {
+				u = buyerDAO.findBuyerProfile(name);
+				if(u != null) {
+					Buyer buyer = gsonReg.fromJson(reqBody, Buyer.class);
+					buyerDAO.changeBuyer(name,buyer);
+				}else {
+					u = managerDAO.findManagerProfile(name);
+					if(u != null) {
+						Manager manager = gsonReg.fromJson(reqBody, Manager.class);
+						managerDAO.changeManager(name,manager);
+					}else {
+						u = delivererDAO.findDelivererProfile(name);
+						if(u != null) {
+							Deliverer deliverer = gsonReg.fromJson(reqBody, Deliverer.class);
+							delivererDAO.changeDeliverer(name,deliverer);
+						}	
+					}
+				}	
+				
+			}
 			return true;
 			
 		});

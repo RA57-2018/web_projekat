@@ -3,6 +3,8 @@ package beans;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,6 +49,42 @@ public class DAODeliverer {
 	        }
 	    }
 		return null;
+	}
+	
+	public Deliverer findDelivererProfile(String username) {
+		for (Map.Entry<String, Deliverer> entry : deliverers.entrySet()) {
+	        if(entry.getValue().getUsername().equals(username) ) {
+	        	return entry.getValue();
+	        }
+	    }
+		return null;
+	}
+	
+	public void changeDeliverer(String username, Deliverer deliverer) {
+		for (Map.Entry<String, Deliverer> entry : deliverers.entrySet()) {
+	        if(entry.getValue().getUsername().equals(username)) {
+	        	entry.getValue().setName(deliverer.getName());
+	        	entry.getValue().setSurname(deliverer.getSurname());
+	        	entry.getValue().setPassword(deliverer.getPassword());
+	        	entry.getValue().setGender(deliverer.getGender());
+	        }
+	    }
+		
+		try {
+			writeDeliverer();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void writeDeliverer() throws IOException{
+		Gson gson = new Gson();
+		FileWriter fw = new FileWriter("files/deliverers.json");
+		gson.toJson(this.deliverers, fw);
+		fw.flush();
+		fw.close();
 	}
 
 }

@@ -66,4 +66,32 @@ public class DAOBuyer {
 		fw.flush();
 		fw.close();
 	}
+	
+	public Buyer findBuyerProfile(String username) {
+		for (Map.Entry<String, Buyer> entry : buyers.entrySet()) {
+	        if(entry.getValue().getUsername().equals(username) ) {
+	        	return entry.getValue();
+	        }
+	    }
+		return null;
+	}
+	
+	public void changeBuyer(String username, Buyer buyer) {
+		for (Map.Entry<String, Buyer> entry : buyers.entrySet()) {
+	        if(entry.getValue().getUsername().equals(username)) {
+	        	entry.getValue().setName(buyer.getName());
+	        	entry.getValue().setSurname(buyer.getSurname());
+	        	entry.getValue().setPassword(buyer.getPassword());
+	        	entry.getValue().setGender(buyer.getGender());
+	        }
+	    }
+		
+		try {
+			writeBuyers();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }
