@@ -6,17 +6,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class DAORestaurant {
-	private HashMap<String,Restaurant> restaurants;
+	private HashMap<Integer,Restaurant> restaurants;
 	
     public DAORestaurant() {
 		
-    	restaurants = new HashMap<String,Restaurant>();
+    	restaurants = new HashMap<Integer,Restaurant>();
 		try {
 			readRestaurants();
 		} catch (FileNotFoundException e) {
@@ -24,9 +25,9 @@ public class DAORestaurant {
 		}
 	}
     
-    private void readRestaurants() throws FileNotFoundException{
+	private void readRestaurants() throws FileNotFoundException{
 		Gson gson = new Gson();
-		Type token = new TypeToken<HashMap<String,Restaurant>>(){}.getType();
+		Type token = new TypeToken<HashMap<Integer,Restaurant>>(){}.getType();
 		BufferedReader br = new BufferedReader(new FileReader("files/restaurants.json"));
 		this.restaurants = gson.fromJson(br, token);
 	}
@@ -39,25 +40,16 @@ public class DAORestaurant {
 		fw.close();
 	}
     
-    public Restaurant addRestaurants(Restaurant restaurant) {
-		restaurant.setStatus("otvoren");
-		Location location = new Location();
-		restaurant.setLocation(location);
-		restaurants.put(restaurant.getName(),restaurant);
-		try {
-			this.writeRestaurants();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    	return restaurant;
-    }
+    public int findNextIdR() {
+		int maxValueKey = Collections.max(this.restaurants.keySet());
+		return maxValueKey + 1;
+	}
 
-	public HashMap<String, Restaurant> getRestaurants() {
+	public HashMap<Integer, Restaurant> getRestaurants() {
 		return restaurants;
 	}
 
-	public void setRestaurants(HashMap<String, Restaurant> restaurants) {
+	public void setRestaurants(HashMap<Integer, Restaurant> restaurants) {
 		this.restaurants = restaurants;
 	}
-	
 }

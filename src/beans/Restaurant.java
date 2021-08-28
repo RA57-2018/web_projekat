@@ -4,15 +4,25 @@ import java.util.ArrayList;
 
 public class Restaurant {
 
+	private int id;
 	private String name;
 	private String type;
 	private ArrayList<Artical> articals;
 	private String status;
-	private Location location;
+	private int location;
 	private String logo;
 	
 	public Restaurant() {}
-	
+
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getStatus() {
+		return status;
+	}
 	public String getName() {
 		return name;
 	}
@@ -25,16 +35,14 @@ public class Restaurant {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public String isStatus() {
-		return status;
-	}
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public Location getLocation() {
+	public int getLocation() {
 		return location;
 	}
-	public void setLocation(Location location) {
+	public void setLocation(int location) {
 		this.location = location;
 	}
 	public String getLogo() {
@@ -49,5 +57,4 @@ public class Restaurant {
 	public void setArticals(ArrayList<Artical> articals) {
 		this.articals = articals;
 	}
-	
 }

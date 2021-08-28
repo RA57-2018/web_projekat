@@ -2,15 +2,21 @@ package beans;
 
 public class Location {
 
+	private int id;
 	private double longitude;
 	private double latitude;
-	private String streetName;
-	private int number;
-	private String city;
-	private int postalCode;
+	private Address address;
 	
 	public Location() {}
 	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public double getLongitude() {
 		return longitude;
 	}
@@ -24,36 +30,12 @@ public class Location {
 		this.latitude = latitude;
 	}
 
-	public String getStreetName() {
-		return streetName;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setStreetName(String streetName) {
-		this.streetName = streetName;
-	}
-
-	public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public int getPostalCode() {
-		return postalCode;
-	}
-
-	public void setPostalCode(int postalCode) {
-		this.postalCode = postalCode;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 	
 }

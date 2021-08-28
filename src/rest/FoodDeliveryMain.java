@@ -7,6 +7,7 @@ import static spark.Spark.staticFiles;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,11 +17,14 @@ import beans.Buyer;
 import beans.DAOAdministrator;
 import beans.DAOBuyer;
 import beans.DAODeliverer;
+import beans.DAOLocation;
 import beans.DAOManager;
 import beans.DAORestaurant;
 import beans.Deliverer;
+import beans.Location;
 import beans.Manager;
 import beans.Restaurant;
+import beans.RestaurantDAO;
 import beans.User;
 
 public class FoodDeliveryMain {
@@ -31,6 +35,7 @@ public class FoodDeliveryMain {
 	private static DAOAdministrator administratorDAO = new DAOAdministrator();
 	private static DAOManager managerDAO = new DAOManager();
 	private static DAODeliverer delivererDAO = new DAODeliverer();
+	private static DAOLocation locationDAO = new DAOLocation();
 
 	public static void main(String[] args) throws Exception {
 		
@@ -83,13 +88,25 @@ public class FoodDeliveryMain {
 			return g.toJson(restaurantDAO.getRestaurants().values());
 		});
 		
-		post("/add-restaurant", (req, res)-> {
-			
+		post("/add-restaurant", (req, res) -> {
 			String reqBody = req.body();
-			Gson gsonReg = new GsonBuilder().create();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'hh:mm").create();
 			
-			Restaurant restaurant = gsonReg.fromJson(reqBody, Restaurant.class);
-			restaurantDAO.addRestaurants(restaurant);
+			RestaurantDAO r = gsonReg.fromJson(reqBody, RestaurantDAO.class);
+			int locationId = locationDAO.findNextId();
+			Location location = r.getLocation();
+			location.setId(locationId);
+			
+			int id = restaurantDAO.findNextIdR();
+			Restaurant restaurant = r.getRestaurant();
+			restaurant.setId(id);
+			restaurant.setLocation(locationId);
+		
+			HashMap<Integer, Location> locations = locationDAO.getLocation();
+			locations.put(locationId, location);
+			locationDAO.setLocation(locations);
+			locationDAO.writeLocation();
+			System.out.println("Hello");
 			return true;
 			
 		});
