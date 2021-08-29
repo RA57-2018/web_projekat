@@ -84,8 +84,12 @@ public class FoodDeliveryMain {
 			
 		});
 		
-		get("/", (req, res) -> {
+		get("/restaurants", (req, res) -> {
 			return g.toJson(restaurantDAO.getRestaurants().values());
+		});
+		
+		get("/restaurantsLocations", (req, res) -> {
+			return g.toJson(locationDAO.getLocation().values());
 		});
 		
 		post("/add-restaurant", (req, res) -> {

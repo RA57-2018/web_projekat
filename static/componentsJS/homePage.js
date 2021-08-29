@@ -4,6 +4,8 @@ Vue.component("home-page", {
             username: "",
 	        role: "",
 	        activeUser: false,
+	        restaurantList: [],
+	        locationList: [],
       }  
 	},
     methods: {
@@ -14,6 +16,18 @@ Vue.component("home-page", {
             router.replace({ path: `/` })
 			
        },
+	checkRestaurant: function(id){
+			router.push({ path: `/restaurant/${id}` })
+			
+		},
+	restaurantLocation: function(id){
+			let i = 0;
+			for(i ; i < this.locationList.length; i++){
+				if(this.locationList[i].id == id){
+					return this.locationList[i];
+				}
+			}
+		},
     },
     mounted: function () {
         this.username = window.localStorage.getItem('uName');
@@ -22,6 +36,18 @@ Vue.component("home-page", {
         if(this.role =="administrator" || this.role =="buyer" || this.role =="manager" || this.role =="deliverer"){
             this.activeUser = true;
         }
+        
+    axios.get("/restaurants")
+			.then(response => {
+				for(let i = 0; i < response.data.length; i++){
+						this.restaurantList.push(response.data[i]);
+				}
+			});
+			
+	axios.get("/restaurantsLocations")
+			.then(response => {
+				this.locationList = response.data;
+			});
     },
 	template: ` 
 	<div>
@@ -58,47 +84,49 @@ Vue.component("home-page", {
 	  <div class="column">
 	    <img src="../images/restaurant1.jpg">
 	  </div>
-    </div>
+    </div><br /><br />
      
      
-    <h2>Restorani</h2>
+    <h1>Restorani</h1>
 
 
+<div v-for="(restaurant, index) in restaurantList">
+<div v-if="restaurant.status === 'otvoren'">
  	<div class="column">
 	 <div class="gallery">
-	  <a href="#/login">
-	    <img src="images/pizza.jpg">
-	  </a>
-	  <div class="desc">Add a description here</div>
+	    <img :src="restaurant.logo">
+	  <div class="desc">
+	  	<h2>{{ restaurant.name }}</h2>
+	  	<ul>
+			<li style="float:left"><b>Tip:</b> {{ restaurant.type }}</li><br />
+			<li style="float:left"><b>Status:</b> {{ restaurant.status }}</li><br />
+			<li style="float:left"><b>Lokacija:</b> {{ (restaurantLocation(restaurant.location)).address.streetName}} {{(restaurantLocation(restaurant.location)).address.number}}, {{ (restaurantLocation(restaurant.location)).address.city}} {{ (restaurantLocation(restaurant.location)).address.postalCode}} </li><br />
+			<li style="float:left"><button type="button" v-on:click="checkRestaurant(restaurant.id)">Detaljnije</button></li>
+		</ul>
+	  </div>
 	</div>
 	</div>
-	
-	<div class="column">
+</div>	
+</div>
+<div v-for="(restaurant, index) in restaurantList">
+<div v-if="restaurant.status === 'zatvoren'">
+ 	<div class="column">
 	 <div class="gallery">
-	  <a href="#/login">
-	    <img src="images/pasta.jpg">
-	  </a>
-	  <div class="desc">Add a description here</div>
+	    <img :src="restaurant.logo">
+	  <div class="desc">
+	  	<h2>{{ restaurant.name }}</h2>
+	  	<ul>
+			<li style="float:left"><b>Tip:</b> {{ restaurant.type }}</li><br />
+			<li style="float:left"><b>Status:</b> {{ restaurant.status }}</li><br />
+			<li style="float:left"><b>Lokacija:</b> {{ (restaurantLocation(restaurant.location)).address.streetName}} {{(restaurantLocation(restaurant.location)).address.number}}, {{ (restaurantLocation(restaurant.location)).address.city}} {{ (restaurantLocation(restaurant.location)).address.postalCode}} </li><br />
+			<li style="float:left"><button type="button" v-on:click="checkRestaurant(restaurant.id)">Detaljnije</button></li>
+		</ul>
+	  </div>
 	</div>
 	</div>
-	
-	<div class="column">
-	 <div class="gallery">
-	  <a href="#/login">
-	    <img src="images/chinese.jpg">
-	  </a>
-	  <div class="desc">Add a description here</div>
-	</div>
-	</div>
-	
-    <div class="column">
-	 <div class="gallery">
-	  <a href="#/login">
-	    <img src="images/barbecue.jpg">
-	  </a>
-	  <div class="desc">Add a description here</div>
-	</div>
-	</div>
+</div>	
+</div>
+
 
 	</div>	  
 `
