@@ -10,6 +10,7 @@ public class Restaurant {
 	private ArrayList<Artical> articals;
 	private String status;
 	private int location;
+	private Location locations;
 	private String logo;
 	
 	public Restaurant() {}
@@ -57,4 +58,14 @@ public class Restaurant {
 	public void setArticals(ArrayList<Artical> articals) {
 		this.articals = articals;
 	}
+
+	public Location getLocations() {
+		return locations;
+	}
+
+	public void setLocations(Location locations) {
+		this.locations = locations;
+	}
+	
+	
 }

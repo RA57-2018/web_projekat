@@ -5,9 +5,15 @@ import static spark.Spark.post;
 import static spark.Spark.port;
 import static spark.Spark.staticFiles;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -38,8 +44,7 @@ public class FoodDeliveryMain {
 	private static DAOLocation locationDAO = new DAOLocation();
 
 	public static void main(String[] args) throws Exception {
-		
-	port(8080);
+		port(8080);
 		
 		staticFiles.externalLocation(new File("./static").getCanonicalPath()); 
 		
@@ -84,8 +89,8 @@ public class FoodDeliveryMain {
 			
 		});
 		
-		get("/restaurants", (req, res) -> {
-			return g.toJson(restaurantDAO.getRestaurants().values());
+		get("/users", (req, res) -> {
+			return g.toJson(buyerDAO.getBuyers().values());
 		});
 		
 		get("/restaurantsLocations", (req, res) -> {
@@ -96,21 +101,35 @@ public class FoodDeliveryMain {
 			String reqBody = req.body();
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'hh:mm").create();
 			
-			RestaurantDAO r = gsonReg.fromJson(reqBody, RestaurantDAO.class);
+			Restaurant restaurant = gsonReg.fromJson(reqBody, Restaurant.class);
 			int locationId = locationDAO.findNextId();
-			Location location = r.getLocation();
-			location.setId(locationId);
 			
 			int id = restaurantDAO.findNextIdR();
-			Restaurant restaurant = r.getRestaurant();
 			restaurant.setId(id);
 			restaurant.setLocation(locationId);
-		
-			HashMap<Integer, Location> locations = locationDAO.getLocation();
-			locations.put(locationId, location);
-			locationDAO.setLocation(locations);
-			locationDAO.writeLocation();
-			System.out.println("Hello");
+			/*
+			if(restaurant.getLogo() == null) {
+				return false;
+			}
+			
+			String imageString = restaurant.getLogo().split(",")[1];
+			BufferedImage image = null;
+            byte[] imageByte;
+            
+            imageByte = Base64.getDecoder().decode(imageString);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            image = ImageIO.read(bis);
+            bis.close();
+            String imageName= "restaurant" + id + ".jpg";
+            
+            File outputfile = new File(System.getProperty("restaurant1.dir")+ "\\static\\images\\" + imageName);
+            ImageIO.write(image, "jpg", outputfile);
+            restaurant.setLogo("../images/" + imageName);
+		*/
+			HashMap<Integer, Restaurant> restaurants = restaurantDAO.getRestaurants();
+			restaurants.put(id, restaurant);
+			restaurantDAO.setRestaurants(restaurants);
+			restaurantDAO.writeRestaurants();
 			return true;
 			
 		});

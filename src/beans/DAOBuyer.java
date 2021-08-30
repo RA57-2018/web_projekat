@@ -16,6 +16,15 @@ public class DAOBuyer {
 
 	private HashMap<String,Buyer> buyers;
 	
+	
+	public HashMap<String, Buyer> getBuyers() {
+		return buyers;
+	}
+
+	public void setBuyers(HashMap<String, Buyer> buyers) {
+		this.buyers = buyers;
+	}
+
 	public DAOBuyer() {
 		
 		buyers = new HashMap<String,Buyer>();

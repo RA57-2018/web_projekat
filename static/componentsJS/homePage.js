@@ -188,7 +188,10 @@ Vue.component("home-page", {
         </li> 
         <li v-if="activeUser == true && role =='administrator'">
             <a href="/#/add-employee">Dodaj radnika</a>
-        </li>        
+        </li>   
+        <li v-if="activeUser == true && role =='administrator'">
+            <a href="/#/user-view">Pregled korisnika</a>
+        </li>      
 	</ul>
 
 	<h1>Dostava hrane</h1>

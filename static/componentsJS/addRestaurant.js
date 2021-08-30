@@ -15,28 +15,50 @@ Vue.component("add-restaurant", {
         number: null,
         city: null,
         postalCode: null,
+        locations: null,
   };
   },
     methods: {
+    	/*logoChange: function(event){
+            const file = event.target.files[0];
+            this.createBase64Image(file);
+            this.logoShow = (URL.createObjectURL(file));
+        },
+        createBase64Image(file){
+            const reader= new FileReader();
+ 
+            reader.onload = (e) =>{
+                this.imagesForBackend = (e.target.result);
+            }
+            reader.readAsDataURL(file);
+        },*/
     	 Cancel: function(){
              router.replace({ path: `/home-page` })
     	 },
         createR: function(e){
         	e.preventDefault();
+        	console.log("rrrrrrrrr"+this.imagesForBackend);
         	this.errors = null;
         	if(!this.nameR || !this.type || !this.status || !this.longitude || !this.latitude || !this.streetName || !this.number || !this.city || !this.postalCode){
 				this.showErrorMessage = true;
 				alert("Neophodno je uneti sve podatke!")
 				e.preventDefault();
 			}else{
+				this.locations ={}
+				this.address = {}
+				this.locations.longitude=this.longitude;
+				this.locations.latitude=this.latitude;
+				this.address.streetName = this.streetName;
+				this.address.number = this.number;
+				this.address.city = this.city;
+				this.address.postalCode = this.postalCode;
+				this.locations.address = this.address;
 				axios
-		        .post('/add-restaurant'/* , {name: this.restaurant.nameR, type: this.restaurant.type, status: this.restaurant.status,
-		        	longitude: this.location.longitude, latitude : this.location.latitude,
-		        	streetName : this.address.streetName, number: this.address.number, city : this.address.city,
-		        	postalCode : this.address.postalCode}*/)
+		        .post('/add-restaurant' , {name: this.nameR, type: this.type, status: this.status,
+		        	locations: this.locations/*, logo: this.logo*/})
 		        .then(function(response){ 
 		        			alert("Uspesno dodat restoran!")
-		        			//router.replace({ path: `/home-page` })
+		        			router.replace({ path: `/home-page` })
 		           });
 			}
         },
