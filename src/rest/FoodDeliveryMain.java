@@ -93,6 +93,10 @@ public class FoodDeliveryMain {
 			return g.toJson(buyerDAO.getBuyers().values());
 		});
 		
+		get("/restaurants", (req, res) -> {
+			return g.toJson(restaurantDAO.getRestaurants().values());
+		});
+		
 		get("/restaurantsLocations", (req, res) -> {
 			return g.toJson(locationDAO.getLocation().values());
 		});
@@ -213,6 +217,17 @@ public class FoodDeliveryMain {
 			}
 			return true;
 			
+		});
+        
+		get("/restaurant", (req, res) -> {
+			String id = req.queryParams("id");
+			Restaurant r = restaurantDAO.findRestaurant(Integer.parseInt(id));
+			return g.toJson(r);
+		});
+		
+		get("/restaurantLocation", (req, res) -> {
+			String id = req.queryParams("id");
+			return g.toJson(locationDAO.locationRestaurant(Integer.parseInt(id)));
 		});
 
 	}

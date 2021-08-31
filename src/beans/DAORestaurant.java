@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -51,5 +52,15 @@ public class DAORestaurant {
 
 	public void setRestaurants(HashMap<Integer, Restaurant> restaurants) {
 		this.restaurants = restaurants;
+	}
+	
+	public Restaurant findRestaurant(int id){
+
+		for (Map.Entry<Integer, Restaurant> entry : restaurants.entrySet()) {
+	        if( entry.getValue().getId() == id) {
+	        	return entry.getValue();
+	        }
+	    }		
+		return null;
 	}
 }
