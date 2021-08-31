@@ -66,6 +66,7 @@ public class DAODeliverer {
 	        	entry.getValue().setName(deliverer.getName());
 	        	entry.getValue().setSurname(deliverer.getSurname());
 	        	entry.getValue().setPassword(deliverer.getPassword());
+	        	entry.getValue().setBirthDate(deliverer.getBirthDate());
 	        	entry.getValue().setGender(deliverer.getGender());
 	        }
 	    }

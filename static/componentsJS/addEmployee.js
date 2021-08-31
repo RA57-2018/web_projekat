@@ -32,7 +32,7 @@ Vue.component("add-employee", {
         axios
         .post('/addEmployee', {name: this.name, surname: this.surname,username: this.username,
         						password: this.password, gender : this.gender,
-        						dateBirth : this.date, role: this.rol },{params:{username:this.userName,password:this.passWord,role:this.rol}})
+        						birthDate : this.date, role: this.rol },{params:{username:this.userName,password:this.passWord,role:this.rol}})
         .then(function(response){ 
         			alert("Uspesno dodat radnik!")
         			router.replace({ path: `/home-page` })

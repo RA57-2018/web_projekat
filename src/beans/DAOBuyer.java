@@ -91,6 +91,7 @@ public class DAOBuyer {
 	        	entry.getValue().setName(buyer.getName());
 	        	entry.getValue().setSurname(buyer.getSurname());
 	        	entry.getValue().setPassword(buyer.getPassword());
+	        	entry.getValue().setBirthDate(buyer.getBirthDate());
 	        	entry.getValue().setGender(buyer.getGender());
 	        }
 	    }

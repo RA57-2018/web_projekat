@@ -66,6 +66,7 @@ public class DAOManager {
 	        	entry.getValue().setName(manager.getName());
 	        	entry.getValue().setSurname(manager.getSurname());
 	        	entry.getValue().setPassword(manager.getPassword());
+	        	entry.getValue().setBirthDate(manager.getBirthDate());
 	        	entry.getValue().setGender(manager.getGender());
 	        }
 	    }

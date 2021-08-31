@@ -31,7 +31,7 @@ Vue.component("registration", {
         axios
         .post('/registration', {name: this.name, surname: this.surname,username: this.username,
         						password: this.password, gender : this.gender,
-        						dateBirth : this.date })
+        						birthDate : this.date })
         .then(function(response){ 
         			alert("Registracija uspesna!")
                     localStorage.setItem('uName', JSON.parse(JSON.stringify(response.data))[0]);

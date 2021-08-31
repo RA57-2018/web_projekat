@@ -1,6 +1,7 @@
 package beans;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public abstract class User {
 
@@ -9,7 +10,7 @@ public abstract class User {
 	private String name;
 	private String surname;
 	private String gender;
-	private String birthDate;
+	private Date birthDate;
 	private String role;
 	private ArrayList<Order> orders;
 	private Basket basket;
@@ -48,10 +49,10 @@ public abstract class User {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public String getBirthDate() {
+	public Date getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
 	public String getRole() {

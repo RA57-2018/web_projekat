@@ -36,23 +36,23 @@ Vue.component("profile", {
             this.backup.name = this.name;
             this.backup.surname = this.surname;
             this.backup.password = this.password;
+            this.backup.date = this.date;
             this.backup.gender = this.gender;
         },
         Cancel: function(){
             this.t = true;
-            this.backup.name = this.name;
-            this.backup.surname = this.surname;
-            this.backup.username = this.username;
-            this.backup.password = this.password;
-            this.backup.date = this.date;
-            this.backup.gender = this.gender;
+            this.name = this.backup.name;
+            this.surname = this.backup.surname;
+            this.password = this.backup.password;
+            this.date =  this.backup.date;
+            this.gender = this.backup.gender;
             router.replace({ path: `/home-page` })
         },
         formSubmit: function(e){
             e.preventDefault();
                 axios
                 .post('/updateProfile',{name: this.name, surname: this.surname, username : this.username, password: this.password,
-                    date : this.date,gender : this.gender}, {params:{username:this.username}})
+                    birthDate : this.date, gender : this.gender}, {params:{username:this.username}})
                 .then((response) => {
                   alert("Uspesno ste izmenili podatke! ");
                   this.backup = {};
@@ -81,6 +81,9 @@ Vue.component("profile", {
             
         <label><b>Lozinka</b></label><br />
         <input type="text" v-bind:disabled="t" v-model="password"><br />
+        
+        <label><b>Datum rodjenja</b></label><br />
+        <input type="text" v-bind:disabled="t" v-model="date"><br />
         
         <label><b>Pol</b></label>
         <div>

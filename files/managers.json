@@ -1,1 +1,1 @@
-{"kaca":{"username":"kaca","password":"kaca123","name":"Kaca","surname":"Katic","gender":"zenski","role":"menadzer"},"bojana":{"username":"bojana","password":"bojana123","name":"Bojana","surname":"Bojanovic","gender":"zenski","role":"menadzer"}}
+{"kaca":{"username":"kaca","password":"kaca123","name":"Kaca","surname":"Katic","gender":"zenski","birthDate":"Sep 10, 1993 12:00:00 AM","role":"menadzer"},"nenad":{"username":"nenad","password":"nenad123","name":"Nenad","surname":"Nenadovic","gender":"muski","birthDate":"May 17, 1984 12:00:00 AM","role":"menadzer"}}

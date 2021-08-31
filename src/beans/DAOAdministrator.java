@@ -68,6 +68,7 @@ public class DAOAdministrator {
 	        	entry.getValue().setName(administrator.getName());
 	        	entry.getValue().setSurname(administrator.getSurname());
 	        	entry.getValue().setPassword(administrator.getPassword());
+	        	entry.getValue().setBirthDate(administrator.getBirthDate());
 	        	entry.getValue().setGender(administrator.getGender());
 	        }
 	    }

@@ -140,7 +140,7 @@ public class FoodDeliveryMain {
 		
 		get("/profile", (req, res)->{
 			String name =  req.queryParams("username");
-			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			User u = null;
 			u = buyerDAO.findBuyerProfile(name);
 			if(u != null) {
@@ -170,7 +170,7 @@ public class FoodDeliveryMain {
 		post("/updateProfile", (req, res)-> {
 			String name =  req.queryParams("username");
 			String reqBody = req.body();
-			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			User u = null;
 			u = administratorDAO.findAdministratorProfile(name);
 			if(u != null) {
