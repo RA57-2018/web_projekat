@@ -236,6 +236,15 @@ public class FoodDeliveryMain {
 			String id = req.queryParams("id");
 			return g.toJson(articlesDAO.articlesRestaurant(Integer.parseInt(id)));
 		});
+		
+		get("/searchUsers", (req, res) -> {
+			String filterType = (req.queryParams("filterType")).trim();
+			String searchName = (req.queryParams("searchName")).trim();
+			String searchSurname = (req.queryParams("searchSurname")).trim();
+			String searchUsername = (req.queryParams("searchUsername")).trim();
+			HashMap<String,Buyer> buyers = buyerDAO.getBuyers();
+			return g.toJson(buyerDAO.search(buyers,filterType, searchName, searchSurname, searchUsername));
+		});
 
 	}
 

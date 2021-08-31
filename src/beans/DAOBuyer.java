@@ -5,12 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
+import java.text.ParseException;
 
 public class DAOBuyer {
 
@@ -103,5 +105,48 @@ public class DAOBuyer {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public ArrayList<Buyer> search(HashMap<String,Buyer> searchBuyers, String filterType, String searchName, String searchSurname, String searchUsername) throws ParseException{
+		ArrayList<Buyer> valid = new ArrayList<Buyer>();
+		
+		for(Buyer b : searchBuyers.values()) 
+		{
+			if((b.getName()).toLowerCase().contains(searchName.toLowerCase()) && (b.getSurname()).toLowerCase().contains(searchSurname.toLowerCase()) && (b.getUsername()).toLowerCase().contains(searchUsername.toLowerCase())) 
+				{
+					valid.add(b);
+				}
+/*
+				if(filterType.equalsIgnoreCase("zlatni")) 
+				{
+					if(b.getType().equals("zlatni"))
+					{
+						valid.add(b);
+					}
+					break;
+				}
+				else if(filterType.equalsIgnoreCase("srebrni")) 
+				{
+					if(b.getType().equals("srebrni"))
+					{
+						valid.add(b);
+					}
+					break;
+				}
+				else if(filterType.equalsIgnoreCase("bronzani")) 
+				{
+					if(b.getType().equals("bronzani"))
+					{	
+						valid.add(b);
+					}
+					break;
+				}
+				else 
+				{
+					valid.add(b);
+					break;
+				}*/
+		 	}
+		return valid;
 	}
 }
