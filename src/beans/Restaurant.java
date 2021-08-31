@@ -7,7 +7,7 @@ public class Restaurant {
 	private int id;
 	private String name;
 	private String type;
-	private ArrayList<Artical> articals;
+	private int articles;
 	private String status;
 	private int location;
 	private Location locations;
@@ -52,11 +52,11 @@ public class Restaurant {
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
-	public ArrayList<Artical> getArticals() {
-		return articals;
+	public int getArticals() {
+		return articles;
 	}
-	public void setArticals(ArrayList<Artical> articals) {
-		this.articals = articals;
+	public void setArticals(int articles) {
+		this.articles = articles;
 	}
 
 	public Location getLocations() {

@@ -21,6 +21,7 @@ import com.google.gson.GsonBuilder;
 import beans.Administrator;
 import beans.Buyer;
 import beans.DAOAdministrator;
+import beans.DAOArticles;
 import beans.DAOBuyer;
 import beans.DAODeliverer;
 import beans.DAOLocation;
@@ -42,6 +43,7 @@ public class FoodDeliveryMain {
 	private static DAOManager managerDAO = new DAOManager();
 	private static DAODeliverer delivererDAO = new DAODeliverer();
 	private static DAOLocation locationDAO = new DAOLocation();
+	private static DAOArticles articlesDAO = new DAOArticles();
 
 	public static void main(String[] args) throws Exception {
 		port(8080);
@@ -228,6 +230,11 @@ public class FoodDeliveryMain {
 		get("/restaurantLocation", (req, res) -> {
 			String id = req.queryParams("id");
 			return g.toJson(locationDAO.locationRestaurant(Integer.parseInt(id)));
+		});
+		
+		get("/restaurantArticles", (req, res) -> {			
+			String id = req.queryParams("id");
+			return g.toJson(articlesDAO.articlesRestaurant(Integer.parseInt(id)));
 		});
 
 	}
