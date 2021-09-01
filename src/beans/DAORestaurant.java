@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,4 +65,40 @@ public class DAORestaurant {
 	    }		
 		return null;
 	}
+	
+	public ArrayList<Restaurant> search(HashMap<Integer,Restaurant> restaurants,HashMap<Integer,Location> locations, String searchName, String searchType, String searchLocation) throws ParseException{
+		ArrayList<Restaurant> valid = new ArrayList<Restaurant>();
+	
+		for(Restaurant r : restaurants.values()) 
+		{
+			if((r.getName()).toLowerCase().contains(searchName.toLowerCase()) && (r.getType()).toLowerCase().contains(searchType.toLowerCase())) 
+			{			
+				valid.add(r);
+				
+			}
+									
+		}				
+		return valid;
+	}
+	
+	/* pokusaj provere adrese tj grada prilikom pretrage
+	public boolean check(HashMap<Integer,Restaurant> restaurants,HashMap<Integer,Location> locations, String searchLocation) {
+		for(Restaurant r : restaurants.values()) {
+			
+				for(Location l : locations.values()) 
+				{
+					if((l.getAddress().getCity()).toLowerCase().contains(searchLocation)) {	
+	
+						if(r.getId() == l.getId()) {
+							return true;
+						}
+					}
+	
+				}
+			
+		}
+		return false;
+	}
+	*/	
+
 }

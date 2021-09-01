@@ -8,6 +8,9 @@ Vue.component("home-page", {
 	        locationList: [],
 	        sortCriteria: "",
             sortType: "",
+            searchName: "",
+            searchType: "",
+            searchLocation: "",
       }  
 	},
     methods: {
@@ -145,6 +148,17 @@ Vue.component("home-page", {
 			}
 			
 		},
+	search: function(){
+		if(this.searchName == "" && this.searchType == "" && this.searchLocation == ""){
+			alert("Unesite parametar za pretragu!");
+		}else{
+			var searchParameters = "searchName=" + this.searchName+ "&searchType=" + this.searchType+ "&searchLocation=" + this.searchLocation;
+			axios.get("/searchRestaurants?" + searchParameters)
+				.then(response => {
+					this.restaurantList = response.data;
+				})
+		}
+	},
 
     },
     mounted: function () {
@@ -225,6 +239,20 @@ Vue.component("home-page", {
 						<option value="opadajuce">Opadajuce</option>
 		</select>
 		<button v-on:click="sortThis">Sortiraj</button>
+	</div>
+	
+	
+	<div>
+		<input type="text" v-model="searchName" placeholder="Pretrazite po imenu" style="margin: 0.3em; width: 12em;">
+		<label>Tip</label>
+		    	<select v-model="searchType" style="margin: 0.3em; width: 12em;">
+    				<option value="italijanski">italijanski</option>
+    				<option value="rostilj">rostilj</option>
+    				<option value="kineski">kineski</option>
+    				<option value="">nijedan</option>
+    			</select>
+		<input type="text" v-model="searchLocation" placeholder="Pretrazite po gradu" style="margin: 0.3em; width: 12em;">
+		<button v-on:click="search">Pretrazi</button>
 	</div>
 
 

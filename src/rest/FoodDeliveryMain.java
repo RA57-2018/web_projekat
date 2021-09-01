@@ -245,6 +245,15 @@ public class FoodDeliveryMain {
 			HashMap<String,Buyer> buyers = buyerDAO.getBuyers();
 			return g.toJson(buyerDAO.search(buyers,filterType, searchName, searchSurname, searchUsername));
 		});
+		
+		get("/searchRestaurants", (req, res) -> {
+			String searchName = (req.queryParams("searchName")).trim();
+			String searchType = (req.queryParams("searchType")).trim();
+			String searchLocation = (req.queryParams("searchLocation")).trim();
+			HashMap<Integer,Restaurant> restaurants = restaurantDAO.getRestaurants();
+			HashMap<Integer,Location> locations = locationDAO.getLocation();
+			return g.toJson(restaurantDAO.search(restaurants,locations,searchName,searchType,searchLocation));
+		});
 
 	}
 
