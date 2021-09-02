@@ -271,6 +271,12 @@ public class FoodDeliveryMain {
 			
 		});
         
+		get("/myRestaurant", (req, res) -> {
+			String userName = (req.queryParams("username")).trim();
+			return g.toJson(restaurantDAO.findManagerRestaurant(userName));
+		
+		});
+        
 	}
 
 }

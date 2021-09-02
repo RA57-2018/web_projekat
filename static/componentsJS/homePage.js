@@ -11,6 +11,7 @@ Vue.component("home-page", {
             searchName: "",
             searchType: "",
             searchLocation: "",
+            id: null,
       }  
 	},
     methods: {
@@ -158,9 +159,16 @@ Vue.component("home-page", {
 					this.restaurantList = response.data;
 				})
 		}
-	},
-
-    },
+	},	
+	myRestaurant: function(){
+	    var parameter = "username=" + this.username;
+		axios.get("/myRestaurant?" + parameter)
+				.then(response => {
+					this.id = response.data;
+					router.push({ path: `/restaurant/${this.id}` })
+				})
+	}
+    },     
     mounted: function () {
         this.username = window.localStorage.getItem('uName');
 	    this.role = window.localStorage.getItem('role');
@@ -210,8 +218,11 @@ Vue.component("home-page", {
         <li v-if="activeUser == true && role =='manager'">
             <a href="/#/add-article">Dodaj artikal</a>
         </li>  
+        <li v-if="activeUser == true && role =='manager'">
+           <a style="cursor: pointer;" @click="myRestaurant">Moj restoran</a>
+        </li> 
 	</ul>
-	<button @click="Edit" type="button">Izmeni</button>
+	
 
 	<h1>Dostava hrane</h1>
 	<h2>Brzo i lako za samo par minuta!</h2>
