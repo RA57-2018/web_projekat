@@ -101,4 +101,13 @@ public class DAORestaurant {
 	}
 	*/	
 
+	public int findManagerRestaurant(String username){
+
+		for (Map.Entry<Integer, Restaurant> entry : restaurants.entrySet()) {
+	        if( (entry.getValue().getManager()).equals(username) ) {
+	        	return entry.getValue().getId();
+	        }
+	    }		
+		return 0;
+	}
 }

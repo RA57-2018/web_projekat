@@ -12,6 +12,7 @@ public class Restaurant {
 	private int location;
 	private Location locations;
 	private String logo;
+	private String manager;
 	
 	public Restaurant() {}
 
@@ -65,6 +66,22 @@ public class Restaurant {
 
 	public void setLocations(Location locations) {
 		this.locations = locations;
+	}
+
+	public int getArticles() {
+		return articles;
+	}
+
+	public void setArticles(int articles) {
+		this.articles = articles;
+	}
+
+	public String getManager() {
+		return manager;
+	}
+
+	public void setManager(String manager) {
+		this.manager = manager;
 	}
 	
 	

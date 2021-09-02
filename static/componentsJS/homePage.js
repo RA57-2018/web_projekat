@@ -165,6 +165,7 @@ Vue.component("home-page", {
         this.username = window.localStorage.getItem('uName');
 	    this.role = window.localStorage.getItem('role');
         console.log(this.role);
+        console.log(this.username);
         if(this.role =="administrator" || this.role =="buyer" || this.role =="manager" || this.role =="deliverer"){
             this.activeUser = true;
         }
@@ -205,8 +206,12 @@ Vue.component("home-page", {
         </li>   
         <li v-if="activeUser == true && role =='administrator'">
             <a href="/#/user-view">Pregled korisnika</a>
-        </li>      
+        </li>    
+        <li v-if="activeUser == true && role =='manager'">
+            <a href="/#/add-article">Dodaj artikal</a>
+        </li>  
 	</ul>
+	<button @click="Edit" type="button">Izmeni</button>
 
 	<h1>Dostava hrane</h1>
 	<h2>Brzo i lako za samo par minuta!</h2>

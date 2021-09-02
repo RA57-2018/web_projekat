@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import beans.Administrator;
+import beans.Artical;
 import beans.Buyer;
 import beans.DAOAdministrator;
 import beans.DAOArticles;
@@ -254,7 +255,22 @@ public class FoodDeliveryMain {
 			HashMap<Integer,Location> locations = locationDAO.getLocation();
 			return g.toJson(restaurantDAO.search(restaurants,locations,searchName,searchType,searchLocation));
 		});
-
+		
+        post("/addArticle", (req, res)-> {
+    		
+			String userName = req.queryParams("username");
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			int id = restaurantDAO.findManagerRestaurant(userName);
+			Artical artical = gsonReg.fromJson(reqBody, Artical.class);
+			artical.setRestaurant(id);
+			articlesDAO.addArticle(id, artical);
+			articlesDAO.writeArticle();
+			return true;
+			
+		});
+        
 	}
 
 }
