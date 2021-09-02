@@ -1,10 +1,11 @@
 Vue.component("user-view", {
+	name: "user-view",
 	data: function () {
 		  return {
             username: "",
 	        role: "",
 	        activeUser: false,
-	        userList: [],
+	        users: [],
 	        sortCriteria: "",
             sortType: "",
             searchName: "",
@@ -14,21 +15,58 @@ Vue.component("user-view", {
       }  
 	},
     methods: {
-	checkUser: function(username){
-			router.push({ path: `/buyer/${username}` })
-		},
-	search: function(){
-		console.log(this.filterRole);
-		if(this.searchName == "" && this.searchSurname == "" && this.searchUsername == "" && this.filterType == ""){
-			alert("Unesite parametar za pretragu!");
-		}else{
-			var searchParameters = "searchName=" + this.searchName+ "&searchSurname=" + this.searchSurname+ "&searchUsername=" + this.searchUsername+ "&filterType=" + this.filterType;
-			axios.get("/searchUsers?" + searchParameters)
-				.then(response => {
-					this.userList = response.data;
-				})
-		}
-	},
+    refresh(){
+    	axios.get('/users')
+		.then(response => {
+           
+            for(var i =0;i< response.data.length;i++){
+                var user = {};
+                user.name = response.data[i].name;
+                user.surname = response.data[i].surname;
+                user.username = response.data[i].username;
+                user.role = "kupac";
+                this.users.push(user);
+            }
+         
+        });
+    	axios.get('/deliverers')
+		.then(response => {
+           
+            for(var i =0;i< response.data.length;i++){
+                var user = {};
+                user.name = response.data[i].name;
+                user.surname = response.data[i].surname;
+                user.username = response.data[i].username;
+                user.role = "dostavljac";
+                this.users.push(user);
+            }
+         
+        });
+    	axios.get('/managers')
+		.then(response => {
+           
+            for(var i =0;i< response.data.length;i++){
+                var user = {};
+                user.name = response.data[i].name;
+                user.surname = response.data[i].surname;
+                user.username = response.data[i].username;
+                user.role = "menadzer";
+                this.users.push(user);
+            }
+         
+        });
+    	},
+    	search: function(){
+    		if(this.searchName == "" && this.searchSurname == "" && this.searchUsername == ""){
+    			alert("Unesite parametar za pretragu!");
+    		}else{
+    			var searchParameters = "searchName=" + this.searchName+ "&searchSurname=" + this.searchSurname+ "&searchUsername=" + this.searchUsername;
+    			axios.get("/searchUsers?" + searchParameters)
+    				.then(response => {
+    					this.users = response.data;
+    				})
+    		}
+    	},
 	sortiraj: function(){
 			if(this.sortCriteria != "ime" && this.sortCriteria != "prezime" && this.sortCriteria != "korisnicko ime")
 			{
@@ -42,15 +80,15 @@ Vue.component("user-view", {
 			{
 				if(this.sortCriteria == "prezime")
 				{
-					this.userList.sort(this.compareSurname);
+					this.users.sort(this.compareSurname);
 				}
 				else if(this.sortCriteria == "korisnicko ime")
 				{
-					this.userList.sort(this.compareUsername);
+					this.users.sort(this.compareUsername);
 				}
 				else
 				{
-					this.userList.sort(this.compareData);
+					this.users.sort(this.compareData);
 				}
 										
 			}
@@ -156,48 +194,36 @@ Vue.component("user-view", {
 
     },
     mounted: function () {
-	    this.role = window.localStorage.getItem('role');
-        console.log(this.role);
-        if(this.role =="administrator"){
-            this.activeUser = true;
-        }
-        
-    axios.get("/users")
-    	.then(response => {
-    		this.userList = response.data;
-    	});
+    	this.refresh();
     },
 	template: ` 
-	<div>
+<div>
 	
 	<h2>Pregled korisnika</h2>
+	
 	<div>
-		<input type="text" v-model="searchName" placeholder="Pretrazi po imenu" style="margin: 0.3em; width: 12em;">
-		<input type="text" v-model="searchSurname" placeholder="Pretrazi po prezimenu" style="margin: 0.3em; width: 12em;">
-		<input type="text" v-model="searchUsername" placeholder="Pretrazi po korisnickom imenu" style="margin: 0.3em; width: 12em;">
+		<input type="text" v-model="searchName" placeholder="Pretrazite po imenu" style="margin: 0.3em; width: 12em;">
+		<input type="text" v-model="searchSurname" placeholder="Pretrazite po prezimenu" style="margin: 0.3em; width: 12em;">
+		<input type="text" v-model="searchUsername" placeholder="Pretrazite po korisnickom imenu" style="margin: 0.3em; width: 12em;">
 		<button v-on:click="search">Pretrazi</button>
 	</div>
 	
-	<div>
-		<label style="color:black; margin: 0.5em;">Filteri</label>
-	</div>
-	
     <div>
+		<label>Filteri</label>
     	<select v-model="filterType" style="margin: 0.3em; width: 29.2em;">
     		<option value="normalan">normalan</option>
     		<option value="zlatni">zlatni</option>
     		<option value="srebrni">srebrni</option>
     		<option value="bronzani">bronzani</option>
     	</select>
-    	<div>
-			<label style="color:black;margin-left: 40.5em; margin-top:0.5em;" for="sortCriteria">Sortiranje</label>
-		</div>
+    </div>
+    <div>
+		<label for="sortCriteria">Sortiranje</label>
 		<select v-model="sortCriteria" style="margin: 0.6em; width: 15em;">
 						<option value="ime">Ime</option>
 						<option value="prezime">Prezime</option>
 						<option value="korisnicko ime">Korisnicko ime</option>
-		</select>    	
-
+		</select>  
         <label><b>Smer</b></label>
 		<select v-model="sortType" style="margin: 0.6em; width: 15em;">
 						<option value="rastuce">Rastuce</option>
@@ -207,20 +233,16 @@ Vue.component("user-view", {
 	</div>
 
 
-<div v-for="(user, username) in userList">
+<div v-for="(user, username) in users">
  	<div class="column">
-	  <div class="desc">
 	  	<h2>{{ user.name }}</h2>
 	  	<ul>
 			<li style="float:left"><b>Ime:</b> {{ user.name }}</li><br />
 			<li style="float:left"><b>Prezime:</b> {{ user.surname }}</li><br />
 			<li style="float:left"><b>Korisnicko ime:</b> {{ user.username }} </li><br />
 		</ul>
-	  </div>
 	</div>
 </div>	
-</div>
-
-	</div>	  
+</div>	  
 `
 });

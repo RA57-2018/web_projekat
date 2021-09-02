@@ -28,6 +28,7 @@ import beans.DAODeliverer;
 import beans.DAOLocation;
 import beans.DAOManager;
 import beans.DAORestaurant;
+import beans.DAOUser;
 import beans.Deliverer;
 import beans.Location;
 import beans.Manager;
@@ -45,6 +46,7 @@ public class FoodDeliveryMain {
 	private static DAODeliverer delivererDAO = new DAODeliverer();
 	private static DAOLocation locationDAO = new DAOLocation();
 	private static DAOArticles articlesDAO = new DAOArticles();
+	private static DAOUser userDAO = new DAOUser();
 
 	public static void main(String[] args) throws Exception {
 		port(8080);
@@ -90,10 +92,6 @@ public class FoodDeliveryMain {
 			buyerDAO.addBuyer(buyer);
 			return true;
 			
-		});
-		
-		get("/users", (req, res) -> {
-			return g.toJson(buyerDAO.getBuyers().values());
 		});
 		
 		get("/restaurants", (req, res) -> {
@@ -238,15 +236,6 @@ public class FoodDeliveryMain {
 			return g.toJson(articlesDAO.articlesRestaurant(Integer.parseInt(id)));
 		});
 		
-		get("/searchUsers", (req, res) -> {
-			String filterType = (req.queryParams("filterType")).trim();
-			String searchName = (req.queryParams("searchName")).trim();
-			String searchSurname = (req.queryParams("searchSurname")).trim();
-			String searchUsername = (req.queryParams("searchUsername")).trim();
-			HashMap<String,Buyer> buyers = buyerDAO.getBuyers();
-			return g.toJson(buyerDAO.search(buyers,filterType, searchName, searchSurname, searchUsername));
-		});
-		
 		get("/searchRestaurants", (req, res) -> {
 			String searchName = (req.queryParams("searchName")).trim();
 			String searchType = (req.queryParams("searchType")).trim();
@@ -276,7 +265,112 @@ public class FoodDeliveryMain {
 			return g.toJson(restaurantDAO.findManagerRestaurant(userName));
 		
 		});
-        
+		
+		get("/users", (req, res)->{
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			ArrayList<Buyer> buyers = new ArrayList<Buyer>();
+			for (Map.Entry<String, Buyer> entry : buyerDAO.getBuyers().entrySet()) {
+				
+				buyers.add( entry.getValue());
+		        
+		    }	
+			return gsonReg.toJson(buyers);
+			
+		});
+		
+		get("/deliverers", (req, res)->{
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			ArrayList<Deliverer> deliverers = new ArrayList<Deliverer>();
+			for (Map.Entry<String, Deliverer> entry : delivererDAO.getDeliverers().entrySet()) {
+				
+				deliverers.add( entry.getValue());
+		        
+		    }	
+			return gsonReg.toJson(deliverers);
+			
+		});
+		
+		get("/managers", (req, res)->{
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			ArrayList<Manager> managers = new ArrayList<Manager>();
+			for (Map.Entry<String, Manager> entry : managerDAO.getManagers().entrySet()) {
+				
+				managers.add( entry.getValue());
+		        
+		    }	
+			return gsonReg.toJson(managers);
+			
+		});
+		
+		/*	get("/searchUsers", (req, res) -> {
+		String searchName = (req.queryParams("searchName")).trim();
+		String searchSurname = (req.queryParams("searchSurname")).trim();
+		String searchUsername = (req.queryParams("searchUsername")).trim();
+		HashMap<String,User> users = userDAO.getUsers();
+		System.out.println("Hello");
+		return userDAO.search(users,searchName,searchSurname,searchUsername);
+	});*/
+		
+		/*get("/searchBuyer", (req, res)->{
+		String p =  req.queryParams("pretraga");
+		String u =  req.queryParams("uloga");
+		Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+		ArrayList<Buyer> buyers = new ArrayList<Buyer>();
+		if(u.equals("kupac") || u.equals("")) {
+			for (Map.Entry<String, Buyer> entry : buyerDAO.getBuyers().entrySet()) {
+				if(p.equals("")) {
+					buyers.add( entry.getValue());
+				}else {
+					if((entry.getValue().getName().contains(p) || entry.getValue().getSurname().contains(p) || entry.getValue().getUsername().contains(p)))
+						buyers.add( entry.getValue());
+				}
+			}
+		}
+		return gsonReg.toJson(buyers);
+		
+	});
+	
+	get("/searchManager", (req, res)->{
+		String p =  req.queryParams("pretraga");
+		String u =  req.queryParams("uloga");
+		Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+		ArrayList<Manager> managers = new ArrayList<Manager>();
+		if(u.equals("menadzer") || u.equals("")) {
+			for (Map.Entry<String, Manager> entry : managerDAO.getManagers().entrySet()) {
+				if(p.equals("")) {
+					managers.add( entry.getValue());
+				}else {
+					if((entry.getValue().getName().contains(p) || entry.getValue().getSurname().contains(p) || entry.getValue().getUsername().contains(p)))
+						managers.add( entry.getValue());
+				}
+			}
+		}
+		return gsonReg.toJson(managers);
+		
+	});
+	
+	get("/searchDeliverer", (req, res)->{
+		String p =  req.queryParams("pretraga");
+		String u =  req.queryParams("uloga");
+		Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+		ArrayList<Deliverer> deliverers = new ArrayList<Deliverer>();
+		if(u.equals("dostavljac") || u.equals("")) {
+			for (Map.Entry<String, Deliverer> entry : delivererDAO.getDeliverers().entrySet()) {
+				if(p.equals("")) {
+					deliverers.add( entry.getValue());
+				}else {
+					if((entry.getValue().getName().contains(p) || entry.getValue().getSurname().contains(p) || entry.getValue().getUsername().contains(p)))
+						deliverers.add( entry.getValue());
+				}
+			}
+		}
+		return gsonReg.toJson(deliverers);
+		
+	});*/
+
 	}
 
 }
