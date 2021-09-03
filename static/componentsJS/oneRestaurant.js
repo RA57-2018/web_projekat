@@ -8,11 +8,37 @@ Vue.component("restaurant", {
       user: localStorage.getItem('uName'),
       errorMessage: "",
       typeUser: {},
-      articles: null,
+      articles: [],
 
     }
   },
   methods: {
+        Delete(event){   
+         this.findRestaurant();    
+         if(this.restaurant.manager == this.user){  
+            articleName = event.target.id;
+            for(var i =0; i<this.articles.length; i++){
+                if(this.articles[i].name == articleName){
+                axios
+                .post('/deleteArticle',{}, {params:{name:articleName}})
+                .then((response) => {
+                  alert("Uspesno obrisan artikal!");
+                  this.articles = [];
+                  this.refresh();
+                  
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+                }
+            }
+         }else{
+           alert("Ne mozete da brisete tudje artikle!");
+         }
+        },
+    refresh(){
+        this.findRestaurant();
+    	},
     findRestaurant: function() {
       let id = this.$route.params.id;
       axios.get('/restaurant?id=' + id)
@@ -44,6 +70,7 @@ Vue.component("restaurant", {
   mounted: function() {
     this.uName = window.localStorage.getItem('uName');
     this.role = window.localStorage.getItem('role');
+    console.log(this.role);
     
     this.findRestaurant();     
     
@@ -77,6 +104,7 @@ Vue.component("restaurant", {
 					<li style="float:left"><b>Tip artikla:</b> {{ article.typeArtical }}</li><br />
 		            <li style="float:left"><b>Kolicina:</b> {{ article.quantity }}</li><br />
 		            <li style="float:left"><b>Opis:</b> {{ article.description }}</li><br />
+		            <li v-if="role =='manager'"><button type="button" @click="Delete" :id="article.name">Obrisi</button></li>
 				</ul>
 			  </div>
 	  </div>

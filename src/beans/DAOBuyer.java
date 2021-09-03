@@ -155,7 +155,7 @@ public class DAOBuyer {
 	public void deleteBuyer(String username) {
 		for (Map.Entry<String, Buyer> entry : buyers.entrySet()) {
 	        if(entry.getValue().getUsername().equals(username) ) {
-	        	entry.getValue().setDeleted(true);;
+	        	entry.getValue().setDeleted(true);
 	        }
 	    }
 		try {

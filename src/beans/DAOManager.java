@@ -103,7 +103,7 @@ public class DAOManager {
 	public void deleteManager(String username) {
 		for (Map.Entry<String, Manager> entry : managers.entrySet()) {
 	        if(entry.getValue().getUsername().equals(username) ) {
-	        	entry.getValue().setDeleted(true);;
+	        	entry.getValue().setDeleted(true);
 	        }
 	    }
 		

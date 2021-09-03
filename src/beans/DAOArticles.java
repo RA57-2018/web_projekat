@@ -122,4 +122,30 @@ public class DAOArticles {
     }
 	*/
 	
+    
+    public void findArticle(String name) {
+		articles = new HashMap<Integer,ArrayList<Artical>>();
+		try {
+			readArticles();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(ArrayList<Artical> l : articles.values()) 
+		{
+		    for (Artical i : l) {
+					if(i.getName().equals(name)) {
+						i.setDeleted(true);
+					}
+		      }
+		}
+		
+		try {
+			writeArticle();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 }

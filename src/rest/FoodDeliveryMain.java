@@ -239,7 +239,14 @@ public class FoodDeliveryMain {
 		
 		get("/restaurantArticles", (req, res) -> {			
 			String id = req.queryParams("id");
-			return g.toJson(articlesDAO.articlesRestaurant(Integer.parseInt(id)));
+			ArrayList<Artical> valid = new ArrayList<Artical>();
+			ArrayList<Artical> l = articlesDAO.articlesRestaurant(Integer.parseInt(id));
+			for (Artical i : l) {
+		    	if(!i.isDeleted()) {
+		    		valid.add(i);
+				}
+		      }
+			return g.toJson(valid);
 		});
 		
 		get("/searchRestaurants", (req, res) -> {
@@ -402,7 +409,14 @@ public class FoodDeliveryMain {
 			
 		});
 		
-		
+		post("/deleteArticle", (req, res)-> {
+			String aName =  req.queryParams("name");
+			
+			articlesDAO.findArticle(aName);
+			
+			return true;
+			
+		});
 		
 	}
 	

@@ -103,7 +103,7 @@ public class DAODeliverer {
 	public void deleteDeliverer(String username) {
 		for (Map.Entry<String, Deliverer> entry : deliverers.entrySet()) {
 	        if(entry.getValue().getUsername().equals(username) ) {
-	        	entry.getValue().setDeleted(true);;
+	        	entry.getValue().setDeleted(true);
 	        }
 	    }
 		

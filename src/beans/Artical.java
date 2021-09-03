@@ -9,6 +9,7 @@ public class Artical {
 	private String quantity;
 	private String description;
 	private String image;
+	private boolean deleted; 
 	
 	public Artical() {}
 	
@@ -53,6 +54,14 @@ public class Artical {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	

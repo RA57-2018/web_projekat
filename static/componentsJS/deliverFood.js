@@ -172,6 +172,10 @@ Vue.component("deliver-food", {
 			.then(response => {
 				this.locationList = response.data;
 			});
+			
+			
+	localStorage.removeItem('role');
+    localStorage.removeItem('uName');
 
   },
 	template: ` 
