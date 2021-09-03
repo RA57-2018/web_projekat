@@ -56,6 +56,7 @@ public class DAOBuyer {
 	
 	public Buyer addBuyer(Buyer buyer) {
 		buyer.setPoints(0);
+		buyer.setDeleted(false);
 		UserType type = new UserType();
 		type.setType("normal");
 		type.setDiscount(0);
@@ -148,5 +149,20 @@ public class DAOBuyer {
 				}*/
 		 	}
 		return valid;
+	}
+	
+	
+	public void deleteBuyer(String username) {
+		for (Map.Entry<String, Buyer> entry : buyers.entrySet()) {
+	        if(entry.getValue().getUsername().equals(username) ) {
+	        	entry.getValue().setDeleted(true);;
+	        }
+	    }
+		try {
+			writeBuyers();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

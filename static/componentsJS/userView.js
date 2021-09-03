@@ -15,6 +15,26 @@ Vue.component("user-view", {
       }  
 	},
     methods: {
+        Delete(event){          
+            userName = event.target.id;
+            for(var i =0; i<this.users.length; i++){
+                if(this.users[i].username == userName && this.users[i].role =="administrator"){
+                    alert("Ne mozete da obrisete administratora!");
+                }else if(this.users[i].username == userName){
+                    axios
+                .post('/delete',{}, {params:{username:userName}})
+                .then((response) => {
+                  alert("Uspesno obrisan korisnik!");
+                  this.users = [];
+                  this.refresh();
+                  
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+                }
+            }
+        },
     refresh(){
     	axios.get('/users')
 		.then(response => {
@@ -240,6 +260,8 @@ Vue.component("user-view", {
 			<li style="float:left"><b>Ime:</b> {{ user.name }}</li><br />
 			<li style="float:left"><b>Prezime:</b> {{ user.surname }}</li><br />
 			<li style="float:left"><b>Korisnicko ime:</b> {{ user.username }} </li><br />
+			<li style="float:left"><b>Uloga:</b> {{ user.role }} </li><br />
+			<li style="float:left"><button type="button" @click="Delete" :id="user.username">Obrisi</button></li>
 		</ul>
 	</div>
 </div>	

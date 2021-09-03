@@ -90,6 +90,7 @@ public class DAODeliverer {
 	
 	public Deliverer addDeliverer(Deliverer deliverer) {
 
+		deliverer.setDeleted(false);
 		deliverers.put(deliverer.getUsername(),deliverer);
 		try {
 			this.writeDeliverer();
@@ -97,6 +98,21 @@ public class DAODeliverer {
 			e.printStackTrace();
 		}
 		return deliverer;
+	}
+	
+	public void deleteDeliverer(String username) {
+		for (Map.Entry<String, Deliverer> entry : deliverers.entrySet()) {
+	        if(entry.getValue().getUsername().equals(username) ) {
+	        	entry.getValue().setDeleted(true);;
+	        }
+	    }
+		
+		try {
+			writeDeliverer();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

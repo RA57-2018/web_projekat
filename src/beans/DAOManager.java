@@ -90,6 +90,7 @@ public class DAOManager {
 	
 	public Manager addManager(Manager manager) {
 
+		manager.setDeleted(false);
 		managers.put(manager.getUsername(),manager);
 		try {
 			this.writeManager();
@@ -97,6 +98,21 @@ public class DAOManager {
 			e.printStackTrace();
 		}
 		return manager;
+	}
+	
+	public void deleteManager(String username) {
+		for (Map.Entry<String, Manager> entry : managers.entrySet()) {
+	        if(entry.getValue().getUsername().equals(username) ) {
+	        	entry.getValue().setDeleted(true);;
+	        }
+	    }
+		
+		try {
+			writeManager();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

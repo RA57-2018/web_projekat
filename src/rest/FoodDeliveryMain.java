@@ -60,23 +60,29 @@ public class FoodDeliveryMain {
 			String userN = " ";
 			ArrayList<String> response = new ArrayList<String>();
 			if(buyerDAO.findBuyer(name, pass) != null) {
-			    userN = name;
-				response.add(userN);
-				response.add("buyer");
+				if(!buyerDAO.findBuyer(name, pass).isDeleted()) {
+				    userN = name;
+					response.add(userN);
+					response.add("buyer");
+				}
 			}
 			else if(administratorDAO.findAdministrator(name, pass) != null){
-				userN = name;
-				response.add(userN);
-				response.add("administrator");
+					userN = name;
+					response.add(userN);
+					response.add("administrator");
 			}
 			else if(managerDAO.findManager(name, pass) != null){
-				userN = name;
-				response.add(userN);
-				response.add("manager");
+				if(!managerDAO.findManager(name, pass).isDeleted()) {
+					userN = name;
+					response.add(userN);
+					response.add("manager");
+				}
 			}else if(delivererDAO.findDeliverer(name, pass) != null){
-				userN = name;
-				response.add(userN);
-				response.add("deliverer");
+				if(!delivererDAO.findDeliverer(name, pass).isDeleted()) {
+					userN = name;
+					response.add(userN);
+					response.add("deliverer");
+				}
 			}
 			response.add(userN);
 			return g.toJson(response);
@@ -271,8 +277,9 @@ public class FoodDeliveryMain {
 			
 			ArrayList<Buyer> buyers = new ArrayList<Buyer>();
 			for (Map.Entry<String, Buyer> entry : buyerDAO.getBuyers().entrySet()) {
-				
-				buyers.add( entry.getValue());
+				if(!entry.getValue().isDeleted()) {
+					buyers.add( entry.getValue());
+				}
 		        
 		    }	
 			return gsonReg.toJson(buyers);
@@ -284,8 +291,9 @@ public class FoodDeliveryMain {
 			
 			ArrayList<Deliverer> deliverers = new ArrayList<Deliverer>();
 			for (Map.Entry<String, Deliverer> entry : delivererDAO.getDeliverers().entrySet()) {
-				
-				deliverers.add( entry.getValue());
+				if(!entry.getValue().isDeleted()) {
+					deliverers.add( entry.getValue());
+				}
 		        
 		    }	
 			return gsonReg.toJson(deliverers);
@@ -297,8 +305,9 @@ public class FoodDeliveryMain {
 			
 			ArrayList<Manager> managers = new ArrayList<Manager>();
 			for (Map.Entry<String, Manager> entry : managerDAO.getManagers().entrySet()) {
-				
-				managers.add( entry.getValue());
+				if(!entry.getValue().isDeleted()) {
+					managers.add( entry.getValue());
+				}
 		        
 		    }	
 			return gsonReg.toJson(managers);
@@ -371,6 +380,32 @@ public class FoodDeliveryMain {
 		
 	});*/
 
+		
+		post("/delete", (req, res)-> {
+			String uName =  req.queryParams("username");
+			User u = null;
+			u = buyerDAO.findBuyerProfile(uName);
+			if(u != null) {
+				buyerDAO.deleteBuyer(uName);
+			}else {
+					u = managerDAO.findManagerProfile(uName);
+					if(u != null) {
+						managerDAO.deleteManager(uName);
+					}else {
+						u = delivererDAO.findDelivererProfile(uName);
+						if(u != null) {
+							delivererDAO.deleteDeliverer(uName);
+						}
+					}
+			}
+			return true;
+			
+		});
+		
+		
+		
 	}
+	
+	
 
 }

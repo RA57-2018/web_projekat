@@ -16,6 +16,7 @@ public abstract class User {
 	private Basket basket;
 	private Restaurant restaurant;
 	private ArrayList<Order> deliveryOrders;
+	private boolean deleted;
 	
 	public User() {}
 	
@@ -84,6 +85,14 @@ public abstract class User {
 	}
 	public void setDeliveryOrders(ArrayList<Order> deliveryOrders) {
 		this.deliveryOrders = deliveryOrders;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 }
