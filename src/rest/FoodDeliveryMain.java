@@ -267,6 +267,28 @@ public class FoodDeliveryMain {
 			int id = restaurantDAO.findManagerRestaurant(userName);
 			Artical artical = gsonReg.fromJson(reqBody, Artical.class);
 			artical.setRestaurant(id);
+			
+			if(artical.getImage() == null) {
+				return false;
+			}
+			
+			String imageString = artical.getImage().split(",")[1];
+			BufferedImage image = null;
+            byte[] imageByte;
+            
+            imageByte = Base64.getDecoder().decode(imageString);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            image = ImageIO.read(bis);
+            bis.close();
+            
+            
+            String imageName= "artikal" + id + ".jpg";
+
+			File outputfile = new File(System.getProperty("user.dir")+ "\\static\\images\\" + imageName);
+	        ImageIO.write(image, "jpg", outputfile);
+	        
+	        artical.setImage("../images/" + imageName);
+	            			
 			articlesDAO.addArticle(id, artical);
 			articlesDAO.writeArticle();
 			return true;

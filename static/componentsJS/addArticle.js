@@ -10,6 +10,9 @@ Vue.component("add-article", {
       image: null,
       username: "",
 	  role: "",
+	  imageShow: null,
+	  imageForBackend: null,
+	  error: null,
   };
   },
     methods: {
@@ -19,23 +22,42 @@ Vue.component("add-article", {
     formSubmit: function (e) {
       e.preventDefault();
       this.errors = null;
-			if(!this.name || !this.price || !this.typeArtical || !this.image){
+			if(!this.name || !this.price || !this.typeArtical || !this.imageForBackend){
 				this.showErrorMessage = true;
 				alert("Neophodno je uneti sve podatke!")
 				e.preventDefault();
-			}else{
+			}else if(!this.Number(this.price)){
+			    alert("Cena mora biti ceo broj!")
+			    e.preventDefault();
+			}
+			else{
         axios
         .post('/addArticle', {name: this.name, price: this.price, typeArtical: this.typeArtical,
         						quantity: this.quantity, description : this.description,
-        						image : this.image},{params:{username:this.username}})
+        						image : this.imageForBackend},{params:{username:this.username}})
         .then(function(response){ 
         			alert("Uspesno dodat artikal!")
         			router.replace({ path: `/home-page` })
            });
       }
-
       
     },
+	ChangeImage: function(event){
+       const file = event.target.files[0];
+       this.createBaseImage(file);
+       this.imageShow = (URL.createObjectURL(file));
+      },
+    createBaseImage(file){
+       const reader= new FileReader();
+ 
+       reader.onload = (e) =>{
+             this.imageForBackend = (e.target.result);
+           }
+          reader.readAsDataURL(file);
+      },
+    Number: function (value) {
+       return /^[0-9]+$/.test(value);
+      },     
 
    },
      mounted: function () {
@@ -72,10 +94,14 @@ Vue.component("add-article", {
         <input type="text" placeholder="Unesite opis" v-model="description"><br />
         
         <label><b>Slika</b></label><br />
-        <input type="text" placeholder="Unesite sliku" v-model="image"><br />
+        <input type="file" v-on:change="ChangeImage"><br />
+        
+        <img v-if="!imageShow" src="" width="300" height="300">
+        <img v-if="imageShow" :src="imageShow" width="300" height="300"><br />
            
         <button @click="Cancel" type="button">Nazad</button>
         <input class="inp" type="submit" value="Dodaj">
+        
              
    </div>
    </form> 
