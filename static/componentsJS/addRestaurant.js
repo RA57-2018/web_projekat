@@ -16,10 +16,12 @@ Vue.component("add-restaurant", {
         city: null,
         postalCode: null,
         locations: null,
+        imagesForBackend: null,
+        logoShow: null,
   };
   },
     methods: {
-    	/*logoChange: function(event){
+    	logoChange: function(event){
             const file = event.target.files[0];
             this.createBase64Image(file);
             this.logoShow = (URL.createObjectURL(file));
@@ -31,15 +33,14 @@ Vue.component("add-restaurant", {
                 this.imagesForBackend = (e.target.result);
             }
             reader.readAsDataURL(file);
-        },*/
+        },
     	 Cancel: function(){
              router.replace({ path: `/home-page` })
     	 },
         createR: function(e){
         	e.preventDefault();
-        	console.log("rrrrrrrrr"+this.imagesForBackend);
         	this.errors = null;
-        	if(!this.nameR || !this.type || !this.status || !this.longitude || !this.latitude || !this.streetName || !this.number || !this.city || !this.postalCode){
+        	if(!this.nameR || !this.type || !this.status || !this.longitude || !this.latitude || !this.streetName || !this.number || !this.city || !this.postalCode || !this.imagesForBackend){
 				this.showErrorMessage = true;
 				alert("Neophodno je uneti sve podatke!")
 				e.preventDefault();
@@ -55,7 +56,7 @@ Vue.component("add-restaurant", {
 				this.locations.address = this.address;
 				axios
 		        .post('/add-restaurant' , {name: this.nameR, type: this.type, status: this.status,
-		        	locations: this.locations/*, logo: this.logo*/})
+		        	locations: this.locations, logo: this.imagesForBackend})
 		        .then(function(response){ 
 		        			alert("Uspesno dodat restoran!")
 		        			router.replace({ path: `/home-page` })
@@ -113,6 +114,12 @@ Vue.component("add-restaurant", {
         
         <label><b>Postanski broj</b></label><br />
         <input type="text" placeholder="Unesite postanski broj" required v-model="postalCode"><br />
+        
+        <label><b>Slika</b></label><br />
+        <input type="file" v-on:change="logoChange"><br />
+        
+        <img v-if="!logoShow" src="" width="300" height="300">
+        <img v-if="logoShow" :src="logoShow" width="300" height="300"><br />
         
         <button @click="Cancel" type="button">Nazad</button>  
         <input class="inp" type="submit" value="Dodaj restoran">

@@ -118,7 +118,7 @@ public class FoodDeliveryMain {
 			int id = restaurantDAO.findNextIdR();
 			restaurant.setId(id);
 			restaurant.setLocation(locationId);
-			/*
+			
 			if(restaurant.getLogo() == null) {
 				return false;
 			}
@@ -131,12 +131,14 @@ public class FoodDeliveryMain {
             ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
             image = ImageIO.read(bis);
             bis.close();
-            String imageName= "restaurant" + id + ".jpg";
             
-            File outputfile = new File(System.getProperty("restaurant1.dir")+ "\\static\\images\\" + imageName);
+            int idr = restaurantDAO.imageNumberRestaurant();
+            String imageName = "restoran" + idr + ".jpg";
+            
+            File outputfile = new File(System.getProperty("user.dir")+ "\\static\\images\\" + imageName);
             ImageIO.write(image, "jpg", outputfile);
             restaurant.setLogo("../images/" + imageName);
-		*/
+		
 			HashMap<Integer, Restaurant> restaurants = restaurantDAO.getRestaurants();
 			restaurants.put(id, restaurant);
 			restaurantDAO.setRestaurants(restaurants);
@@ -281,9 +283,9 @@ public class FoodDeliveryMain {
             image = ImageIO.read(bis);
             bis.close();
             
+            int idd = articlesDAO.imageNumber();
+            String imageName= "artikal" + idd + ".jpg";
             
-            String imageName= "artikal" + id + ".jpg";
-
 			File outputfile = new File(System.getProperty("user.dir")+ "\\static\\images\\" + imageName);
 	        ImageIO.write(image, "jpg", outputfile);
 	        

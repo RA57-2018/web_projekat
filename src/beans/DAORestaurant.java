@@ -110,4 +110,21 @@ public class DAORestaurant {
 	    }		
 		return 0;
 	}
+
+	public int imageNumberRestaurant() {
+		restaurants = new HashMap<Integer, Restaurant>();
+		try {
+            readRestaurants();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+		
+		int idR = 0;
+		for(Restaurant r : restaurants.values()) {
+			idR++;
+		}
+		
+		return idR;
+	}
 }

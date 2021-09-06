@@ -99,6 +99,26 @@ public class DAOArticles {
 		
     }
     
+    public int imageNumber() {
+        articles = new HashMap<Integer,ArrayList<Artical>>();
+        try {
+            readArticles();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        int id = 0;
+        for(ArrayList<Artical> l : articles.values()) 
+        {
+            for (Artical i : l) {
+                id++;
+              }
+        }
+
+        return id;
+    }
+    
     /*pokusaj provere imena
     public boolean checkName(String name) {
     	articles = new HashMap<Integer,ArrayList<Artical>>();
