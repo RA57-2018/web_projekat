@@ -14,8 +14,7 @@ Vue.component("restaurant", {
   },
   methods: {
         Delete(event){   
-         this.findRestaurant();    
-         if(this.restaurant.manager == this.user){  
+         this.findRestaurant();     
             articleName = event.target.id;
             for(var i =0; i<this.articles.length; i++){
                 if(this.articles[i].name == articleName){
@@ -32,9 +31,6 @@ Vue.component("restaurant", {
                 });
                 }
             }
-         }else{
-           alert("Ne mozete da brisete tudje artikle!");
-         }
         },
     refresh(){
         this.findRestaurant();
@@ -104,7 +100,7 @@ Vue.component("restaurant", {
 					<li style="float:left"><b>Tip artikla:</b> {{ article.typeArtical }}</li><br />
 		            <li style="float:left"><b>Kolicina:</b> {{ article.quantity }}</li><br />
 		            <li style="float:left"><b>Opis:</b> {{ article.description }}</li><br />
-		            <li v-if="role =='manager'"><button type="button" @click="Delete" :id="article.name">Obrisi</button></li>
+		            <li v-if="role =='administrator'"><button type="button" @click="Delete" :id="article.name">Obrisi</button></li>
 				</ul>
 			  </div>
 	  </div>
