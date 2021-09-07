@@ -44,6 +44,24 @@ Vue.component("add-restaurant", {
 				this.showErrorMessage = true;
 				alert("Neophodno je uneti sve podatke!")
 				e.preventDefault();
+			}else if(!this.Float(this.longitude)){
+			    alert("Geografska duzina mora biti broj!")
+			    e.preventDefault();
+			}else if(!this.Float(this.latitude)){
+			    alert("Geografska sirina mora biti broj!")
+			    e.preventDefault();
+			}else if(!this.Word(this.streetName)){
+			    alert("Naziv ulice mora sadrzati samo slova i veliko pocetno slovo!")
+			    e.preventDefault();
+			}else if(!this.Number(this.number)){
+			    alert("Broj ulice mora biti ceo broj!")
+			    e.preventDefault();
+			}else if(!this.Word(this.city)){
+			    alert("Naziv grada mora sadrzati samo slova i veliko pocetno slovo!")
+			    e.preventDefault();
+			}else if(!this.Number(this.postalCode)){
+			    alert("Postanski broj mora biti ceo broj!")
+			    e.preventDefault();
 			}else{
 			    this.restaurants = {}
 				this.locations ={}
@@ -67,6 +85,15 @@ Vue.component("add-restaurant", {
 		           });
 			}
         },
+    Number: function (value) {
+       return /^[0-9]+$/.test(value);
+      },
+    Float: function(value){
+       return /^[0-9]+(\.)?[0-9]*$/.test(value);
+      }, 
+    Word: function(value){
+       return /^[A-Z][a-zA-Z]*$/.test(value);
+      },
 },
 
    template: ` 
@@ -98,8 +125,16 @@ Vue.component("add-restaurant", {
                <label>Pizza</label>
         </div><br />
         
-        <label><b>Status restorana</b></label><br />
-        <input type="text" placeholder="Unesite status restorana" required v-model="status"><br />
+        <label><b>Status restorana</b></label>
+        <div>
+           <input type="radio" v-model="status" value="otvoren">
+               <label>Otvoren</label>
+        </div>
+              <label></label>
+        <div>
+            <input type="radio" v-model="status" value="zatvoren" >
+               <label>Zatvoren</label>
+        </div><br />
         
         <label><b>Geografska duzina</b></label><br />
         <input type="text" placeholder="Unesite geografsku duzinu" required v-model="longitude"><br />

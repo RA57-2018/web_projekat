@@ -28,7 +28,13 @@ Vue.component("add-employee", {
                 this.showErrorMessage = true;
 				alert("Lozinke moraju biti iste!")
 				e.preventDefault();
-      }else{
+      		}else if(!this.Word(this.name)){
+			    alert("Ime mora sadrati samo slova i veliko pocetno slovo!")
+			    e.preventDefault();
+			}else if(!this.Word(this.surname)){
+			    alert("Prezime mora sadrati samo slova i veliko pocetno slovo!")
+			    e.preventDefault();
+			}else{
         axios
         .post('/addEmployee', {name: this.name, surname: this.surname,username: this.username,
         						password: this.password, gender : this.gender,
@@ -41,6 +47,9 @@ Vue.component("add-employee", {
 
       
     },
+    Word: function(value){
+       return /^[A-Z][a-zA-Z]*$/.test(value);
+      },
 
    },
    template: ` 

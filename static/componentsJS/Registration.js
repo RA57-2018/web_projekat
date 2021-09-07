@@ -23,6 +23,12 @@ Vue.component("registration", {
 				this.showErrorMessage = true;
 				alert("Neophodno je uneti sve podatke!")
 				e.preventDefault();
+			}else if(!this.Word(this.name)){
+			    alert("Ime mora sadrati samo slova i veliko pocetno slovo!")
+			    e.preventDefault();
+			}else if(!this.Word(this.surname)){
+			    alert("Prezime mora sadrati samo slova i veliko pocetno slovo!")
+			    e.preventDefault();
 			}else if(this.passwordConfirmation != this.password){
                 this.showErrorMessage = true;
 				alert("Lozinke moraju biti iste!")
@@ -42,6 +48,9 @@ Vue.component("registration", {
 
       
     },
+    Word: function(value){
+       return /^[A-Z][a-zA-Z]*$/.test(value);
+      },
 
    },
    template: ` 
