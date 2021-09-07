@@ -10,7 +10,7 @@ public class Restaurant {
 	private int articles;
 	private String status;
 	private int location;
-	private Location locations;
+	//private Location locations;
 	private String logo;
 	private String manager;
 	
@@ -59,7 +59,7 @@ public class Restaurant {
 	public void setArticals(int articles) {
 		this.articles = articles;
 	}
-
+	/*
 	public Location getLocations() {
 		return locations;
 	}
@@ -67,7 +67,7 @@ public class Restaurant {
 	public void setLocations(Location locations) {
 		this.locations = locations;
 	}
-
+	*/
 	public int getArticles() {
 		return articles;
 	}

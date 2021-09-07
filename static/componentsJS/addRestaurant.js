@@ -6,7 +6,7 @@ Vue.component("add-restaurant", {
         restaurant: null,
         location: null,
         address: null,
-        nameR: null,
+        name: null,
         type: null,
         status: null,
         longitude: null,
@@ -40,13 +40,18 @@ Vue.component("add-restaurant", {
         createR: function(e){
         	e.preventDefault();
         	this.errors = null;
-        	if(!this.nameR || !this.type || !this.status || !this.longitude || !this.latitude || !this.streetName || !this.number || !this.city || !this.postalCode || !this.imagesForBackend){
+        	if(!this.name || !this.type || !this.status || !this.longitude || !this.latitude || !this.streetName || !this.number || !this.city || !this.postalCode || !this.imagesForBackend){
 				this.showErrorMessage = true;
 				alert("Neophodno je uneti sve podatke!")
 				e.preventDefault();
 			}else{
+			    this.restaurants = {}
 				this.locations ={}
 				this.address = {}
+				this.restaurants.name = this.name;
+				this.restaurants.type = this.type;
+				this.restaurants.status = this.status;
+				this.restaurants.logo = this.imagesForBackend;
 				this.locations.longitude=this.longitude;
 				this.locations.latitude=this.latitude;
 				this.address.streetName = this.streetName;
@@ -55,8 +60,7 @@ Vue.component("add-restaurant", {
 				this.address.postalCode = this.postalCode;
 				this.locations.address = this.address;
 				axios
-		        .post('/add-restaurant' , {name: this.nameR, type: this.type, status: this.status,
-		        	locations: this.locations, logo: this.imagesForBackend})
+		        .post('/add-restaurant' , {restaurant: this.restaurants, location: this.locations})
 		        .then(function(response){ 
 		        			alert("Uspesno dodat restoran!")
 		        			router.replace({ path: `/home-page` })
@@ -71,7 +75,7 @@ Vue.component("add-restaurant", {
    <div class="container">
    
    		<label><b>Naziv restorana</b></label><br />
-        <input type="text" placeholder="Unesite naziv restorana" required v-model="nameR"><br />
+        <input type="text" placeholder="Unesite naziv restorana" required v-model="name"><br />
         
         <label><b>Tip restorana</b></label>
         <div>

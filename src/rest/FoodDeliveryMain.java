@@ -110,20 +110,26 @@ public class FoodDeliveryMain {
 		
 		post("/add-restaurant", (req, res) -> {
 			String reqBody = req.body();
-			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'hh:mm").create();
-			
-			Restaurant restaurant = gsonReg.fromJson(reqBody, Restaurant.class);
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+						
+			RestaurantDAO restaurant = gsonReg.fromJson(reqBody, RestaurantDAO.class);
 			int locationId = locationDAO.findNextId();
 			
-			int id = restaurantDAO.findNextIdR();
-			restaurant.setId(id);
-			restaurant.setLocation(locationId);
+			Location location = restaurant.getLocation();			
+			location.setId(locationId);
 			
-			if(restaurant.getLogo() == null) {
+			int id = restaurantDAO.findNextIdR();
+			Restaurant rest = restaurant.getRestaurant();
+			rest.setId(id);
+			rest.setLocation(locationId);
+			
+								
+			if(rest.getLogo() == null) {
+				System.out.println("here");
 				return false;
 			}
 			
-			String imageString = restaurant.getLogo().split(",")[1];
+			String imageString = rest.getLogo().split(",")[1];
 			BufferedImage image = null;
             byte[] imageByte;
             
@@ -137,12 +143,18 @@ public class FoodDeliveryMain {
             
             File outputfile = new File(System.getProperty("user.dir")+ "\\static\\images\\" + imageName);
             ImageIO.write(image, "jpg", outputfile);
-            restaurant.setLogo("../images/" + imageName);
-		
+            rest.setLogo("../images/" + imageName);
+            
 			HashMap<Integer, Restaurant> restaurants = restaurantDAO.getRestaurants();
-			restaurants.put(id, restaurant);
+			restaurants.put(id, rest);
 			restaurantDAO.setRestaurants(restaurants);
 			restaurantDAO.writeRestaurants();
+            
+			HashMap<Integer,Location> locations = locationDAO.getLocation();
+			locations.put(locationId, location);
+			locationDAO.setLocation(locations);
+			locationDAO.writeLocation();
+	
 			return true;
 			
 		});
