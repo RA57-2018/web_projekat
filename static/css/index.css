@@ -130,3 +130,7 @@ button:hover {
   background-color: #ddd; 
   color: black;
 }
+
+.hide {
+    visibility: hidden !important;
+}

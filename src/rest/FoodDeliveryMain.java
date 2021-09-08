@@ -123,7 +123,6 @@ public class FoodDeliveryMain {
 			
 								
 			if(rest.getLogo() == null) {
-				System.out.println("here");
 				return false;
 			}
 			
@@ -143,7 +142,6 @@ public class FoodDeliveryMain {
             ImageIO.write(image, "jpg", outputfile);
             rest.setLogo("../images/" + imageName);
             
-            System.out.println(rest.getManager());
             managerDAO.writeIdManager(rest.getManager(), id);
             
 			HashMap<Integer, Restaurant> restaurants = restaurantDAO.getRestaurants();
@@ -457,6 +455,19 @@ public class FoodDeliveryMain {
 		
 		get("/restaurantManager", (req, res) -> {
 			return g.toJson(managerDAO.getManagers().values());
+		});
+		
+        post("/addManager", (req, res)-> {
+    					
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			Manager manager = gsonReg.fromJson(reqBody, Manager.class);
+			manager.setRole("menadzer");
+			managerDAO.addManager(manager);
+
+			return true;
+			
 		});
 		
 	}

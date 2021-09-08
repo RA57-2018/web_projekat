@@ -20,6 +20,14 @@ Vue.component("add-restaurant", {
         logoShow: null,
         manager: null,
         managerList: [],
+        seen: false,
+        nameManager: null,
+        surname: null,
+      	username: null,
+      	password:null,
+      	passwordConfirmation: null,
+      	date: null,
+      	gender: null,
   };
   },
     methods: {
@@ -42,6 +50,9 @@ Vue.component("add-restaurant", {
         createR: function(e){
         	e.preventDefault();
         	this.errors = null;
+        	if(this.username != null){
+        		this.manager = this.username;
+        	}
         	if(!this.name || !this.type || !this.status || !this.longitude || !this.latitude || !this.streetName || !this.number || !this.city || !this.postalCode || !this.imagesForBackend || !this.manager){
 				this.showErrorMessage = true;
 				alert("Neophodno je uneti sve podatke!")
@@ -97,6 +108,34 @@ Vue.component("add-restaurant", {
     Word: function(value){
        return /^[A-Z][a-zA-Z]*$/.test(value);
       },
+	createManager: function (e) {
+      e.preventDefault();
+      this.errors = null;
+			if(!this.nameManager || !this.surname || !this.username || !this.password || !this.passwordConfirmation || !this.date || !this.gender){
+				this.showErrorMessage = true;
+				alert("Neophodno je uneti sve podatke!")
+				e.preventDefault();
+			}else if(this.passwordConfirmation != this.password){
+                this.showErrorMessage = true;
+				alert("Lozinke moraju biti iste!")
+				e.preventDefault();
+      		}else if(!this.Word(this.nameManager)){
+			    alert("Ime mora sadrati samo slova i veliko pocetno slovo!")
+			    e.preventDefault();
+			}else if(!this.Word(this.surname)){
+			    alert("Prezime mora sadrati samo slova i veliko pocetno slovo!")
+			    e.preventDefault();
+			}else{
+        axios
+        .post('/addManager', {name: this.nameManager, surname: this.surname,username: this.username,
+        						password: this.password, gender : this.gender,
+        						birthDate : this.date})
+        .then(function(response){ 
+        			alert("Uspesno dodat menadzer!")        			
+           });
+      }
+      
+    },
 
 },
     mounted: function () {        
@@ -178,8 +217,54 @@ Vue.component("add-restaurant", {
 		<select v-model="manager" style="margin: 0.3em; width: 29.2em;">
     		<option v-for="(managers, value) in managerList" v-if="managers.id === 0" :value="managers.name" v-bind:value="managers.username">{{ managers.name }} {{ managers.surname }}</option>
     	</select><br /><br />
+    	
 
+		<div v-on:click="seen = !seen">
+          	<button type="button">Registruj novog menadzera</button><br /><br />
+		</div>
 
+  		<div v-if="seen" id="hide">
+  			<label><b>Kliknite opet na prethodno dugme da otkazete dodavanje novog menadzera</b></label><br /><br />
+   
+      		<form @submit="createManager">
+   			<div class="container">
+		   		<label><b>Ime</b></label><br />
+		        <input type="text" placeholder="Unesite ime" required v-model="nameManager"><br />
+		        
+		        <label><b>Prezime</b></label><br />
+		        <input type="text" placeholder="Unesite prezime" required v-model="surname"><br />
+		        
+		        <label><b>Korisnicko ime</b></label><br />
+		        <input type="text" placeholder="Unesite korisnicko ime" required v-model="username"><br />
+		            
+		        <label><b>Lozinka</b></label><br />
+		        <input type="password" placeholder="Unesite lozinku" required v-model="password"><br />
+		        
+		        <label><b>Potvrda lozinke</b></label><br />
+		        <input type="password" placeholder="Unesite ponovo lozinku" required v-model="passwordConfirmation"><br />
+		        
+		        <label><b>Pol</b></label>
+		        <div>
+		           <input type="radio" v-model="gender" value="muski">
+		               <label>Muski</label>
+		        </div>
+		              <label></label>
+		        <div>
+		            <input type="radio" v-model="gender" value="zenski" >
+		               <label>Zenski</label>
+		        </div><br />
+		        
+		        <label><b>Datum rodjenja</b></label><br />
+		              <div>
+		              <input v-model="date" type="date">
+		              </div><br />
+		              
+		        <input class="inp" type="submit" value="Dodaj menadzera">
+		              
+		    </div>
+   			</form> 
+		             
+  		</div>
         
         <button @click="Cancel" type="button">Nazad</button>  
         <input class="inp" type="submit" value="Dodaj restoran">
