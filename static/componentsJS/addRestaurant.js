@@ -18,6 +18,8 @@ Vue.component("add-restaurant", {
         locations: null,
         imagesForBackend: null,
         logoShow: null,
+        manager: null,
+        managerList: [],
   };
   },
     methods: {
@@ -40,7 +42,7 @@ Vue.component("add-restaurant", {
         createR: function(e){
         	e.preventDefault();
         	this.errors = null;
-        	if(!this.name || !this.type || !this.status || !this.longitude || !this.latitude || !this.streetName || !this.number || !this.city || !this.postalCode || !this.imagesForBackend){
+        	if(!this.name || !this.type || !this.status || !this.longitude || !this.latitude || !this.streetName || !this.number || !this.city || !this.postalCode || !this.imagesForBackend || !this.manager){
 				this.showErrorMessage = true;
 				alert("Neophodno je uneti sve podatke!")
 				e.preventDefault();
@@ -70,6 +72,7 @@ Vue.component("add-restaurant", {
 				this.restaurants.type = this.type;
 				this.restaurants.status = this.status;
 				this.restaurants.logo = this.imagesForBackend;
+				this.restaurants.manager = this.manager;
 				this.locations.longitude=this.longitude;
 				this.locations.latitude=this.latitude;
 				this.address.streetName = this.streetName;
@@ -94,7 +97,17 @@ Vue.component("add-restaurant", {
     Word: function(value){
        return /^[A-Z][a-zA-Z]*$/.test(value);
       },
+
 },
+    mounted: function () {        
+    axios.get("/restaurantManager")
+			.then(response => {
+				for(let i = 0; i < response.data.length; i++){
+						this.managerList.push(response.data[i]);
+				}
+			});
+
+    },
 
    template: ` 
 	   <div>
@@ -158,7 +171,15 @@ Vue.component("add-restaurant", {
         <input type="file" v-on:change="logoChange"><br />
         
         <img v-if="!logoShow" src="" width="300" height="300">
-        <img v-if="logoShow" :src="logoShow" width="300" height="300"><br />
+        <img v-if="logoShow" :src="logoShow" width="300" height="300"><br /><br />
+          	
+
+        <label><b>Menadzer</b></label><br />
+		<select v-model="manager" style="margin: 0.3em; width: 29.2em;">
+    		<option v-for="(managers, value) in managerList" v-if="managers.id === 0" :value="managers.name" v-bind:value="managers.username">{{ managers.name }} {{ managers.surname }}</option>
+    	</select><br /><br />
+
+
         
         <button @click="Cancel" type="button">Nazad</button>  
         <input class="inp" type="submit" value="Dodaj restoran">

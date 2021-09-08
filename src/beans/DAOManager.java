@@ -91,6 +91,7 @@ public class DAOManager {
 	public Manager addManager(Manager manager) {
 
 		manager.setDeleted(false);
+		manager.setId(0);
 		managers.put(manager.getUsername(),manager);
 		try {
 			this.writeManager();
@@ -104,6 +105,21 @@ public class DAOManager {
 		for (Map.Entry<String, Manager> entry : managers.entrySet()) {
 	        if(entry.getValue().getUsername().equals(username) ) {
 	        	entry.getValue().setDeleted(true);
+	        }
+	    }
+		
+		try {
+			writeManager();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void writeIdManager(String username, int id) {
+		for (Map.Entry<String, Manager> entry : managers.entrySet()) {
+	        if(entry.getValue().getUsername().equals(username) ) {
+	        	entry.getValue().setId(id);
 	        }
 	    }
 		

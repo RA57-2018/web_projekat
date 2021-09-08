@@ -28,7 +28,6 @@ import beans.DAODeliverer;
 import beans.DAOLocation;
 import beans.DAOManager;
 import beans.DAORestaurant;
-import beans.DAOUser;
 import beans.Deliverer;
 import beans.Location;
 import beans.Manager;
@@ -46,7 +45,6 @@ public class FoodDeliveryMain {
 	private static DAODeliverer delivererDAO = new DAODeliverer();
 	private static DAOLocation locationDAO = new DAOLocation();
 	private static DAOArticles articlesDAO = new DAOArticles();
-	private static DAOUser userDAO = new DAOUser();
 
 	public static void main(String[] args) throws Exception {
 		port(8080);
@@ -144,6 +142,9 @@ public class FoodDeliveryMain {
             File outputfile = new File(System.getProperty("user.dir")+ "\\static\\images\\" + imageName);
             ImageIO.write(image, "jpg", outputfile);
             rest.setLogo("../images/" + imageName);
+            
+            System.out.println(rest.getManager());
+            managerDAO.writeIdManager(rest.getManager(), id);
             
 			HashMap<Integer, Restaurant> restaurants = restaurantDAO.getRestaurants();
 			restaurants.put(id, rest);
@@ -452,6 +453,10 @@ public class FoodDeliveryMain {
 			
 			return true;
 			
+		});
+		
+		get("/restaurantManager", (req, res) -> {
+			return g.toJson(managerDAO.getManagers().values());
 		});
 		
 	}
