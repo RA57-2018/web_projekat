@@ -34,10 +34,17 @@ Vue.component("add-article", {
         axios
         .post('/addArticle', {name: this.name, price: this.price, typeArtical: this.typeArtical,
         						quantity: this.quantity, description : this.description,
-        						image : this.imageForBackend},{params:{username:this.username}})
+        						image : this.imageForBackend},{params:{username:this.username, name: this.name}})
         .then(function(response){ 
+        
+                if(JSON.parse(JSON.stringify(response.data))[0]===" "){
+                    alert("Jelo vec postoji! Ime jela mora biti jedinstveno!");
+                    
+                }else{
         			alert("Uspesno dodat artikal!")
         			router.replace({ path: `/home-page` })
+                }
+        
            });
       }
       

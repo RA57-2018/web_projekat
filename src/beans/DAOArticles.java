@@ -119,8 +119,7 @@ public class DAOArticles {
         return id;
     }
     
-    /*pokusaj provere imena
-    public boolean checkName(String name) {
+    public Artical checkName(int id, Artical artical,String name) {
     	articles = new HashMap<Integer,ArrayList<Artical>>();
 		try {
 			readArticles();
@@ -128,19 +127,24 @@ public class DAOArticles {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		for(ArrayList<Artical> l : articles.values()) 
-		{
-		    for (Artical i : l) {
-		    	if((i.getName()).equals(name)) {
-					return false;
-				}
-		      }
-		}
-		
-		return true;
+
+			for (Map.Entry<Integer, ArrayList<Artical>> entry : articles.entrySet()) {
+		        if(entry.getKey() == id) {	 
+		        	for(ArrayList<Artical> l : articles.values()) 
+		    		{		
+		        		for (Artical i : l) {
+		        			if(i.getRestaurant() == id) {
+			    		    	if((i.getName()).equals(name)) {
+			    		        	return i;	 		    		        	
+			    				}
+		        			}
+		    		      }
+		        	
+		    		}
+		        }
+		    }
+			return null;
     }
-	*/
 	
     
     public void findArticle(String name) {

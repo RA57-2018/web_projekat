@@ -279,40 +279,51 @@ public class FoodDeliveryMain {
 			return g.toJson(restaurantDAO.search(restaurants,locations,searchName,searchType,searchLocation));
 		});
 		
-        post("/addArticle", (req, res)-> {
+post("/addArticle", (req, res)-> {
     		
 			String userName = req.queryParams("username");
+			String articleName = req.queryParams("name");
 			String reqBody = req.body();
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			
 			int id = restaurantDAO.findManagerRestaurant(userName);
 			Artical artical = gsonReg.fromJson(reqBody, Artical.class);
-			artical.setRestaurant(id);
 			
-			if(artical.getImage() == null) {
-				return false;
+			String aName = " ";
+			ArrayList<String> answer = new ArrayList<String>();
+			if(articlesDAO.checkName(id, artical, articleName) != null) {
+				answer.add(aName);
+				return g.toJson(answer);
+			}else {
+				artical.setRestaurant(id);
+				
+				if(artical.getImage() == null) {
+					return false;
+				}
+				
+				String imageString = artical.getImage().split(",")[1];
+				BufferedImage image = null;
+	            byte[] imageByte;
+	            
+	            imageByte = Base64.getDecoder().decode(imageString);
+	            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+	            image = ImageIO.read(bis);
+	            bis.close();
+	            
+	            int idd = articlesDAO.imageNumber();
+	            String imageName= "artikal" + idd + ".jpg";
+	            
+				File outputfile = new File(System.getProperty("user.dir")+ "\\static\\images\\" + imageName);
+		        ImageIO.write(image, "jpg", outputfile);
+		        
+		        artical.setImage("../images/" + imageName);
+		            			
+				articlesDAO.addArticle(id, artical);
+				articlesDAO.writeArticle();
+				return true;
 			}
 			
-			String imageString = artical.getImage().split(",")[1];
-			BufferedImage image = null;
-            byte[] imageByte;
-            
-            imageByte = Base64.getDecoder().decode(imageString);
-            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-            image = ImageIO.read(bis);
-            bis.close();
-            
-            int idd = articlesDAO.imageNumber();
-            String imageName= "artikal" + idd + ".jpg";
-            
-			File outputfile = new File(System.getProperty("user.dir")+ "\\static\\images\\" + imageName);
-	        ImageIO.write(image, "jpg", outputfile);
-	        
-	        artical.setImage("../images/" + imageName);
-	            			
-			articlesDAO.addArticle(id, artical);
-			articlesDAO.writeArticle();
-			return true;
+			
 			
 		});
         
