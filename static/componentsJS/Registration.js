@@ -33,25 +33,30 @@ Vue.component("registration", {
                 this.showErrorMessage = true;
 				alert("Lozinke moraju biti iste!")
 				e.preventDefault();
-      }else{
-        axios
-        .post('/registration', {name: this.name, surname: this.surname,username: this.username,
+      		}else{
+        	axios
+        	.post('/registration', {name: this.name, surname: this.surname,username: this.username,
         						password: this.password, gender : this.gender,
         						birthDate : this.date })
-        .then(function(response){ 
+        	.then(function(response){ 
+        	
+        	    if(JSON.parse(JSON.stringify(response.data))[0]===" "){
+                    alert("Korisnicko ime vec postoji! Mora biti jedinstveno!");
+                    
+                }else{
         			alert("Registracija uspesna!")
                     localStorage.setItem('uName', JSON.parse(JSON.stringify(response.data))[0]);
                     localStorage.setItem('role', JSON.parse(JSON.stringify(response.data))[1]);
                     router.replace({ path: `/` })
+                }
+        	
            });
       }
-
       
     },
     Word: function(value){
        return /^[A-Z][a-zA-Z]*$/.test(value);
       },
-
    },
    template: ` 
    <div>

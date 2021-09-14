@@ -88,15 +88,23 @@ public class FoodDeliveryMain {
 		
 		
 		post("/registration", (req, res)-> {
-			
-			String reqBody = req.body();
-			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-			
-			Buyer buyer = gsonReg.fromJson(reqBody, Buyer.class);
-			buyerDAO.addBuyer(buyer);
-			return true;
-			
-		});
+
+            String reqBody = req.body();
+            Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+
+            Buyer buyer = gsonReg.fromJson(reqBody, Buyer.class);
+
+            String userName = " ";
+            ArrayList<String> answer = new ArrayList<String>();
+            if(buyerDAO.findUsername(buyer.getUsername()) != null) {
+                answer.add(userName);
+                return g.toJson(answer);
+            }else {
+                buyerDAO.addBuyer(buyer);
+                return true;
+            }
+
+        });
 		
 		get("/restaurants", (req, res) -> {
 			return g.toJson(restaurantDAO.getRestaurants().values());

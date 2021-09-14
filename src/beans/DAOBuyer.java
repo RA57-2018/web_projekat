@@ -165,4 +165,14 @@ public class DAOBuyer {
 			e.printStackTrace();
 		}
 	}
+	
+	public Buyer findUsername(String username) {
+        for (Map.Entry<String, Buyer> entry : buyers.entrySet()) {
+            if(entry.getValue().getUsername().equals(username)) {
+                return entry.getValue();
+
+            }
+        }
+        return null;
+    }
 }
