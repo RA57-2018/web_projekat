@@ -62,6 +62,14 @@ Vue.component("restaurant", {
         this.articles = response.data;
       });
 	},
+    checkArticle: function(id){
+    	if(this.restaurant.manager == this.user){
+		router.push({ path: `/oneArticle/${id}` })
+		}else{
+           alert("Ne mozete da menjate tudje artikle!");
+         }
+		
+	},
   },
   mounted: function() {
     this.uName = window.localStorage.getItem('uName');
@@ -101,6 +109,7 @@ Vue.component("restaurant", {
 		            <li style="float:left"><b>Kolicina:</b> {{ article.quantity }}</li><br />
 		            <li style="float:left"><b>Opis:</b> {{ article.description }}</li><br />
 		            <li v-if="role =='administrator'"><button type="button" @click="Delete" :id="article.name">Obrisi</button></li>
+		            <li v-if="role =='manager'"><button type="button" v-on:click="checkArticle(article.id)">Izmeni</button></li>
 				</ul>
 			  </div>
 	  </div>

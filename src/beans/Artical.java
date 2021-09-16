@@ -2,6 +2,7 @@ package beans;
 
 public class Artical {
 
+	private String id;
 	private String name;
 	private double price;
 	private String typeArtical;
@@ -62,6 +63,14 @@ public class Artical {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	

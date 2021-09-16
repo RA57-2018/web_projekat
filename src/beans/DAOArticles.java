@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,6 +117,7 @@ public class DAOArticles {
               }
         }
 
+        id++;
         return id;
     }
     
@@ -173,4 +175,55 @@ public class DAOArticles {
 		}
     }
     
+    public Artical findArticleId(String id) {
+		articles = new HashMap<Integer,ArrayList<Artical>>();
+		try {
+			readArticles();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(ArrayList<Artical> l : articles.values()) 
+		{
+		    for (Artical i : l) {
+					if((i.getId()).equals(id)) {
+						return i;
+					}
+		      }
+		}
+		return null;
+
+    }
+    
+    public void changeArticle(String id, Artical artical) {
+		articles = new HashMap<Integer,ArrayList<Artical>>();
+		try {
+			readArticles();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(ArrayList<Artical> l : articles.values()) 
+		{
+		    for (Artical i : l) {
+					if((i.getId()).equals(id)) {
+						i.setName(artical.getName());
+						i.setPrice(artical.getPrice());
+						i.setTypeArtical(artical.getTypeArtical());
+						i.setQuantity(artical.getQuantity());
+						i.setDescription(artical.getDescription());
+					}
+		      }
+		}
+		
+		try {
+			writeArticle();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    }
 }

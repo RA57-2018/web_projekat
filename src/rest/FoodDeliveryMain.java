@@ -279,7 +279,7 @@ public class FoodDeliveryMain {
 			return g.toJson(restaurantDAO.search(restaurants,locations,searchName,searchType,searchLocation));
 		});
 		
-post("/addArticle", (req, res)-> {
+        post("/addArticle", (req, res)-> {
     		
 			String userName = req.queryParams("username");
 			String articleName = req.queryParams("name");
@@ -295,6 +295,11 @@ post("/addArticle", (req, res)-> {
 				answer.add(aName);
 				return g.toJson(answer);
 			}else {
+				int idA = articlesDAO.imageNumber();
+				String m = "a" + idA;
+				
+				artical.setId(m);
+				
 				artical.setRestaurant(id);
 				
 				if(artical.getImage() == null) {
@@ -485,6 +490,33 @@ post("/addArticle", (req, res)-> {
 			manager.setRole("menadzer");
 			managerDAO.addManager(manager);
 
+			return true;
+			
+		});
+        
+		get("/oneArticle", (req, res)->{
+			String idA =  req.queryParams("idA");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			Artical artical = null;
+			artical = articlesDAO.findArticleId(idA);
+			
+			if(artical != null) {
+				return gsonReg.toJson(artical);
+			}
+			
+			return gsonReg.toJson(artical);
+		});
+		
+		post("/updateArticle", (req, res)-> {
+			String idA =  req.queryParams("id");
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			Artical artical = null;
+			artical = articlesDAO.findArticleId(idA);
+			if(artical != null) {
+				Artical a = gsonReg.fromJson(reqBody, Artical.class);
+				articlesDAO.changeArticle(idA,a);
+			}
 			return true;
 			
 		});
