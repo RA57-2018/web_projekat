@@ -1,6 +1,5 @@
 package beans;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public abstract class User {
@@ -12,10 +11,6 @@ public abstract class User {
 	private String gender;
 	private Date birthDate;
 	private String role;
-	private ArrayList<Order> orders;
-	private Basket basket;
-	private Restaurant restaurant;
-	private ArrayList<Order> deliveryOrders;
 	private boolean deleted;
 	
 	public User() {}
@@ -62,31 +57,6 @@ public abstract class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public ArrayList<Order> getOrders() {
-		return orders;
-	}
-	public void setOrders(ArrayList<Order> orders) {
-		this.orders = orders;
-	}
-	public Basket getBasket() {
-		return basket;
-	}
-	public void setBasket(Basket basket) {
-		this.basket = basket;
-	}
-	public Restaurant getRestaurant() {
-		return restaurant;
-	}
-	public void setRestaurant(Restaurant restaurant) {
-		this.restaurant = restaurant;
-	}
-	public ArrayList<Order> getDeliveryOrders() {
-		return deliveryOrders;
-	}
-	public void setDeliveryOrders(ArrayList<Order> deliveryOrders) {
-		this.deliveryOrders = deliveryOrders;
-	}
-
 	public boolean isDeleted() {
 		return deleted;
 	}

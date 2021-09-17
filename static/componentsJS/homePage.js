@@ -221,6 +221,9 @@ Vue.component("home-page", {
         <li v-if="activeUser == true && role =='manager'">
            <a style="cursor: pointer;" @click="myRestaurant">Moj restoran</a>
         </li> 
+        <li v-if="activeUser == true && role =='buyer'">
+            <a href="/#/basket">Moja korpa</a>
+        </li> 
 	</ul>
 	
 

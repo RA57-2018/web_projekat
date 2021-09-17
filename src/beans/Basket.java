@@ -5,22 +5,27 @@ import java.util.ArrayList;
 
 public class Basket {
 
-	private ArrayList<Artical> artical; //******
-	private User user;
+	private ArrayList<Integer> articalsInBasket; 
+	private String user;
 	private double price;
 	
 	public Basket() {}
 	
-	public ArrayList<Artical> getArtical() {
-		return artical;
+
+	public ArrayList<Integer> getArticalsInBasket() {
+		return articalsInBasket;
 	}
-	public void setArtical(ArrayList<Artical> artical) {
-		this.artical = artical;
+
+
+	public void setArticalsInBasket(ArrayList<Integer> articalsInBasket) {
+		this.articalsInBasket = articalsInBasket;
 	}
-	public User getUser() {
+
+
+	public String getUser() {
 		return user;
 	}
-	public void setUser(User user) {
+	public void setUser(String user) {
 		this.user = user;
 	}
 	public double getPrice() {

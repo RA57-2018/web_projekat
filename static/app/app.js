@@ -9,6 +9,7 @@ const UserView = { template: '<user-view></user-view>' }
 const OneRestaurant = { template: '<restaurant></restaurant>' }
 const AddArticle = { template: '<add-article></add-article>' }
 const OneArticle = { template: '<one-article></one-article>' }
+const Basket = { template: '<basket></basket>' }
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -23,7 +24,8 @@ const router = new VueRouter({
 	    { path: '/user-view', component: UserView},
 	    { path: '/restaurant/:id', component: OneRestaurant},
 	    { path: '/add-article', component: AddArticle},
-	    { path: '/oneArticle/:id', component: OneArticle}
+	    { path: '/oneArticle/:id', component: OneArticle},
+	    { path: '/basket', component: Basket}
 	  ]
 });
 

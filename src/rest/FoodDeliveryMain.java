@@ -20,8 +20,11 @@ import com.google.gson.GsonBuilder;
 
 import beans.Administrator;
 import beans.Artical;
+import beans.ArticleInBasket;
+import beans.Basket;
 import beans.Buyer;
 import beans.DAOAdministrator;
+import beans.DAOArticleInBasket;
 import beans.DAOArticles;
 import beans.DAOBuyer;
 import beans.DAODeliverer;
@@ -45,6 +48,7 @@ public class FoodDeliveryMain {
 	private static DAODeliverer delivererDAO = new DAODeliverer();
 	private static DAOLocation locationDAO = new DAOLocation();
 	private static DAOArticles articlesDAO = new DAOArticles();
+	private static DAOArticleInBasket articlesInBasketDAO = new DAOArticleInBasket();
 
 	public static void main(String[] args) throws Exception {
 		port(8080);
@@ -519,6 +523,55 @@ public class FoodDeliveryMain {
 			}
 			return true;
 			
+		});
+		
+		get("/articleInBasket", (req, res)->{
+			String username =  req.queryParams("id");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			Basket basket = null;
+
+			basket = buyerDAO.findBasket(username);
+			
+			ArrayList<ArticleInBasket> a = new ArrayList<ArticleInBasket>();
+			for(int i = 0; i < basket.getArticalsInBasket().size(); i++) {				
+				ArticleInBasket articles = articlesInBasketDAO.findArticle(basket.getArticalsInBasket().get(i));
+				if(!articles.isDeleted()) {
+					a.add(articles);
+				}
+								
+			}
+			
+			return gsonReg.toJson(a);
+		});
+		
+		post("/deleteArticleInBasket", (req, res)-> {
+			String id = req.queryParams("id");
+			
+			ArticleInBasket article = articlesInBasketDAO.findArticle(Integer.parseInt(id));
+			
+			article.setDeleted(true);
+			
+			HashMap<Integer, ArticleInBasket> articles = articlesInBasketDAO.getArticlesInBasket();
+			articles.put(article.getId(), article);
+			articlesInBasketDAO.setArticlesInBasket(articles);
+			articlesInBasketDAO.writeArticleInBasket();
+			
+			return true;
+		});
+		
+		post("/changeQuantity", (req, res)-> {
+			String id = req.queryParams("id");			
+			String quantity = req.queryParams("quantity");
+			
+			ArticleInBasket article = articlesInBasketDAO.findArticle(Integer.parseInt(id));
+			article.setQuantity(Integer.parseInt(quantity));
+			
+			HashMap<Integer, ArticleInBasket> articles = articlesInBasketDAO.getArticlesInBasket();
+			articles.put(article.getId(), article);
+			articlesInBasketDAO.setArticlesInBasket(articles);
+			articlesInBasketDAO.writeArticleInBasket();
+			
+			return true;
 		});
 		
 	}

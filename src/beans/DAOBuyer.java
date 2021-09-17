@@ -175,4 +175,15 @@ public class DAOBuyer {
         }
         return null;
     }
+	
+	public Basket findBasket(String username) {
+		
+		for (Map.Entry<String, Buyer> entry : buyers.entrySet()) {
+	        if(entry.getValue().getUsername().equals(username) ) {
+	        	return entry.getValue().getBasket();
+	        }
+	    }
+		return null;
+		
+	}
 }
