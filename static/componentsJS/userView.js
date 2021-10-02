@@ -2,20 +2,26 @@ Vue.component("user-view", {
 	name: "user-view",
 	data: function () {
 		  return {
-            username: "",
+			users: [],
 	        role: "",
-	        activeUser: false,
-	        users: [],
+	        type: "",
+	        name: "",
+	        surname: "",
+	        username: "",
+	        points: "",
 	        sortCriteria: "",
-            sortType: "",
             searchName: "",
             searchSurname: "",
             searchUsername: "",
+            filterRole: "",
             filterType: "",
       }  
 	},
+	mounted: function(){
+        this.load();					
+    },
     methods: {
-        Delete(event){          
+       /* Delete(event){          
             userName = event.target.id;
             for(var i =0; i<this.users.length; i++){
                 if(this.users[i].username == userName && this.users[i].role =="administrator"){
@@ -34,237 +40,109 @@ Vue.component("user-view", {
                 });
                 }
             }
-        },
-    refresh(){
+        },*/
+    load(){
     	axios.get('/users')
 		.then(response => {
            
-            for(var i =0;i< response.data.length;i++){
-                var user = {};
-                user.name = response.data[i].name;
-                user.surname = response.data[i].surname;
-                user.username = response.data[i].username;
-                user.role = "kupac";
-                this.users.push(user);
-            }
-         
+            this.users = response.data;
         });
-    	axios.get('/deliverers')
-		.then(response => {
-           
-            for(var i =0;i< response.data.length;i++){
-                var user = {};
-                user.name = response.data[i].name;
-                user.surname = response.data[i].surname;
-                user.username = response.data[i].username;
-                user.role = "dostavljac";
-                this.users.push(user);
-            }
-         
-        });
-    	axios.get('/managers')
-		.then(response => {
-           
-            for(var i =0;i< response.data.length;i++){
-                var user = {};
-                user.name = response.data[i].name;
-                user.surname = response.data[i].surname;
-                user.username = response.data[i].username;
-                user.role = "menadzer";
-                this.users.push(user);
-            }
-         
-        });
-    	},
-    	search: function(){
-    		if(this.searchName == "" && this.searchSurname == "" && this.searchUsername == ""){
-    			alert("Unesite parametar za pretragu!");
-    		}else{
-    			var searchParameters = "searchName=" + this.searchName+ "&searchSurname=" + this.searchSurname+ "&searchUsername=" + this.searchUsername;
-    			axios.get("/searchUsers?" + searchParameters)
-    				.then(response => {
-    					this.users = response.data;
-    				})
-    		}
-    	},
-	sortiraj: function(){
-			if(this.sortCriteria != "ime" && this.sortCriteria != "prezime" && this.sortCriteria != "korisnicko ime")
-			{
-				alert("Morate uneti kriterijum sortiranja pretrage!");
-			}
-			else if(this.sortType != "opadajuce" && this.sortType != "rastuce")
-			{
-				alert("Morate uneti smer sortiranja pretrage!");
-			}
-			else
-			{
-				if(this.sortCriteria == "prezime")
-				{
-					this.users.sort(this.compareSurname);
-				}
-				else if(this.sortCriteria == "korisnicko ime")
-				{
-					this.users.sort(this.compareUsername);
-				}
-				else
-				{
-					this.users.sort(this.compareData);
-				}
-										
-			}
-		},
-	compareData: function(o,t){
-			let first, second;
-			if(this.sortCriteria == "ime")
-			{
-				first = o.name;
-				second = t.name;
-			}
-			if(first < second)
-			{
-				if(this.sortType == 'rastuce')
-				{
-					return -1;
-				}
-				else
-				{
-					return 1;
-				}
-			}
-			else if(first > second)
-			{
-				if(this.sortType == 'opadajuce')
-				{
-					return 1;
-				}
-				else
-				{
-					return -1;
-				}
-			}
-			else
-			{
-				return 0;
-			}
-
-		},
-		compareSurname: function(o,t){
-			let first1 = o.surname;
-			let second1 = t.surname;
-			if(first1 < second1)
-			{
-				if(this.sortType == 'rastuce')
-				{
-					return -1;
-				}
-				else
-				{
-					return 1;
-				}
-			}
-			else if(first1 > second1)
-			{
-				if(this.sortType == 'opadajuce')
-				{
-					return 1;
-				}
-				else
-				{
-					return -1;
-				}
-			}
-			else
-			{
-				return 0;
-			}
-
-		},
-		compareUsername: function(o,t){
-			let f = o.username;
-			let s = t.username;
-			
-			if(f < s)
-			{
-				if(this.sortType == 'rastuce')
-				{
-					return -1;
-				}
-				else
-				{
-					return 1;
-				}
-			}
-			else if(f > s)
-			{
-				if(this.sortType == 'opadajuce')
-				{
-					return 1;
-				}
-				else
-				{
-					return -1;
-				}
-			}
-			else
-			{
-				return 0;
-			}
-
-		},
-
     },
-    mounted: function () {
-    	this.refresh();
+    search: function(){
+    	var parameter = "name=" + this.searchName + "&surname="+this.searchSurname + "&username=" + this.searchUsername + "&role=" + this.filterRole + "&type=" + this.filterType + "&sortCriteria=" + this.sortiranje;
+    	
+        axios.get('/searchUsers?' + parameter)
+                    .then(response => {
+                    	this.users=response.data;
+        })
     },
+	
+   },
 	template: ` 
-<div>
+	<div>
 	
 	<h2>Pregled korisnika</h2>
-	
 	<div>
-		<input type="text" v-model="searchName" placeholder="Pretrazite po imenu" style="margin: 0.3em; width: 12em;">
-		<input type="text" v-model="searchSurname" placeholder="Pretrazite po prezimenu" style="margin: 0.3em; width: 12em;">
-		<input type="text" v-model="searchUsername" placeholder="Pretrazite po korisnickom imenu" style="margin: 0.3em; width: 12em;">
-		<button v-on:click="search">Pretrazi</button>
-	</div>
+		<div>
+          	<table>
+	          <tr><td><i>Ime: &nbsp</i></td><td><input type="text" v-model="searchName"  placeholder="Ime..."></td></tr>
+	          <tr><td><i>Prezime: &nbsp</i></td><td><input type="text" v-model="searchSurname"  placeholder="Prezime..."></td></tr>
+	          <tr><td><i>Korisnicko ime: &nbsp</i></td><td><input type="text" v-model="searchUsername"  placeholder="Korisnicko ime..."></td></tr>
+	         
+	      	  <tr><td><button v-on:click="search">Pretrazi</button></td></tr>
+	      	</table>
+	      </div>
 	
-    <div>
-		<label>Filteri</label>
-    	<select v-model="filterType" style="margin: 0.3em; width: 29.2em;">
-    		<option value="normalan">normalan</option>
-    		<option value="zlatni">zlatni</option>
-    		<option value="srebrni">srebrni</option>
-    		<option value="bronzani">bronzani</option>
-    	</select>
-    </div>
-    <div>
-		<label for="sortCriteria">Sortiranje</label>
-		<select v-model="sortCriteria" style="margin: 0.6em; width: 15em;">
-						<option value="ime">Ime</option>
-						<option value="prezime">Prezime</option>
-						<option value="korisnicko ime">Korisnicko ime</option>
-		</select>  
-        <label><b>Smer</b></label>
-		<select v-model="sortType" style="margin: 0.6em; width: 15em;">
-						<option value="rastuce">Rastuce</option>
-						<option value="opadajuce">Opadajuce</option>
-		</select>
-		<button v-on:click="sortiraj">Sortiraj</button>
-	</div>
+		  <div>
+          	<table>
+	          <tr><td><i>Unesite tip korisnika: &nbsp</i></td><td><select style="width:210px; height:40px;"  v-model="filterType">
+	                        <option  value="zlatni" ><i>Zlatni</i></option>
+	                        <option  value="srebrni"><i>Srebrni</i></option>
+	                         <option  value="bronzani"><i>Bronzani</i></option>
+	                    </select></td></tr>
+	          <tr><td><i>Unesite ulogu: &nbsp</i></td><td><select style="width:210px; height:40px;"  v-model="filterRole">
+	                        <option  value="administrator" ><i>Administrator</i></option>
+	                        <option  value="dostavljac"><i>Dostavljac</i></option>
+	                        <option  value="menadzer" ><i>Menadzer</i></option>
+	                        <option  value="kupac"><i>Kupac</i></option>
 
+	                    </select></td></tr>
+	          
+	                    
+   			</table>
+   			<br> 
+	                    <br>
+	                    <br> <br> <br> <br <br> <br> <br> <br>
+	                    <br> <br> 
+	                   
+	                
+	                  
+   		 </div>
+		 <div>
+          	<table>
+	          <tr><td><i>Sortiraj: &nbsp</i></td><td><select style="width:210px; height:40px;"  v-model="sortCriteria">
+	                        <option  value="name-rastuce" ><i>Ime - rastuce</i></option>
+	                        <option  value="name-opadajuce"><i>Ime - opadajuce</i></option>
+	                        <option  value="surname-rastuce" ><i>Prezime - rastuce</i></option>
+	                        <option  value="surname-opadajuce"><i>Prezime - opadajuce</i></option>
+	                        <option  value="username-rastuce" ><i>Korisnicko ime - rastuce</i></option>
+	                        <option  value="username-opadajuce"><i>Korisnicko ime- opadajuce</i></option>
+	                         <option  value="points-rastuce" ><i>Broj sakupljenih bodova - rastuce</i></option>
+	                        <option  value="points-opadajuce"><i>Broj sakupljenih bodova - opadajuce</i></option>
+	                    </select></td></tr>
+	                    
+   			</table>
+   			<br>
+	                    <br>
+	                    <br> <br> <br> <br <br> <br> <br> <br> 
+	                    <br>
+	          
+	                    
+   		 </div>
+		</div>
+		
+		<div>
+			<table align="center"> 
+                        <tr>
+                            <th><i>Ime</i> </th>
+                            <th><i>Prezime</i></th>
+                            <th><i>Korisnicko ime</i></th>
+                            <th><i>Uloga</i> </th>
+                            <th><i>Tip kupca</i> </th>
+                            <th> <i>Sakupljeni bodovi </i> </th>
+                            <th></th>
+                            
+                        </tr>
+                        <tr v-for="user in users">
+                            <td>{{user.name}} </td>
+                            <td> {{user.surname}}</td>
+                            <td> {{user.username}}</td>
+                            <td> {{user.role}} </td>
+                            <td> {{user.type}} </td>
+                        </tr>
 
-<div v-for="(user, username) in users">
- 	<div class="column">
-	  	<h2>{{ user.name }}</h2>
-	  	<ul>
-			<li style="float:left"><b>Ime:</b> {{ user.name }}</li><br />
-			<li style="float:left"><b>Prezime:</b> {{ user.surname }}</li><br />
-			<li style="float:left"><b>Korisnicko ime:</b> {{ user.username }} </li><br />
-			<li style="float:left"><b>Uloga:</b> {{ user.role }} </li><br />
-			<li style="float:left"><button type="button" @click="Delete" :id="user.username">Obrisi</button></li>
-		</ul>
-	</div>
-</div>	
-</div>	  
+                    </table>
+		</div>
+	</div>	  
 `
 });

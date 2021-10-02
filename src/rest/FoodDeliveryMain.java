@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,10 +31,14 @@ import beans.DAOBuyer;
 import beans.DAODeliverer;
 import beans.DAOLocation;
 import beans.DAOManager;
+import beans.DAOOrder;
 import beans.DAORestaurant;
+import beans.DAOUser;
+import beans.DAOUserUs;
 import beans.Deliverer;
 import beans.Location;
 import beans.Manager;
+import beans.Order;
 import beans.Restaurant;
 import beans.RestaurantDAO;
 import beans.User;
@@ -49,7 +54,10 @@ public class FoodDeliveryMain {
 	private static DAOLocation locationDAO = new DAOLocation();
 	private static DAOArticles articlesDAO = new DAOArticles();
 	private static DAOArticleInBasket articlesInBasketDAO = new DAOArticleInBasket();
-
+	//private static DAOOrder orderDAO = new DAOOrder();
+	private static DAOUser userDAO = new DAOUser();
+	private static DAOUserUs userDAOus = new DAOUserUs();
+	
 	public static void main(String[] args) throws Exception {
 		port(8080);
 		
@@ -384,14 +392,16 @@ public class FoodDeliveryMain {
 			
 		});
 		
-		/*	get("/searchUsers", (req, res) -> {
-		String searchName = (req.queryParams("searchName")).trim();
-		String searchSurname = (req.queryParams("searchSurname")).trim();
-		String searchUsername = (req.queryParams("searchUsername")).trim();
-		HashMap<String,User> users = userDAO.getUsers();
-		System.out.println("Hello");
-		return userDAO.search(users,searchName,searchSurname,searchUsername);
-	});*/
+		get("/searchUsers", (req, res) -> {
+		String sortCriteria = (req.queryParams("sortCriteria")).trim();
+		String type = (req.queryParams("type")).trim();
+		String role = (req.queryParams("role")).trim();
+		String username = (req.queryParams("username")).trim();
+		String surname = (req.queryParams("surname")).trim();
+		String name = (req.queryParams("name")).trim();
+		
+		return g.toJson(userDAOus.search(name, surname, username, type, role, sortCriteria));
+		});
 		
 		/*get("/searchBuyer", (req, res)->{
 		String p =  req.queryParams("pretraga");
@@ -573,6 +583,63 @@ public class FoodDeliveryMain {
 			
 			return true;
 		});
+		
+		/*post("/createOrder", (req, res) -> {
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			Date date= java.util.Calendar.getInstance().getTime();
+			
+			Basket basket = gsonReg.fromJson(reqBody, Basket.class);
+			
+			HashMap<Integer, Order> orders = orderDAO.getOrders();
+			
+			Order o = new Order();
+			
+			o.setId(orderDAO.findNextId());
+			o.setPrice(basket.getPrice());
+			o.setBuyer(basket.getUser());
+			o.setStatus("OBRADA");
+			o.setDate(date);
+			o.setArtical(basket.getArticalsInBasket());
+			
+			int idArticle = basket.getArticalsInBasket().get(0);
+			ArticleInBasket a = articlesInBasketDAO.findArticle(idArticle);
+			int restaurant = a.getArtical().getRestaurant();
+		
+			o.setRestaurant(restaurant);
+			
+			orders.put(o.getId(), o);
+			orderDAO.setOrders(orders);
+			
+			orderDAO.write();
+			
+			HashMap<Integer, ArticleInBasket> artK = articlesInBasketDAO.getArticlesInBasket();
+			
+			for(int i = 0; i < basket.getArticalsInBasket().size(); i++) {
+				
+				int id = basket.getArticalsInBasket().get(i);
+				ArticleInBasket artB = articlesInBasketDAO.findArticle(id);
+				artB.setDeleted(true);
+				
+				artK.put(artB.getId(), artB);
+				
+			
+			}
+			articlesInBasketDAO.setArticlesInBasket(artK);
+			articlesInBasketDAO.writeArticleInBasket();
+			Buyer b = buyerDAO.findBuyerProfile(basket.getUser());
+			int points=(int) (basket.getPrice()/1000 * 133) + b.getPoints();
+			HashMap<String, Buyer> buyers = buyerDAO.getBuyers();
+			
+			b.setPoints(points);
+			buyers.put(b.getUsername(), b);
+			buyerDAO.setBuyers(buyers);
+			buyerDAO.writeBuyers();
+			
+			return true;
+		});
+		*/
 		
 	}
 	

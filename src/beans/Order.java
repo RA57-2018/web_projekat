@@ -2,36 +2,49 @@ package beans;
 
 import java.util.ArrayList;
 import java.util.Date;
+import javax.json.bind.annotation.JsonbDateFormat;
 
 
 public class Order {
 
-	private String id;
-	private ArrayList<Artical> artical;
-	private Restaurant restaurant;
-	private Date date; // i vreme?
+	private int id;
+	private ArrayList<Integer> artical;
+	private int restaurant;
+	private Date date;
 	private double price;
-	private User user;
+	private String buyer;
 	private String status;
 	
 	public Order() {}
 	
-	public String getId() {
+	public Order(int id, ArrayList<Integer> artical, int restaurant, Date date, double price, String buyer,
+			String status) {
+		super();
+		this.id = id;
+		this.artical = artical;
+		this.restaurant = restaurant;
+		this.date = date;
+		this.price = price;
+		this.buyer = buyer;
+		this.status = status;
+	}
+	
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public ArrayList<Artical> getArtical() {
+	public ArrayList<Integer> getArtical() {
 		return artical;
 	}
-	public void setArtical(ArrayList<Artical> artical) {
+	public void setArtical(ArrayList<Integer> artical) {
 		this.artical = artical;
 	}
-	public Restaurant getRestaurant() {
+	public int getRestaurant() {
 		return restaurant;
 	}
-	public void setRestaurant(Restaurant restaurant) {
+	public void setRestaurant(int restaurant) {
 		this.restaurant = restaurant;
 	}
 	public Date getDate() {
@@ -46,11 +59,11 @@ public class Order {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public User getUser() {
-		return user;
+	public String getBuyer() {
+		return buyer;
 	}
-	public void setUser(User user) {
-		this.user = user;
+	public void setBuyer(String buyer) {
+		this.buyer = buyer;
 	}
 	public String getStatus() {
 		return status;

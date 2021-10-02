@@ -224,6 +224,9 @@ Vue.component("home-page", {
         <li v-if="activeUser == true && role =='buyer'">
             <a href="/#/basket">Moja korpa</a>
         </li> 
+        <li v-if="activeUser == true && role =='buyer'">
+            <a href="/#/order">Moja porudzbina</a>
+        </li>
 	</ul>
 	
 

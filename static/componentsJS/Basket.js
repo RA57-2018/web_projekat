@@ -11,7 +11,9 @@ Vue.component("basket", {
       newQuantity: null,  
       price: null,   
       buyer: null,
-
+      articlesOrder: [],
+      basket: null,
+      idArticle: null,
     }
   },
   methods: {
@@ -72,7 +74,27 @@ Vue.component("basket", {
           this.changePrice();
         });
     	
-    },	
+    },
+    createObject: function(){
+    	this.basket = {};
+  		
+  		for(i = 0; i < this.articles.length; i++) {
+  			this.articlesOrder.push(this.articles[i].idArticlesInBasket);
+  		}
+  		
+  		this.createOrder();
+    },
+    createOrder: function(){
+    	axios.post("/createOrder", {
+            articlesInBasket: this.articlesOrder,  
+            buyer: this.username,
+            price : this.price,         
+          })
+          .then(response =>{
+                alert( "Porudzbina je kreirana!")
+              	this.findBuyersArticles();
+          });
+    },
 
   },
   mounted: function() {
@@ -92,6 +114,7 @@ Vue.component("basket", {
 	  
 	  <div v-if="articles.length">	  
 	  <label style="margin-left:1em; font-size:20px;"><b>Ukupna cena:</b></label><input type style="margin-left:1em; width:100px; font-weight:700; color:black;" disabled="true" v-model="price">din<br />
+	  <p><button type="button" v-on:click="createObject">Poruci</button></p>
 	  </div>
 	  	  
 	  <div>

@@ -2,6 +2,8 @@ package beans;
 
 import java.util.Date;
 
+import javax.json.bind.annotation.JsonbDateFormat;
+
 public abstract class User {
 
 	private String username;
