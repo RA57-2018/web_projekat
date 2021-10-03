@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
+import java.text.ParseException;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -49,7 +50,7 @@ public class DAOOrder {
 	
 	public void write() throws IOException{
 		Gson gson = new Gson();
-		FileWriter writer = new FileWriter("json/orders.json");
+		FileWriter writer = new FileWriter("files/orders.json");
 		gson.toJson(this.orders, writer);
 		writer.flush();
 		writer.close();

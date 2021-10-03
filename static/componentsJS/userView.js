@@ -21,7 +21,7 @@ Vue.component("user-view", {
         this.load();					
     },
     methods: {
-       /* Delete(event){          
+        Delete(event){          
             userName = event.target.id;
             for(var i =0; i<this.users.length; i++){
                 if(this.users[i].username == userName && this.users[i].role =="administrator"){
@@ -40,7 +40,7 @@ Vue.component("user-view", {
                 });
                 }
             }
-        },*/
+        },
     load(){
     	axios.get('/users')
 		.then(response => {
@@ -49,12 +49,27 @@ Vue.component("user-view", {
         });
     },
     search: function(){
-    	var parameter = "name=" + this.searchName + "&surname="+this.searchSurname + "&username=" + this.searchUsername + "&role=" + this.filterRole + "&type=" + this.filterType + "&sortCriteria=" + this.sortiranje;
+    	var parameter = "name=" + this.searchName + "&surname="+this.searchSurname + "&username=" + this.searchUsername + "&role=" + this.filterRole + "&type=" + this.filterType + "&sortCriteria=" + this.sortCriteria;
     	
         axios.get('/searchUsers?' + parameter)
                     .then(response => {
                     	this.users=response.data;
         })
+    },
+    
+    block: function(username){
+    	axios
+        .post('/block',{},{params:{user: username}}
+        )
+          .then(function(response){
+            
+          
+              alert("Korisnik je blokiran!");
+              
+         
+          
+        });
+		this.load();
     },
 	
    },
@@ -101,14 +116,14 @@ Vue.component("user-view", {
 		 <div>
           	<table>
 	          <tr><td><i>Sortiraj: &nbsp</i></td><td><select style="width:210px; height:40px;"  v-model="sortCriteria">
-	                        <option  value="name-rastuce" ><i>Ime - rastuce</i></option>
-	                        <option  value="name-opadajuce"><i>Ime - opadajuce</i></option>
-	                        <option  value="surname-rastuce" ><i>Prezime - rastuce</i></option>
-	                        <option  value="surname-opadajuce"><i>Prezime - opadajuce</i></option>
-	                        <option  value="username-rastuce" ><i>Korisnicko ime - rastuce</i></option>
-	                        <option  value="username-opadajuce"><i>Korisnicko ime- opadajuce</i></option>
-	                         <option  value="points-rastuce" ><i>Broj sakupljenih bodova - rastuce</i></option>
-	                        <option  value="points-opadajuce"><i>Broj sakupljenih bodova - opadajuce</i></option>
+	                        <option  value="ime-rastuce" ><i>Ime - rastuce</i></option>
+	                        <option  value="ime-opadajuce"><i>Ime - opadajuce</i></option>
+	                        <option  value="prezime-rastuce" ><i>Prezime - rastuce</i></option>
+	                        <option  value="prezime-opadajuce"><i>Prezime - opadajuce</i></option>
+	                        <option  value="kIme-rastuce" ><i>Korisnicko ime - rastuce</i></option>
+	                        <option  value="kIme-opadajuce"><i>Korisnicko ime- opadajuce</i></option>
+	                         <option  value="brBodova-rastuce" ><i>Broj sakupljenih bodova - rastuce</i></option>
+	                        <option  value="brBodova-opadajuce"><i>Broj sakupljenih bodova - opadajuce</i></option>
 	                    </select></td></tr>
 	                    
    			</table>
@@ -124,12 +139,12 @@ Vue.component("user-view", {
 		<div>
 			<table align="center"> 
                         <tr>
-                            <th><i>Ime</i> </th>
+                            <th><i>Ime</i></th>
                             <th><i>Prezime</i></th>
                             <th><i>Korisnicko ime</i></th>
-                            <th><i>Uloga</i> </th>
-                            <th><i>Tip kupca</i> </th>
-                            <th> <i>Sakupljeni bodovi </i> </th>
+                            <th><i>Uloga</i></th
+                            <th><i>Tip kupca</i></th>
+                            <th><i>Sakupljeni bodovi</i></th>
                             <th></th>
                             
                         </tr>
@@ -139,6 +154,11 @@ Vue.component("user-view", {
                             <td> {{user.username}}</td>
                             <td> {{user.role}} </td>
                             <td> {{user.type}} </td>
+                            <td v-if="user.role=='kupac'"> {{user.points}} </td>
+                            <td v-if="user.role=='administrator'">&nbsp</td>
+                            <td v-if="user.role=='dostavljac'">&nbsp</td>
+                            <td v-if="user.role=='menadzer'">&nbsp</td>
+                      		<td v-if="user.role=='kupac' || user.role=='menadzer' || user.role=='dostavljac' "> <button v-on:click="block(user.username)">Blokiraj</button></td>
                         </tr>
 
                     </table>

@@ -1,12 +1,18 @@
 package beans;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 
 public class DAOUserUs {
 	ArrayList<Buyer> buyers = new ArrayList<Buyer>();
@@ -15,6 +21,43 @@ public class DAOUserUs {
 	ArrayList<Deliverer> deliverers = new ArrayList<Deliverer>();
 	private DAOBuyer b;
 	ArrayList<DAOUser> users = new ArrayList<DAOUser>();
+	private DAOBuyer kC;
+	private DAODeliverer dC;
+	private DAOAdministrator aC;
+	private DAOManager mC;
+	
+	public DAOUserUs() {
+		
+		kC=new DAOBuyer();
+		dC=new DAODeliverer();
+		aC=new DAOAdministrator();
+		mC=new DAOManager();
+		
+		buyers = kC.findBuyers();
+		deliverers = dC.findDeliverers();
+		administrators = aC.findAdministrators();
+		managers = mC.findManagers();
+		
+		try {
+			this.readUsers();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void add(DAOUser u) throws IOException{
+		users.add(u);
+		this.writeUsers();
+	}
+	
+	public void readUsers() throws FileNotFoundException {
+		
+		Gson gson = new Gson();
+		Type token = new TypeToken<ArrayList<DAOUser>>(){}.getType();
+		BufferedReader br = new BufferedReader(new FileReader("files/users.json"));
+		this.users = gson.fromJson(br, token);
+	}
 	
 	public static Comparator<DAOUser> imeRastuce = new Comparator<DAOUser>() {
 
@@ -97,7 +140,7 @@ public class DAOUserUs {
     }};
     
 public ArrayList<DAOUser> search(String ime, String prezime, String username, String tip, String uloga, String sortiranje) {
-		
+		System.out.println("Hello");
 		ArrayList<DAOUser> sviKorisnici=new ArrayList<DAOUser>(); 
 		ArrayList<DAOUser> imeK=new ArrayList<DAOUser>();
 		ArrayList<DAOUser> prezimeK=new ArrayList<DAOUser>();
@@ -110,6 +153,36 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 		DAODeliverer dC=new DAODeliverer();
 		DAOManager mC=new DAOManager();
 	
+		for(int i=0; i<users.size(); i++) {
+			
+			if(users.get(i).getRole().equals("kupac")) {
+				
+				Buyer b=kC.findBuyerProfile(users.get(i).getUsername());
+				if(!b.isBlock() && !b.isBlocked()) {
+					sviKorisnici.add(users.get(i));
+				}
+			}else if(users.get(i).getRole().equals("administrator")) {
+				
+				Administrator a=aC.findAdministratorProfile(users.get(i).getUsername());
+				if(!a.isBlock()) {
+					sviKorisnici.add(users.get(i));
+				}
+			}else if(users.get(i).getRole().equals("dostavljac")) {
+				
+				Deliverer d=dC.findDelivererProfile(users.get(i).getUsername());
+				if(!d.isBlock()) {
+					sviKorisnici.add(users.get(i));
+				}
+			}else {
+				
+				Manager m=mC.findManagerProfile(users.get(i).getUsername());
+				if(!m.isBlock()) {
+					sviKorisnici.add(users.get(i));
+				}
+			}
+			
+		}
+		
 		if(ime != "") {
 			for (int i=0; i<sviKorisnici.size(); i++) {
 				if(sviKorisnici.get(i).getName().toLowerCase().equals(ime.toLowerCase())) {
@@ -164,7 +237,7 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 		
 		if(uloga != "") {
 			
-			if(uloga.equals("Administrator")) {
+			if(uloga.equals("administrator")) {
 				
 				for(int j=0; j<tipK.size(); j++) {
 					for (int i = 0; i < administrators.size(); i++) {
@@ -182,7 +255,7 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 							
 				    }
 				}
-			}else if(uloga.equals("Dostavljac")) {
+			}else if(uloga.equals("dostavljac")) {
 				for(int j=0; j<tipK.size(); j++) {
 					for (int i = 0; i < deliverers.size(); i++) {
 						if(deliverers.get(i).getUsername().equals(tipK.get(j).getUsername()))
@@ -201,7 +274,7 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 				    }
 				}
 				
-			}else if(uloga.equals("Menadzer")) {
+			}else if(uloga.equals("menadzer")) {
 				for(int j=0; j<tipK.size(); j++) {
 					for (int i = 0; i < managers.size(); i++) {
 						if(managers.get(i).getUsername().equals(tipK.get(j).getUsername()))
@@ -251,10 +324,10 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 			else if(sortiranje.equals("ime-opadajuce")) { Collections.sort(ulogaK, imeOpadajuce); }
 			else if(sortiranje.equals("prezime-rastuce")) { Collections.sort(ulogaK, prezimeRastuce); }
 			else if(sortiranje.equals("prezime-opadajuce")) { Collections.sort(ulogaK, prezimeOpadajuce); }
-			else if(sortiranje.equals("username-rastuce")) { Collections.sort(ulogaK, kImeRastuce); }
-			else if(sortiranje.equals("username-opadajuce")) { Collections.sort(ulogaK, kImeOpadajuce); }
-			else if(sortiranje.equals("brojBodova-rastuce")) { 
-				if(uloga.equals("Kupac")) {
+			else if(sortiranje.equals("kIme-rastuce")) { Collections.sort(ulogaK, kImeRastuce); }
+			else if(sortiranje.equals("kIme-opadajuce")) { Collections.sort(ulogaK, kImeOpadajuce); }
+			else if(sortiranje.equals("brBodova-rastuce")) { 
+				if(uloga.equals("kupac")) {
 					
 					Collections.sort(ulogaK, brBodovaRastuce);
 					
@@ -265,7 +338,7 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 				
 			}
 			else { 
-				if(uloga.equals("Kupac")) {
+				if(uloga.equals("kupac")) {
 					
 					
 					Collections.sort(ulogaK, brBodovaOpadajuce);
@@ -315,7 +388,7 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 	
 	public void writeUsers() throws IOException{
 		Gson gson = new Gson();
-		FileWriter writer = new FileWriter("json/users.json");
+		FileWriter writer = new FileWriter("files/users.json");
 		gson.toJson(this.users, writer);
 		writer.flush();
 		writer.close();

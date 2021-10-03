@@ -108,50 +108,6 @@ public class DAOBuyer {
 		
 	}
 	
-	public ArrayList<Buyer> search(HashMap<String,Buyer> searchBuyers, String filterType, String searchName, String searchSurname, String searchUsername) throws ParseException{
-		ArrayList<Buyer> valid = new ArrayList<Buyer>();
-		
-		for(Buyer b : searchBuyers.values()) 
-		{
-			if((b.getName()).toLowerCase().contains(searchName.toLowerCase()) && (b.getSurname()).toLowerCase().contains(searchSurname.toLowerCase()) && (b.getUsername()).toLowerCase().contains(searchUsername.toLowerCase())) 
-				{
-					valid.add(b);
-				}
-/*
-				if(filterType.equalsIgnoreCase("zlatni")) 
-				{
-					if(b.getType().equals("zlatni"))
-					{
-						valid.add(b);
-					}
-					break;
-				}
-				else if(filterType.equalsIgnoreCase("srebrni")) 
-				{
-					if(b.getType().equals("srebrni"))
-					{
-						valid.add(b);
-					}
-					break;
-				}
-				else if(filterType.equalsIgnoreCase("bronzani")) 
-				{
-					if(b.getType().equals("bronzani"))
-					{	
-						valid.add(b);
-					}
-					break;
-				}
-				else 
-				{
-					valid.add(b);
-					break;
-				}*/
-		 	}
-		return valid;
-	}
-	
-	
 	public void deleteBuyer(String username) {
 		for (Map.Entry<String, Buyer> entry : buyers.entrySet()) {
 	        if(entry.getValue().getUsername().equals(username) ) {
@@ -185,5 +141,16 @@ public class DAOBuyer {
 	    }
 		return null;
 		
+	}
+
+	public ArrayList<Buyer> findBuyers() {
+		ArrayList<Buyer> users=new ArrayList<Buyer>();
+		for (Map.Entry<String, Buyer> entry : buyers.entrySet()) {
+	        
+	        	users.add(entry.getValue());
+	        
+	    }		
+		
+		return users;
 	}
 }

@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -129,6 +130,28 @@ public class DAOManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public ArrayList<Manager> findManagers() {
+		ArrayList<Manager> users=new ArrayList<Manager>();
+		for (Map.Entry<String, Manager> entry : managers.entrySet()) {
+	        
+	        	users.add(entry.getValue());
+	        
+	    }		
+		
+		return users;
+	}
+	
+	public Manager managerFind(String user){
+
+		for (Map.Entry<String, Manager> entry : managers.entrySet()) {
+	        if( entry.getValue().getUsername().equals(user)) {
+	        	return entry.getValue();
+	        }
+	    }		
+		
+		return null;
 	}
 
 }

@@ -11,10 +11,20 @@ public abstract class User {
 	private String name;
 	private String surname;
 	private String gender;
+	@JsonbDateFormat(JsonbDateFormat.TIME_IN_MILLIS)
 	private Date birthDate;
 	private String role;
 	private boolean deleted;
+	private boolean block;
 	
+	public boolean isBlock() {
+		return block;
+	}
+
+	public void setBlock(boolean block) {
+		this.block = block;
+	}
+
 	public User() {}
 	
 	public String getUsername() {

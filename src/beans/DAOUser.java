@@ -24,6 +24,7 @@ public class DAOUser {
 		
 	}
 	
+	
 	public String getName() {
 		return name;
 	}

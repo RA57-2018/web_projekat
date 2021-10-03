@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -88,6 +89,17 @@ public class DAOAdministrator {
 		gson.toJson(this.administrators, fw);
 		fw.flush();
 		fw.close();
+	}
+
+	public ArrayList<Administrator> findAdministrators() {
+		ArrayList<Administrator> users=new ArrayList<Administrator>();
+		for (Map.Entry<String, Administrator> entry : administrators.entrySet()) {
+	        
+	        	users.add(entry.getValue());
+	        
+	    }		
+		
+		return users;
 	}
 
 }

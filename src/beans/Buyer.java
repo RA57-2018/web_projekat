@@ -8,7 +8,14 @@ public class Buyer extends User{
 	private UserType type;
 	private Basket basket;
 	private ArrayList<String> orders;
+	private boolean blocked;
 	
+	public boolean isBlocked() {
+		return blocked;
+	}
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
+	}
 	public ArrayList<String> getOrders() {
 		return orders;
 	}

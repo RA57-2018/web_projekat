@@ -10,6 +10,7 @@ public class Order {
 	private int id;
 	private ArrayList<Integer> artical;
 	private int restaurant;
+	@JsonbDateFormat(JsonbDateFormat.TIME_IN_MILLIS)
 	private Date date;
 	private double price;
 	private String buyer;
