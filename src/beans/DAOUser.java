@@ -21,10 +21,18 @@ public class DAOUser {
 	private int points;
 	
 	public DAOUser() {
-		
 	}
 	
-	
+	public DAOUser(String name, String surname, String username, UserType typeUser, String role, int points) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.username = username;
+		this.typeUser = typeUser;
+		this.role = role;
+		this.points = points;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -73,16 +81,6 @@ public class DAOUser {
 		this.points = points;
 	}
 
-	private HashMap<String,User> users;
-	
-	public HashMap<String, User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(HashMap<String, User> users) {
-		this.users = users;
-	}
-	
 	public ArrayList<User> search(HashMap<String,User> users, String searchName, String searchSurname, String searchUsername) throws ParseException{
 		ArrayList<User> valid = new ArrayList<User>();
 	

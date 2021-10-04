@@ -9,7 +9,14 @@ public class Buyer extends User{
 	private Basket basket;
 	private ArrayList<String> orders;
 	private boolean blocked;
+	private boolean suspicious;
 	
+	public boolean isSuspicious() {
+		return suspicious;
+	}
+	public void setSuspicious(boolean suspicious) {
+		this.suspicious = suspicious;
+	}
 	public boolean isBlocked() {
 		return blocked;
 	}

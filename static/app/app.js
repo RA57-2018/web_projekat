@@ -12,6 +12,8 @@ const OneArticle = { template: '<one-article></one-article>' }
 const Basket = { template: '<basket></basket>' }
 const Order = { template: '<order></order>' }
 const OrderTable = { template: '<ordertable></ordertable>' }
+const SuspiciousUser = { template: '<suspicioususers></suspicioususers>' }
+const ChangePasword = { template: '<changepassword></changepassword>' }
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -29,7 +31,9 @@ const router = new VueRouter({
 	    { path: '/oneArticle/:id', component: OneArticle},
 	    { path: '/basket', component: Basket},
 	    { path: '/order', component: Order},
-	    { path: '/ordertable', component: OrderTable}
+	    { path: '/ordertable', component: OrderTable},
+	    { path: '/suspicioususers', component: SuspiciousUser},
+	    { path: '/changepassword', component: ChangePasword}
 	  ]
 });
 

@@ -44,17 +44,16 @@ Vue.component("user-view", {
     load(){
     	axios.get('/users')
 		.then(response => {
-           
             this.users = response.data;
         });
     },
     search: function(){
-    	var parameter = "name=" + this.searchName + "&surname="+this.searchSurname + "&username=" + this.searchUsername + "&role=" + this.filterRole + "&type=" + this.filterType + "&sortCriteria=" + this.sortCriteria;
-    	
-        axios.get('/searchUsers?' + parameter)
+    	var par = "name=" + this.searchName + "&surname="+this.searchSurname + "&username=" + this.searchUsername + "&role=" + this.filterRole + "&type=" + this.filterType + "&sortCriteria=" + this.sortCriteria;
+    	console.log(par);
+        axios.get('/searchUsers?' + par)
                     .then(response => {
                     	this.users=response.data;
-        });
+        })
     },
     
     block: function(username){
@@ -103,10 +102,6 @@ Vue.component("user-view", {
 	                    
    			</table>
    			<br> 
-	                    <br>
-	                    <br> <br> <br> <br <br> <br> <br> <br>
-	                    <br> <br> 
-	                   
    		 </div>
 		 <div>
           	<table>
@@ -123,10 +118,6 @@ Vue.component("user-view", {
 	                    
    			</table>
    			<br>
-	                    <br>
-	                    <br> <br> <br> <br <br> <br> <br> <br> 
-	                    <br>
-	          
 	                    
    		 </div>
 		</div>

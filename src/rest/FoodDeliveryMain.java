@@ -713,6 +713,35 @@ public class FoodDeliveryMain {
 			return true;
 		});
 		
+		get("/suspiciousUsers", (req, res) -> {
+			ArrayList<DAOUser> users=userDAOus.getUsers();
+			ArrayList<DAOUser> retUsers=new ArrayList<DAOUser>();
+			for(int i=0; i<users.size(); i++) {
+				
+				if(users.get(i).getRole().equals("kupac")) {
+					
+					Buyer b=buyerDAO.findBuyerProfile(users.get(i).getUsername());
+					if(b.isSuspicious() && !b.isBlocked() && !b.isBlock()) {
+						retUsers.add(users.get(i));
+					}
+				}
+			}
+			return g.toJson(retUsers);
+		});
+		
+		post("/blockSuspicious", (req, res)-> {
+			
+			String user = req.queryParams("user");
+			Buyer b=buyerDAO.findBuyerProfile(user);
+			b.setBlocked(true);
+			HashMap<String, Buyer> buyers=buyerDAO.getBuyers();
+			buyers.put(b.getUsername(), b);
+			buyerDAO.setBuyers(buyers);
+			buyerDAO.writeBuyers();
+
+			return true;
+		});
+		
 	}
 	
 	

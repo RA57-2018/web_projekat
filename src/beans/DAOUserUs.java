@@ -139,8 +139,7 @@ public class DAOUserUs {
 
     }};
     
-public ArrayList<DAOUser> search(String ime, String prezime, String username, String tip, String uloga, String sortiranje) {
-		System.out.println("Hello");
+public ArrayList<DAOUser> search(String name, String surname, String username, String type, String role, String sortCriteria) {
 		ArrayList<DAOUser> sviKorisnici=new ArrayList<DAOUser>(); 
 		ArrayList<DAOUser> imeK=new ArrayList<DAOUser>();
 		ArrayList<DAOUser> prezimeK=new ArrayList<DAOUser>();
@@ -183,16 +182,16 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 			
 		}
 		
-		if(ime != "") {
+		if(name != "") {
 			for (int i=0; i<sviKorisnici.size(); i++) {
-				if(sviKorisnici.get(i).getName().toLowerCase().equals(ime.toLowerCase())) {
+				if(sviKorisnici.get(i).getName().toLowerCase().equals(name.toLowerCase())) {
 					imeK.add(sviKorisnici.get(i));
 				} 
 		    }	
 		} else { imeK = sviKorisnici; }
-		if(prezime != "") {
+		if(surname != "") {
 			for (int i = 0; i < imeK.size(); i++) {
-				if(imeK.get(i).getSurname().toLowerCase().equals(prezime.toLowerCase())) {
+				if(imeK.get(i).getSurname().toLowerCase().equals(surname.toLowerCase())) {
 					prezimeK.add(imeK.get(i));
 				}
 		    }	
@@ -207,14 +206,14 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 		    }	
 		} else { usernameK = prezimeK; }
 		
-		if(tip != "") {
+		if(type != "") {
 			
 			for(int j=0; j<usernameK.size(); j++) {
 				
 				for (int i = 0; i < buyers.size(); i++) {
 					
 					
-					if(buyers.get(i).getType().equals(tip) && buyers.get(i).getUsername().equals(usernameK.get(j).getUsername())) {
+					if(buyers.get(i).getType().equals(type) && buyers.get(i).getUsername().equals(usernameK.get(j).getUsername())) {
 							
 						DAOUser k=new DAOUser();
 						k.setName(buyers.get(i).getName());
@@ -235,9 +234,9 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 			
 		} else { tipK = usernameK; }
 		
-		if(uloga != "") {
+		if(role != "") {
 			
-			if(uloga.equals("administrator")) {
+			if(role.equals("administrator")) {
 				
 				for(int j=0; j<tipK.size(); j++) {
 					for (int i = 0; i < administrators.size(); i++) {
@@ -255,7 +254,7 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 							
 				    }
 				}
-			}else if(uloga.equals("dostavljac")) {
+			}else if(role.equals("dostavljac")) {
 				for(int j=0; j<tipK.size(); j++) {
 					for (int i = 0; i < deliverers.size(); i++) {
 						if(deliverers.get(i).getUsername().equals(tipK.get(j).getUsername()))
@@ -274,7 +273,7 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 				    }
 				}
 				
-			}else if(uloga.equals("menadzer")) {
+			}else if(role.equals("menadzer")) {
 				for(int j=0; j<tipK.size(); j++) {
 					for (int i = 0; i < managers.size(); i++) {
 						if(managers.get(i).getUsername().equals(tipK.get(j).getUsername()))
@@ -318,16 +317,16 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 			
 		} else { ulogaK = tipK; }
 		
-		if(sortiranje != "") {
+		if(sortCriteria != "") {
 			
-			if(sortiranje.equals("ime-rastuce")) { Collections.sort(ulogaK, imeRastuce); } 
-			else if(sortiranje.equals("ime-opadajuce")) { Collections.sort(ulogaK, imeOpadajuce); }
-			else if(sortiranje.equals("prezime-rastuce")) { Collections.sort(ulogaK, prezimeRastuce); }
-			else if(sortiranje.equals("prezime-opadajuce")) { Collections.sort(ulogaK, prezimeOpadajuce); }
-			else if(sortiranje.equals("kIme-rastuce")) { Collections.sort(ulogaK, kImeRastuce); }
-			else if(sortiranje.equals("kIme-opadajuce")) { Collections.sort(ulogaK, kImeOpadajuce); }
-			else if(sortiranje.equals("brBodova-rastuce")) { 
-				if(uloga.equals("kupac")) {
+			if(sortCriteria.equals("ime-rastuce")) { Collections.sort(ulogaK, imeRastuce); } 
+			else if(sortCriteria.equals("ime-opadajuce")) { Collections.sort(ulogaK, imeOpadajuce); }
+			else if(sortCriteria.equals("prezime-rastuce")) { Collections.sort(ulogaK, prezimeRastuce); }
+			else if(sortCriteria.equals("prezime-opadajuce")) { Collections.sort(ulogaK, prezimeOpadajuce); }
+			else if(sortCriteria.equals("kIme-rastuce")) { Collections.sort(ulogaK, kImeRastuce); }
+			else if(sortCriteria.equals("kIme-opadajuce")) { Collections.sort(ulogaK, kImeOpadajuce); }
+			else if(sortCriteria.equals("brBodova-rastuce")) { 
+				if(role.equals("kupac")) {
 					
 					Collections.sort(ulogaK, brBodovaRastuce);
 					
@@ -338,7 +337,7 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 				
 			}
 			else { 
-				if(uloga.equals("kupac")) {
+				if(role.equals("kupac")) {
 					
 					
 					Collections.sort(ulogaK, brBodovaOpadajuce);
@@ -360,18 +359,6 @@ public ArrayList<DAOUser> search(String ime, String prezime, String username, St
 	}
 	public void setUsers(ArrayList<DAOUser> users) {
 		this.users = users;
-	}
-	public ArrayList<Buyer> getBuyers() {
-		return buyers;
-	}
-	public void setBuyers(ArrayList<Buyer> buyers) {
-		this.buyers = buyers;
-	}
-	public DAOBuyer getB() {
-		return b;
-	}
-	public void setB(DAOBuyer b) {
-		this.b = b;
 	}
 	
 	public DAOUser findUser(String username) {
