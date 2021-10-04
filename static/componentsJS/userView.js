@@ -54,7 +54,7 @@ Vue.component("user-view", {
         axios.get('/searchUsers?' + parameter)
                     .then(response => {
                     	this.users=response.data;
-        })
+        });
     },
     
     block: function(username){
@@ -63,11 +63,8 @@ Vue.component("user-view", {
         )
           .then(function(response){
             
-          
               alert("Korisnik je blokiran!");
               
-         
-          
         });
 		this.load();
     },
@@ -110,8 +107,6 @@ Vue.component("user-view", {
 	                    <br> <br> <br> <br <br> <br> <br> <br>
 	                    <br> <br> 
 	                   
-	                
-	                  
    		 </div>
 		 <div>
           	<table>

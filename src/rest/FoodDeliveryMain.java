@@ -54,7 +54,7 @@ public class FoodDeliveryMain {
 	private static DAOLocation locationDAO = new DAOLocation();
 	private static DAOArticles articlesDAO = new DAOArticles();
 	private static DAOArticleInBasket articlesInBasketDAO = new DAOArticleInBasket();
-	//private static DAOOrder orderDAO = new DAOOrder();
+	private static DAOOrder orderDAO = new DAOOrder();
 	private static DAOUser userDAO = new DAOUser();
 	private static DAOUserUs userDAOus = new DAOUserUs();
 	
@@ -364,21 +364,29 @@ public class FoodDeliveryMain {
 				if(users.get(i).getRole().equals("kupac")) {
 					
 					Buyer b = buyerDAO.findBuyerProfile(users.get(i).getUsername());
-					retUsers.add(users.get(i));
+					if(!b.isBlock() && !b.isBlocked()) {
+						retUsers.add(users.get(i));
+					}
 				}else if(users.get(i).getRole().equals("menadzer")) {
 					
 					Manager m = managerDAO.findManagerProfile(users.get(i).getUsername());
-					retUsers.add(users.get(i));
+					if(!m.isBlock()) {
+						retUsers.add(users.get(i));
+					}
 				}else if(users.get(i).getRole().equals("administrator")) {
 					
 					Administrator a = administratorDAO.findAdministratorProfile(users.get(i).getUsername());
-					retUsers.add(users.get(i));
+					if(!a.isBlock()) {
+						retUsers.add(users.get(i));
+					}
 				}else {
 					Deliverer d = delivererDAO.findDelivererProfile(users.get(i).getUsername());
-					retUsers.add(users.get(i));
+					if(!d.isBlock()) {
+						retUsers.add(users.get(i));
 					}
 					
 				}
+			}
 			return g.toJson(retUsers);
 			
 		});
@@ -443,8 +451,6 @@ public class FoodDeliveryMain {
 			String username = (req.queryParams("username")).trim();
 			String surname = (req.queryParams("surname")).trim();
 			String name = (req.queryParams("name")).trim();
-			System.out.println("Hello");
-			System.out.println(username);
 			return g.toJson(userDAOus.search(name, surname, username, type, role, sortCriteria));
 		});
 		
@@ -571,7 +577,7 @@ public class FoodDeliveryMain {
 			return true;
 		});
 		
-		/*post("/createOrder", (req, res) -> {
+		post("/createOrder", (req, res) -> {
 			String reqBody = req.body();
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			
@@ -636,7 +642,7 @@ public class FoodDeliveryMain {
 		});
 		
 		
-		get("/porudzbine", (req, res)->{
+		get("/orders", (req, res)->{
 			
 			String user = req.queryParams("user");
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
@@ -652,25 +658,25 @@ public class FoodDeliveryMain {
 		    }	
 			return gsonReg.toJson(orders);
 			
-		});*/
+		});
 		
-		/*get("/artikliPorudzbine", (req, res) -> {
+		/*get("/articlesOrder", (req, res) -> {
 			String id = req.queryParams("id");
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
 			
-			Porudzbina p= porudzbineController.pronadjiPorudzbinu(Integer.parseInt(id));
-			ArrayList<ArtikalUKorpi> artikli = new ArrayList<ArtikalUKorpi>();
-			for(int i = 0; i<p.getArtikli().size(); i++) {
+			Order o= orderDAO.findOrder(Integer.parseInt(id));
+			ArrayList<ArticleInBasket> articles = new ArrayList<ArticleInBasket>();
+			for(int i = 0; i<o.getArtical().size(); i++) {
 				
-				ArtikalUKorpi art = artikliUKorpiController.pronadjiArtikal(p.getArtikli().get(i));
+				ArticleInBasket art = articlesInBasketDAO.findArticle(o.getArtical().get(i));
 				
-					artikli.add(art);
+					articles.add(art);
 				
 				
 				
 			}
 			
-			return gsonReg.toJson(artikli);
+			return gsonReg.toJson(articles);
 		});*/
 		
 		post("/block", (req, res)-> {

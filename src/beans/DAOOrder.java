@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.text.ParseException;
 
 import com.google.gson.Gson;
@@ -34,6 +35,15 @@ public class DAOOrder {
 
 	public void setOrders(HashMap<Integer, Order> orders) {
 		this.orders = orders;
+	}
+	
+	public Order findOrder(int id) {
+		for (Map.Entry<Integer, Order> entry : orders.entrySet()) {
+	        if(entry.getValue().getId() == id) {
+	        	return entry.getValue();
+	        }
+	    }	
+		return null;
 	}
 
 	private void readOrders() throws FileNotFoundException {

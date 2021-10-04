@@ -37,26 +37,24 @@ Vue.component("order", {
 	  	</center>
 	  	 <div v-for="(articleInBasket, index) in articles">
 
-             <div class="column2">
+             <div>
                       <br> <br>
-               	<div class="card">
+               	<div>
                  	<br>
                 	<center>
-                 	<img :src="articleInBasket.artical.image" width="200em" height="200em"> </center>
+                 	<img :src="articleInBasket.artical.image" width="200em" height="200em"> 
+                 	</center>
 
-                    	<div class="container">
+                    	<div>
                         <h5><i>{{ articleInBasket.artical.name }}</i></h5>
                         <p><i>Cijena: {{ articleInBasket.artical.price }}</i></p>
                         <p><i>Tip: {{ articleInBasket.artical.typeArtical }}</i></p>
                         <p><i>Kolicina: {{ articleInBasket.artical.quantity }}</i></p>
                         <p><i>Opis: {{ articleInBasket.artical.description }}</i></p>
-                        
-                        </hr>
                    		</div>
-                  </div>
+                 </div>
              </div>
        </div>
-	 </div>
   </div>	
 
   `
