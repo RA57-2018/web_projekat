@@ -53,7 +53,7 @@ Vue.component("user-view", {
         axios.get('/searchUsers?' + par)
                     .then(response => {
                     	this.users=response.data;
-        })
+        });
     },
     
     block: function(username){
@@ -76,9 +76,9 @@ Vue.component("user-view", {
 	<div>
 		<div>
           	<table>
-	          <tr><td><i>Ime: &nbsp</i></td><td><input type="text" v-model="searchName"  placeholder="Ime..."></td></tr>
-	          <tr><td><i>Prezime: &nbsp</i></td><td><input type="text" v-model="searchSurname"  placeholder="Prezime..."></td></tr>
-	          <tr><td><i>Korisnicko ime: &nbsp</i></td><td><input type="text" v-model="searchUsername"  placeholder="Korisnicko ime..."></td></tr>
+	          <tr><td>Ime: &nbsp</td><td><input type="text" v-model="searchName"  placeholder="Ime..."></td></tr>
+	          <tr><td>Prezime: &nbsp</td><td><input type="text" v-model="searchSurname"  placeholder="Prezime..."></td></tr>
+	          <tr><td>Korisnicko ime: &nbsp</td><td><input type="text" v-model="searchUsername"  placeholder="Korisnicko ime..."></td></tr>
 	         
 	      	  <tr><td><button v-on:click="search">Pretrazi</button></td></tr>
 	      	</table>
@@ -86,16 +86,16 @@ Vue.component("user-view", {
 	
 		  <div>
           	<table>
-	          <tr><td><i>Unesite tip korisnika: &nbsp</i></td><td><select style="width:210px; height:40px;"  v-model="filterType">
-	                        <option  value="zlatni" ><i>Zlatni</i></option>
-	                        <option  value="srebrni"><i>Srebrni</i></option>
-	                         <option  value="bronzani"><i>Bronzani</i></option>
+	          <tr><td>Unesite tip korisnika: &nbsp</td><td><select style="width:210px; height:40px;"  v-model="filterType">
+	                        <option  value="zlatni" >Zlatni</option>
+	                        <option  value="srebrni">Srebrni</option>
+	                         <option  value="bronzani">Bronzani</option>
 	                    </select></td></tr>
-	          <tr><td><i>Unesite ulogu: &nbsp</i></td><td><select style="width:210px; height:40px;"  v-model="filterRole">
-	                        <option  value="administrator" ><i>Administrator</i></option>
-	                        <option  value="dostavljac"><i>Dostavljac</i></option>
-	                        <option  value="menadzer" ><i>Menadzer</i></option>
-	                        <option  value="kupac"><i>Kupac</i></option>
+	          <tr><td>Unesite ulogu: &nbsp</td><td><select style="width:210px; height:40px;"  v-model="filterRole">
+	                        <option  value="administrator" >Administrator</option>
+	                        <option  value="dostavljac">Dostavljac</option>
+	                        <option  value="menadzer" >Menadzer</option>
+	                        <option  value="kupac">Kupac</option>
 
 	                    </select></td></tr>
 	          
@@ -105,7 +105,7 @@ Vue.component("user-view", {
    		 </div>
 		 <div>
           	<table>
-	          <tr><td><i>Sortiraj: &nbsp</i></td><td><select style="width:210px; height:40px;"  v-model="sortCriteria">
+	          <tr><td>Sortiraj: &nbsp</td><td><select style="width:210px; height:40px;"  v-model="sortCriteria">
 	                        <option  value="ime-rastuce" ><i>Ime - rastuce</i></option>
 	                        <option  value="ime-opadajuce"><i>Ime - opadajuce</i></option>
 	                        <option  value="prezime-rastuce" ><i>Prezime - rastuce</i></option>
@@ -123,14 +123,14 @@ Vue.component("user-view", {
 		</div>
 		
 		<div>
-			<table align="center"> 
+			<table> 
                         <tr>
-                            <th><i>Ime</i></th>
-                            <th><i>Prezime</i></th>
-                            <th><i>Korisnicko ime</i></th>
-                            <th><i>Uloga</i></th
-                            <th><i>Tip kupca</i></th>
-                            <th><i>Sakupljeni bodovi</i></th>
+                            <th>Ime</th>
+                            <th>Prezime</th>
+                            <th>Korisnicko ime</th>
+                            <th>Uloga</th
+                            <th>Tip kupca</th>
+                            <th>Sakupljeni bodovi</th>
                             <th></th>
                             
                         </tr>

@@ -70,7 +70,7 @@ public class FoodDeliveryMain {
 			String userN = " ";
 			ArrayList<String> response = new ArrayList<String>();
 			if(buyerDAO.findBuyer(name, pass) != null) {
-				if(!buyerDAO.findBuyer(name, pass).isDeleted()) {
+				if(!buyerDAO.findBuyer(name, pass).isDeleted() && !buyerDAO.findBuyer(name, pass).isBlock()) {
 				    userN = name;
 					response.add(userN);
 					response.add("buyer");
@@ -451,6 +451,7 @@ public class FoodDeliveryMain {
 			String username = (req.queryParams("username")).trim();
 			String surname = (req.queryParams("surname")).trim();
 			String name = (req.queryParams("name")).trim();
+			
 			return g.toJson(userDAOus.search(name, surname, username, type, role, sortCriteria));
 		});
 		
@@ -652,7 +653,7 @@ public class FoodDeliveryMain {
 				
 				if(entry.getValue().getBuyer().equals(user) && !entry.getValue().getStatus().equals("OTKAZANA") && !entry.getValue().getStatus().equals("DOSTAVLJENA")) {
 				
-					orders.add( entry.getValue());
+					orders.add(entry.getValue());
 				}
 		        
 		    }	
@@ -660,7 +661,7 @@ public class FoodDeliveryMain {
 			
 		});
 		
-		/*get("/articlesOrder", (req, res) -> {
+		get("/articlesOrder", (req, res) -> {
 			String id = req.queryParams("id");
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
 			
@@ -671,13 +672,10 @@ public class FoodDeliveryMain {
 				ArticleInBasket art = articlesInBasketDAO.findArticle(o.getArtical().get(i));
 				
 					articles.add(art);
-				
-				
-				
 			}
 			
 			return gsonReg.toJson(articles);
-		});*/
+		});
 		
 		post("/block", (req, res)-> {
 			

@@ -7,7 +7,7 @@ public class Buyer extends User{
 	private int points;
 	private UserType type;
 	private Basket basket;
-	private ArrayList<String> orders;
+	private ArrayList<Integer> orders;
 	private boolean blocked;
 	private boolean suspicious;
 	
@@ -23,10 +23,10 @@ public class Buyer extends User{
 	public void setBlocked(boolean blocked) {
 		this.blocked = blocked;
 	}
-	public ArrayList<String> getOrders() {
+	public ArrayList<Integer> getOrders() {
 		return orders;
 	}
-	public void setOrders(ArrayList<String> orders) {
+	public void setOrders(ArrayList<Integer> orders) {
 		this.orders = orders;
 	}
 	public Basket getBasket() {

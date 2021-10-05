@@ -18,12 +18,16 @@ Vue.component("login", {
         .then(function(response){                
                 if(JSON.parse(JSON.stringify(response.data))[0]===" "){
                     alert("Pogresno korisnicko ime ili lozinka!");                    
-                }
-                else{
-                    alert("Prijava uspesna!")
-                    localStorage.setItem('uName', JSON.parse(JSON.stringify(response.data))[0]);
-                    localStorage.setItem('role', JSON.parse(JSON.stringify(response.data))[1]);
-                    router.replace({ path: `/home-page` })
+                }else{
+                	if(JSON.parse(JSON.stringify(response.data))[0]==="blokiran"){
+                		alert("Nalog vam je blokiran!");
+                	}
+                	else{
+                		alert("Prijava uspesna!")
+                		localStorage.setItem('uName', JSON.parse(JSON.stringify(response.data))[0]);
+                		localStorage.setItem('role', JSON.parse(JSON.stringify(response.data))[1]);
+                		router.replace({ path: `/home-page` })
+                	}
                 }
               });       	     
       },

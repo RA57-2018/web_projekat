@@ -24,10 +24,10 @@ Vue.component("ordertable", {
 
         
         load(){
-            axios.get('/orders?user=' + this.kIme)
-		.then(response => {
+            axios.get('/orders?user=' + this.username)
+            .then(response => {
            
-           this.orders=response.data;
+            this.orders=response.data;
            
          
         });

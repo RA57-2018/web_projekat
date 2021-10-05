@@ -228,7 +228,7 @@ Vue.component("home-page", {
             <a href="/#/basket">Moja korpa</a>
         </li> 
         <li v-if="activeUser == true && role =='buyer'">
-            <a href="/#/order">Moja porudzbina</a>
+            <a href="/#/orderTable">Moja porudzbina</a>
         </li>
 	</ul>
 	

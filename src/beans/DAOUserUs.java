@@ -52,7 +52,6 @@ public class DAOUserUs {
 	}
 	
 	public void readUsers() throws FileNotFoundException {
-		
 		Gson gson = new Gson();
 		Type token = new TypeToken<ArrayList<DAOUser>>(){}.getType();
 		BufferedReader br = new BufferedReader(new FileReader("files/users.json"));
@@ -295,7 +294,7 @@ public ArrayList<DAOUser> search(String name, String surname, String username, S
 				for(int j=0; j<tipK.size(); j++) {
 					for (int i = 0; i < buyers.size(); i++) {
 						if(buyers.get(i).getUsername().equals(tipK.get(j).getUsername()))
-{
+						{
 							
 							DAOUser k=new DAOUser();
 							k.setName(buyers.get(i).getName());
