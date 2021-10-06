@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,5 +57,10 @@ public class DAOArticleInBasket {
 		gson.toJson(this.articlesInBasket, fw);
 		fw.flush();
 		fw.close();
+	}
+	
+	public int findNextId() {
+		int maxValueKey = Collections.max(this.articlesInBasket.keySet());
+		return maxValueKey + 1;
 	}
 }

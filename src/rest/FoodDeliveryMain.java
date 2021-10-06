@@ -588,7 +588,7 @@ public class FoodDeliveryMain {
 			
 			HashMap<Integer, Order> orders = orderDAO.getOrders();
 			
-			Order o = new Order();
+			Order o = new Order();			
 			
 			o.setId(orderDAO.findNextId());
 			o.setPrice(basket.getPrice());
@@ -610,14 +610,12 @@ public class FoodDeliveryMain {
 			
 			HashMap<Integer, ArticleInBasket> artK = articlesInBasketDAO.getArticlesInBasket();
 			
-			for(int i = 0; i < basket.getArticalsInBasket().size(); i++) {
-				
+						
+			for(int i = 0; i < basket.getArticalsInBasket().size(); i++) {				
 				int id = basket.getArticalsInBasket().get(i);
 				ArticleInBasket artB = articlesInBasketDAO.findArticle(id);
 				artB.setDeleted(true);
-				
-				artK.put(artB.getId(), artB);
-				
+				artK.put(artB.getId(), artB);				
 			
 			}
 			articlesInBasketDAO.setArticlesInBasket(artK);
@@ -626,7 +624,16 @@ public class FoodDeliveryMain {
 			int points=(int) (basket.getPrice()/1000 * 133) + b.getPoints();
 			HashMap<String, Buyer> buyers = buyerDAO.getBuyers();
 			
+			double oldPrice = 0;
+			oldPrice = b.getBasket().getPrice();
+			
 			b.setPoints(points);
+			b.getBasket().setPrice(oldPrice + basket.getPrice());
+			
+			
+			//HashMap<Integer, Order> orde = orderDAO.getOrders();
+			//b.setOrders(b.getOrders());
+						
 			buyers.put(b.getUsername(), b);
 			buyerDAO.setBuyers(buyers);
 			buyerDAO.writeBuyers();
@@ -738,6 +745,40 @@ public class FoodDeliveryMain {
 			buyerDAO.writeBuyers();
 
 			return true;
+		});
+		
+		post("/addArticleInBasket", (req, res)-> {
+			String quantity  = req.queryParams("quantityA");
+			String id = req.queryParams("id");
+			String username = req.queryParams("user");
+
+			ArticleInBasket articleBasket = new ArticleInBasket();
+			Artical artical = articlesDAO.findArticleId(id);
+			articleBasket.setId(articlesInBasketDAO.findNextId());
+			articleBasket.setArtical(artical);
+			articleBasket.setQuantity(Integer.parseInt(quantity));
+			articleBasket.setDeleted(false);
+			
+			HashMap<Integer, ArticleInBasket> articleInBasket = articlesInBasketDAO.getArticlesInBasket();
+			articleInBasket.put(articleBasket.getId(), articleBasket);
+			articlesInBasketDAO.setArticlesInBasket(articleInBasket);
+			
+			articlesInBasketDAO.writeArticleInBasket();
+			
+			Buyer buyer = buyerDAO.findBuyerProfile(username);
+			ArrayList<Integer> articleBuyer = buyer.getBasket().getArticalsInBasket();
+			articleBuyer.add(articleBasket.getId());
+			
+			buyer.getBasket().setArticalsInBasket(articleBuyer);
+			buyer.getBasket().setUser(username);
+			
+			HashMap<String, Buyer> buyers = buyerDAO.getBuyers();
+			buyers.put(username, buyer);
+			buyerDAO.setBuyers(buyers);
+			buyerDAO.writeBuyers();
+			
+			return true;
+			
 		});
 		
 	}

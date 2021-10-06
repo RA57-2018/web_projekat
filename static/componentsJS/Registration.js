@@ -10,6 +10,7 @@ Vue.component("registration", {
       date: null,
       gender: null,
       showErrorMessage: false,
+      activeUser: false,
   };
   },
     methods: {
@@ -60,6 +61,13 @@ Vue.component("registration", {
    },
    template: ` 
    <div>
+   
+   <ul>
+        <li v-if="activeUser != true" style="float:left">
+            <a href="/#/">Pocetna stranica</a>
+        </li>
+    </ul>
+   
    <form @submit="formSubmit">
    <div class="container">
    
