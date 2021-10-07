@@ -39,6 +39,19 @@ Vue.component("ordertable", {
             this.restaurants=response.data;                   
         });             
     },
+    cancelOrder: function(idO){
+		
+		axios
+        .post('/cancelOrder',{},{params:{id: idO}}
+        )
+          .then(function(response){
+          
+   			alert("Porudzbina je otkazana!");
+   			
+        });
+  this.load();
+		
+	},
     findRestaurant: function(id){
 		let i = 0;
 		for(i; i < this.restaurants.length; i++){
@@ -125,6 +138,7 @@ Vue.component("ordertable", {
             	<td>{{order.date}}</td>
                 <td>{{order.price}} din</td>
                 <td>{{order.status}} </td>
+                <td  v-if="order.status=='OBRADA' "><button v-on:click="cancelOrder(order.id)">Otkazi porudzbinu</button></td>
             </tr>
 
       </table>

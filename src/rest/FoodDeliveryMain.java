@@ -24,10 +24,12 @@ import beans.Artical;
 import beans.ArticleInBasket;
 import beans.Basket;
 import beans.Buyer;
+import beans.Canceling;
 import beans.DAOAdministrator;
 import beans.DAOArticleInBasket;
 import beans.DAOArticles;
 import beans.DAOBuyer;
+import beans.DAOCanceling;
 import beans.DAODeliverer;
 import beans.DAOLocation;
 import beans.DAOManager;
@@ -60,6 +62,7 @@ public class FoodDeliveryMain {
 	private static DAOUser userDAO = new DAOUser();
 	private static DAOUserUs userDAOus = new DAOUserUs();
 	private static DAORequest requestDAO = new DAORequest();
+	private static DAOCanceling cancelingDAO = new DAOCanceling();
 	
 	public static void main(String[] args) throws Exception {
 		port(8080);
@@ -907,6 +910,66 @@ public class FoodDeliveryMain {
 			
 			return gsonReg.toJson(orders);
 			
+		});
+		
+		post("/cancelOrder", (req, res)-> {
+			String id = req.queryParams("id");
+			
+			Order o=orderDAO.findOrder(Integer.parseInt(id));
+			o.setStatus("OTKAZANA");
+			
+			
+			HashMap<Integer, Order> orders = orderDAO.getOrders();
+			orders.put(o.getId(), o);
+			orderDAO.setOrders(orders);
+
+			orderDAO.write();
+			
+			Buyer b=buyerDAO.findBuyerProfile(o.getBuyer());
+			int points= b.getPoints() - (int)(o.getPrice()/1000 * 133*4);
+			if(points<0) {
+				points=0;
+			}
+			
+			
+			ArrayList<DAOUser> users=userDAOus.getUsers();
+			DAOUser us=userDAOus.findUser(o.getBuyer());
+			users.remove(us);
+			us.setPoints(points);
+			users.add(us);
+			userDAOus.setUsers(users);
+			userDAOus.writeUsers();
+			
+			ArrayList<Canceling> cancelings=cancelingDAO.getCanceling();
+			Canceling c=new Canceling();
+			Date date= java.util.Calendar.getInstance().getTime();
+			c.setDatum(date);
+			c.setBuyer(o.getBuyer());
+			c.setId(cancelingDAO.findNext());
+			cancelings.add(c);
+			cancelingDAO.setCanceling(cancelings);
+			cancelingDAO.writeCanceledOrder();
+			if(cancelingDAO.isSuspicious(o.getBuyer())) {
+				
+				HashMap<String, Buyer> buyers=buyerDAO.getBuyers();
+				b.setPoints(points);
+				b.setSuspicious(true);
+				buyers.put(b.getUsername(), b);
+				buyerDAO.setBuyers(buyers);
+				buyerDAO.writeBuyers();
+				
+			}else {
+				
+				HashMap<String, Buyer> buyers=buyerDAO.getBuyers();
+				
+				b.setPoints(points);
+				buyers.put(b.getUsername(), b);
+				buyerDAO.setBuyers(buyers);
+				buyerDAO.writeBuyers();
+			}
+			
+			
+			return true;
 		});
 		
 	}
