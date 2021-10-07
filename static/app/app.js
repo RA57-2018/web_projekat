@@ -16,6 +16,7 @@ const SuspiciousUser = { template: '<suspicioususers></suspicioususers>' }
 const ManagerOrders = { template: '<managerOrders></managerOrders>' }
 const DeliveryOrders = { template: '<deliveryOrders></deliveryOrders>' }
 const OrdersForOneDeliverer = { template: '<ordersForOneDeliverer></ordersForOneDeliverer>' }
+const Comment = { template: '<comment></comment>' }
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -37,7 +38,8 @@ const router = new VueRouter({
 	    { path: '/suspicioususers', component: SuspiciousUser},
 	    { path: '/managerOrders', component: ManagerOrders},
 	    { path: '/deliveryOrders', component: DeliveryOrders},
-	    { path: '/ordersForOneDeliverer', component: OrdersForOneDeliverer}
+	    { path: '/ordersForOneDeliverer', component: OrdersForOneDeliverer},
+	    { path: '/comment', component: Comment}
 	  ]
 });
 

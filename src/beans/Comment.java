@@ -2,25 +2,70 @@ package beans;
 
 public class Comment {
 
-	private User user;
-	private Restaurant restaurant;
+	private int id;
+	private String buyer;
+	private int restaurant;
 	private String text;
 	private int rating;
+	private boolean approved;
+	private boolean viewComment;
 	
 	public Comment() {}
 	
-	public User getUser() {
-		return user;
+	
+	public Comment(int id, String buyer, int restaurant, String text, int rating, boolean approved,
+			boolean viewComment) {
+		super();
+		this.id = id;
+		this.buyer = buyer;
+		this.restaurant = restaurant;
+		this.text = text;
+		this.rating = rating;
+		this.approved = approved;
+		this.viewComment = viewComment;
 	}
-	public void setUser(User user) {
-		this.user = user;
+
+
+	public int getId() {
+		return id;
 	}
-	public Restaurant getRestaurant() {
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getBuyer() {
+		return buyer;
+	}
+
+	public void setBuyer(String buyer) {
+		this.buyer = buyer;
+	}
+
+	public int getRestaurant() {
 		return restaurant;
 	}
-	public void setRestaurant(Restaurant restaurant) {
+
+	public void setRestaurant(int restaurant) {
 		this.restaurant = restaurant;
 	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
+	public boolean isViewComment() {
+		return viewComment;
+	}
+
+	public void setViewComment(boolean viewComment) {
+		this.viewComment = viewComment;
+	}
+
 	public String getText() {
 		return text;
 	}

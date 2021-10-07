@@ -147,6 +147,9 @@ Vue.component("restaurant", {
         <li v-if="activeUser == true && role =='buyer'">
             <a href="/#/basket">Moja korpa</a>
         </li> 
+         <li v-if="activeUser == true && role =='buyer'">
+            <a href="/#/Comment">Komentar</a>
+        </li>
         <li v-if="activeUser == true && role =='buyer'">
             <a href="/#/orderTable">Moja porudzbina</a>
         </li>

@@ -25,11 +25,13 @@ import beans.ArticleInBasket;
 import beans.Basket;
 import beans.Buyer;
 import beans.Canceling;
+import beans.Comment;
 import beans.DAOAdministrator;
 import beans.DAOArticleInBasket;
 import beans.DAOArticles;
 import beans.DAOBuyer;
 import beans.DAOCanceling;
+import beans.DAOComment;
 import beans.DAODeliverer;
 import beans.DAOLocation;
 import beans.DAOManager;
@@ -63,6 +65,7 @@ public class FoodDeliveryMain {
 	private static DAOUserUs userDAOus = new DAOUserUs();
 	private static DAORequest requestDAO = new DAORequest();
 	private static DAOCanceling cancelingDAO = new DAOCanceling();
+	private static DAOComment commentDAO = new DAOComment();
 	
 	public static void main(String[] args) throws Exception {
 		port(8080);
@@ -970,6 +973,23 @@ public class FoodDeliveryMain {
 			
 			
 			return true;
+		});
+		
+		post("/sentComment", (req, res)-> {
+			String strReq = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			Comment comment = gsonReg.fromJson(strReq, Comment.class);
+			comment.setId(commentDAO.findNextId());
+			comment.setApproved(false);
+			comment.setViewComment(true);
+		    HashMap<Integer, Comment> comments=commentDAO.getComments();
+		    comments.put(comment.getId(), comment);
+		    commentDAO.setComments(comments);
+		    commentDAO.writeComment();
+		    
+		    return true;
+			
 		});
 		
 	}
