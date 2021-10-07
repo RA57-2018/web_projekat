@@ -119,6 +119,13 @@ public class FoodDeliveryMain {
                 return g.toJson(answer);
             }else {
                 buyerDAO.addBuyer(buyer);
+                DAOUser user = new DAOUser();
+                user.setName(buyer.getName());
+                user.setSurname(buyer.getSurname());
+                user.setUsername(buyer.getUsername());
+                user.setRole("kupac");
+                user.setPoints(0);
+                userDAOus.add(user);
                 return true;
             }
 
@@ -250,17 +257,39 @@ public class FoodDeliveryMain {
         post("/addEmployee", (req, res)-> {
         		
 			String rol = req.queryParams("role");
+			String username = req.queryParams("username");
 			
 			String reqBody = req.body();
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-			
-			if(rol.equals("menadzer")) {
-				Manager manager = gsonReg.fromJson(reqBody, Manager.class);
-				managerDAO.addManager(manager);
-			}else if(rol.equals("dostavljac")) {
-				Deliverer deliverer = gsonReg.fromJson(reqBody, Deliverer.class);
-				delivererDAO.addDeliverer(deliverer);
-			}
+						
+            String userName = " ";
+            ArrayList<String> answer = new ArrayList<String>();
+            if(userDAOus.findUser(username) != null){
+                answer.add(userName);
+                return g.toJson(answer);
+            }else{
+	            if(rol.equals("menadzer")) {
+					Manager manager = gsonReg.fromJson(reqBody, Manager.class);
+					managerDAO.addManager(manager);
+	                DAOUser user = new DAOUser();
+	                user.setName(manager.getName());
+	                user.setSurname(manager.getSurname());
+	                user.setUsername(manager.getUsername());
+	                user.setRole("menadzer");
+	                user.setPoints(0);
+	                userDAOus.add(user);
+				}else if(rol.equals("dostavljac")) {
+					Deliverer deliverer = gsonReg.fromJson(reqBody, Deliverer.class);
+					delivererDAO.addDeliverer(deliverer);
+	                DAOUser user = new DAOUser();
+	                user.setName(deliverer.getName());
+	                user.setSurname(deliverer.getSurname());
+	                user.setUsername(deliverer.getUsername());
+	                user.setRole("dostavljac");
+	                user.setPoints(0);
+	                userDAOus.add(user);
+				}
+            }
 			return true;
 			
 		});
@@ -779,6 +808,70 @@ public class FoodDeliveryMain {
 			
 			return true;
 			
+		});
+		
+		get("/managerOrders", (req, res)->{			
+			String username = req.queryParams("username");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			Manager manager = managerDAO.findManagerProfile(username);
+			ArrayList<Order> orders = new ArrayList<Order>();
+
+			for (Map.Entry<Integer, Order> entry : orderDAO.getOrders().entrySet()) {				
+				if(entry.getValue().getRestaurant() == manager.getId()) {				
+					orders.add(entry.getValue());
+				}
+		        
+		    }	
+			return gsonReg.toJson(orders);
+			
+		});
+		
+		get("/managerBuyers", (req, res)->{			
+			String username = req.queryParams("username");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			String b = "";			
+			for (Map.Entry<String, Buyer> entry : buyerDAO.getBuyers().entrySet()) {				
+				if((entry.getValue().getUsername()).equals(username)) {				
+					b = entry.getValue().getName() + " " + entry.getValue().getSurname();	
+					System.out.println(b);
+					
+				}
+		        
+		    }
+			return gsonReg.toJson(b);
+			
+		});
+		
+		post("/changeStatusManager", (req, res)-> {
+			String id = req.queryParams("id");
+			
+			Order order = orderDAO.findOrder(Integer.parseInt(id));
+			order.setStatus("U PRIPREMI");			
+			
+			HashMap<Integer, Order> orders = orderDAO.getOrders();
+			orders.put(order.getId(), order);
+			orderDAO.setOrders(orders);
+
+			orderDAO.write();
+			
+			return true;
+		});
+		
+		post("/changeStatusWaitDelivery", (req, res)-> {
+			String id = req.queryParams("id");
+			
+			Order order = orderDAO.findOrder(Integer.parseInt(id));
+			order.setStatus("CEKA DOSTAVLJACA");			
+			
+			HashMap<Integer, Order> orders = orderDAO.getOrders();
+			orders.put(order.getId(), order);
+			orderDAO.setOrders(orders);
+
+			orderDAO.write();
+			
+			return true;
 		});
 		
 	}

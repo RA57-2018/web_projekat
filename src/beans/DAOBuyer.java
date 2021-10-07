@@ -58,10 +58,21 @@ public class DAOBuyer {
 		buyer.setPoints(0);
 		buyer.setDeleted(false);
 		UserType type = new UserType();
-		type.setType("normal");
+		type.setType("normalan");
 		type.setDiscount(0);
-		type.setScore(0);
+		type.setScore(1000);
 		buyer.setType(type);
+		Basket basket = new Basket();
+		ArrayList<Integer> articalsInBasket = new ArrayList<Integer>();
+		basket.setArticalsInBasket(articalsInBasket);
+		basket.setUser(buyer.getUsername());
+		basket.setPrice(0);
+		buyer.setBasket(basket);
+		ArrayList<Integer> orders = new ArrayList<Integer>();
+		buyer.setOrders(orders);
+		buyer.setBlocked(false);
+		buyer.setSuspicious(false);
+		buyer.setBlock(false);
 		buyers.put(buyer.getUsername(),buyer);
 		try {
 			this.writeBuyers();

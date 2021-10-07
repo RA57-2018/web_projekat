@@ -13,6 +13,7 @@ const Basket = { template: '<basket></basket>' }
 const Order = { template: '<order></order>' }
 const OrderTable = { template: '<ordertable></ordertable>' }
 const SuspiciousUser = { template: '<suspicioususers></suspicioususers>' }
+const ManagerOrders = { template: '<managerOrders></managerOrders>' }
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -31,7 +32,8 @@ const router = new VueRouter({
 	    { path: '/basket', component: Basket},
 	    { path: '/order', component: Order},
 	    { path: '/ordertable', component: OrderTable},
-	    { path: '/suspicioususers', component: SuspiciousUser}
+	    { path: '/suspicioususers', component: SuspiciousUser},
+	    { path: '/managerOrders', component: ManagerOrders}
 	  ]
 });
 

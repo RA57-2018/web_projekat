@@ -360,12 +360,9 @@ public ArrayList<DAOUser> search(String name, String surname, String username, S
 		this.users = users;
 	}
 	
-	public DAOUser findUser(String username) {
-		
-		for(int i=0; i<users.size(); i++) {
-			
-			if(users.get(i).getUsername().equals(username)) {
-				
+	public DAOUser findUser(String username) {		
+		for(int i=0; i<users.size(); i++) {			
+			if(users.get(i).getUsername().equals(username)) {				
 				return users.get(i);
 			}
 		}

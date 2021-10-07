@@ -1,15 +1,8 @@
 package beans;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 public class DAOUser {
 	
