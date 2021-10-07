@@ -39,9 +39,11 @@ import beans.Deliverer;
 import beans.Location;
 import beans.Manager;
 import beans.Order;
+import beans.Request;
 import beans.Restaurant;
 import beans.RestaurantDAO;
 import beans.User;
+import beans.DAORequest;
 
 public class FoodDeliveryMain {
 	
@@ -57,6 +59,7 @@ public class FoodDeliveryMain {
 	private static DAOOrder orderDAO = new DAOOrder();
 	private static DAOUser userDAO = new DAOUser();
 	private static DAOUserUs userDAOus = new DAOUserUs();
+	private static DAORequest requestDAO = new DAORequest();
 	
 	public static void main(String[] args) throws Exception {
 		port(8080);
@@ -679,16 +682,13 @@ public class FoodDeliveryMain {
 		});
 		
 		
-		get("/orders", (req, res)->{
-			
+		get("/orders", (req, res)->{			
 			String user = req.queryParams("user");
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
 			
 			ArrayList<Order> orders = new ArrayList<Order>();
-			for (Map.Entry<Integer, Order> entry : orderDAO.getOrders().entrySet()) {
-				
-				if(entry.getValue().getBuyer().equals(user) && !entry.getValue().getStatus().equals("OTKAZANA") && !entry.getValue().getStatus().equals("DOSTAVLJENA")) {
-				
+			for (Map.Entry<Integer, Order> entry : orderDAO.getOrders().entrySet()) {				
+				if(entry.getValue().getBuyer().equals(user)) {				
 					orders.add(entry.getValue());
 				}
 		        
@@ -812,7 +812,7 @@ public class FoodDeliveryMain {
 		
 		get("/managerOrders", (req, res)->{			
 			String username = req.queryParams("username");
-			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
 			
 			Manager manager = managerDAO.findManagerProfile(username);
 			ArrayList<Order> orders = new ArrayList<Order>();
@@ -829,7 +829,7 @@ public class FoodDeliveryMain {
 		
 		get("/managerBuyers", (req, res)->{			
 			String username = req.queryParams("username");
-			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
 			
 			String b = "";			
 			for (Map.Entry<String, Buyer> entry : buyerDAO.getBuyers().entrySet()) {				
@@ -872,6 +872,41 @@ public class FoodDeliveryMain {
 			orderDAO.write();
 			
 			return true;
+		});
+		
+		get("/deliveryOrders", (req, res)->{			
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			ArrayList<Order> orders = new ArrayList<Order>();
+			for (Map.Entry<Integer, Order> entry : orderDAO.getOrders().entrySet()) {				
+				if(entry.getValue().getStatus().equals("CEKA DOSTAVLJACA")) {				
+					orders.add(entry.getValue());
+				}		        
+		    }				
+			return gsonReg.toJson(orders);
+			
+		});
+		
+		get("/ordersForOneDeliverer", (req, res)->{			
+			String username = req.queryParams("username");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			
+			ArrayList<Order> orders = new ArrayList<Order>();
+			for (Map.Entry<Integer,Order> entry : orderDAO.getOrders().entrySet()) {				
+				if(entry.getValue().getStatus().equals("U TRANSPORTU")) {													
+					for(Map.Entry<Integer,Request> entryR : requestDAO.getRequests().entrySet()) {						
+						if(entryR.getValue().getDeliverer().equals(username) && entryR.getValue().getOrderId()==entry.getValue().getId() && entryR.getValue().isApproved()) {							
+							orders.add(entry.getValue());
+						}
+					}
+					
+				}
+		        
+		    }	
+			
+			return gsonReg.toJson(orders);
+			
 		});
 		
 	}

@@ -1,20 +1,18 @@
-Vue.component("ordertable", {
-    name: "ordertable",
+Vue.component("ordersForOneDeliverer", {
+    name: "ordersForOneDeliverer",
     data: function () {
       return {
         orders:[],
-        restaurants:[],
         role:"",
+        restaurants:[],
         username:"",
         activeUser: false,
-        restaurant: null,
-        restaurantSearch: "",
         priceSearch: "",
         dateFrom: "",
         dateTo: "",
         sorting: "",
-        filterType: "",
         filterStatus: "",
+        buyers: [],
     };
     },
     mounted: function(){
@@ -29,24 +27,18 @@ Vue.component("ordertable", {
     },
     methods: {        
         load(){
-            axios.get('/orders?user=' + this.username)
+            axios.get('/ordersForOneDeliverer?username=' + this.username)
             .then(response => {           
-            	this.orders=response.data;                  
-        });
+            	this.orders=response.data;                 
+        }); 
         
-        axios.get('/restaurants')
+            axios.get('/restaurants')
 		.then(response => {          
             this.restaurants=response.data;                   
-        });             
+        });
+         
+        this.findBuyers();          
     },
-    findRestaurant: function(id){
-		let i = 0;
-		for(i; i < this.restaurants.length; i++){
-			if(this.restaurants[i].id == id){				    
-				return this.restaurants[i].name;
-			}
-		}
-	},
 	myRestaurant: function(){
 	    var parameter = "username=" + this.username;
 		axios.get("/myRestaurant?" + parameter)
@@ -55,6 +47,14 @@ Vue.component("ordertable", {
 					router.push({ path: `/restaurant/${this.id}` })
 				})
 	},
+	findRestaurant: function(id){
+		let i = 0;
+		for(i; i < this.restaurants.length; i++){
+			if(this.restaurants[i].id == id){				    
+				return this.restaurants[i].name;
+			}
+		}
+	},
     logout: function (event) {
             event.preventDefault();
             localStorage.removeItem('role');
@@ -62,9 +62,23 @@ Vue.component("ordertable", {
             router.replace({ path: `/` })
 			
     },
-       
+    findBuyers: function(){
+            axios.get('/buyers')
+            .then(response => {           
+            	this.buyers=response.data;                  
+        	});	        
+        	
 	},
- 
+    findBuyer: function(value){
+		let i = 0;
+		for(i; i<this.buyers.length; i++){
+			if(value === this.buyers[i].username){				    
+				return this.buyers[i].name + " " + this.buyers[i].surname;				
+			}
+		}		
+	},
+       
+	}, 
     template: ` 		
    	<div> 
    	
@@ -105,9 +119,18 @@ Vue.component("ordertable", {
         <li v-if="activeUser == true && role =='buyer'">
             <a href="/#/orderTable">Moja porudzbina</a>
         </li>
+        <li v-if="activeUser == true && role =='manager'">
+            <a href="/#/ManagerOrders">Porudzbine</a>
+        </li>
+        <li v-if="activeUser == true && role =='deliverer'">
+            <a href="/#/DeliveryOrders">Porudzbine</a>
+        </li>
+        <li v-if="activeUser == true && role =='deliverer'">
+            <a href="/#/OrdersForOneDeliverer">Moje porudzbine</a>
+        </li>
 	</ul>
    	
-   	  <h1>Porudzbine</h1>
+   	  <h1>Moje porudzbine</h1>
 	  <br />
 	  <br />
 	  <br />
@@ -118,14 +141,19 @@ Vue.component("ordertable", {
       		    <th>Restoran</th>
             	<th>Datum</th>
                 <th>Cena</th>
-                <th>Status</th>                            
+                <th>Status</th> 
+                <th>Kupac</th>   
+                <th>Izmena statusa</th>                        
             </tr>
             <tr v-for="order in orders">
                 <td>{{findRestaurant(order.restaurant)}}</td>
             	<td>{{order.date}}</td>
                 <td>{{order.price}} din</td>
                 <td>{{order.status}} </td>
+                <td>{{findBuyer(order.buyer)}} </td>
+                <td></td>             
             </tr>
+            
 
       </table>
 

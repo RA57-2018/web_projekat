@@ -128,6 +128,12 @@ Vue.component("profile", {
         <li v-if="activeUser == true && role =='manager'">
             <a href="/#/ManagerOrders">Porudzbine</a>
         </li>
+        <li v-if="activeUser == true && role =='deliverer'">
+            <a href="/#/DeliveryOrders">Porudzbine</a>
+        </li>
+        <li v-if="activeUser == true && role =='deliverer'">
+            <a href="/#/OrdersForOneDeliverer">Moje porudzbine</a>
+        </li>
 	</ul>
    
    <h2>Profil</h2>
