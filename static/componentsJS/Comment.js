@@ -13,7 +13,7 @@ Vue.component("comment", {
        
     	sentComment: function(e){
     		
-    		let id = this.$route.params.id;
+    		let id = this.$route.params.id
     		if(this.text == null || this.rating == null) {
     			alert("Morate popuniti sva polja!");
     			e.preventDefault();

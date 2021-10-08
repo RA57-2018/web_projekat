@@ -1063,15 +1063,25 @@ public class FoodDeliveryMain {
 		
 		post("/refuseRequest", (req, res)-> {			
 			String id = req.queryParams("id");
-			
 			Request request = requestDAO.findRequest(Integer.parseInt(id));
 			request.setDeleted(true);
-
 			HashMap<Integer, Request> requests = requestDAO.getRequests();
 			requests.put(request.getId(),request);
 			requestDAO.setRequests(requests);
 			requestDAO.writeRequests();
+			return true;
+		});
 		
+		
+		post("/deliveryDelivered", (req, res)-> {
+			String id = req.queryParams("id");
+			Order o=orderDAO.findOrder(Integer.parseInt(id));
+			o.setStatus("DOSTAVLJENA");
+			HashMap<Integer, Order> orders = orderDAO.getOrders();
+			orders.put(o.getId(), o);
+			orderDAO.setOrders(orders);
+			orderDAO.write();
+			
 			return true;
 		});
 		

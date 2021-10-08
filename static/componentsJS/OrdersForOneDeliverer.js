@@ -77,7 +77,17 @@ Vue.component("ordersForOneDeliverer", {
 			}
 		}		
 	},
-       
+	changeStatus: function(idP){
+		axios
+        .post('/deliveryDelivered',{},{params:{id: idP}}
+        )
+          .then(function(response){
+   			alert("Porudzbina je dostavljena!");
+   			
+        });
+  this.ucitaj();
+		
+	},
 	}, 
     template: ` 		
    	<div> 
@@ -151,6 +161,7 @@ Vue.component("ordersForOneDeliverer", {
                 <td>{{order.price}} din</td>
                 <td>{{order.status}} </td>
                 <td>{{findBuyer(order.buyer)}} </td>
+                <td><button v-on:click="changeStatus(order.id)">Promeni status</button></td>
                 <td></td>             
             </tr>
             
