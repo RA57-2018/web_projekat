@@ -144,13 +144,21 @@ public class DAOManager {
 	}
 	
 	public Manager managerFind(String user){
-
 		for (Map.Entry<String, Manager> entry : managers.entrySet()) {
 	        if( entry.getValue().getUsername().equals(user)) {
 	        	return entry.getValue();
 	        }
 	    }		
 		
+		return null;
+	}
+	
+	public Manager findManagerByRestaurant(int id) {
+		for (Map.Entry<String, Manager> entry : managers.entrySet()) {
+	        if(entry.getValue().getId() == id) {
+	        	return entry.getValue();
+	        }
+	    }	
 		return null;
 	}
 

@@ -239,6 +239,9 @@ Vue.component("home-page", {
         <li v-if="activeUser == true && role =='deliverer'">
             <a href="/#/OrdersForOneDeliverer">Moje porudzbine</a>
         </li>
+        <li v-if="activeUser == true && role =='manager'">
+            <a href="/#/Requests">Zahtevi</a>
+        </li>
 	</ul>
 	
 

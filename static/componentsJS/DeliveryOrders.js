@@ -77,6 +77,14 @@ Vue.component("deliveryOrders", {
 			}
 		}		
 	},
+	sendRequest: function(idR, idO){			
+		axios
+        .post('/sendRequest',{},{params:{idRestaurant: idR, idOrder: idO, username: this.username}})
+	    .then(function(response){
+              alert("Zahtev poslat!");            
+            });
+			
+	},
        
 	}, 
     template: ` 		
@@ -151,7 +159,7 @@ Vue.component("deliveryOrders", {
                 <td>{{order.price}} din</td>
                 <td>{{order.status}} </td>
                 <td>{{findBuyer(order.buyer)}} </td>
-                <td></td>             
+                <td><button v-on:click="sendRequest(order.restaurant, order.id)">Posalji zahtev</button></td>             
             </tr>
             
 

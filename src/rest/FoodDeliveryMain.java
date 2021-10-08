@@ -818,13 +818,13 @@ public class FoodDeliveryMain {
 		
 		get("/managerOrders", (req, res)->{			
 			String username = req.queryParams("username");
-			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();			
 			
 			Manager manager = managerDAO.findManagerProfile(username);
 			ArrayList<Order> orders = new ArrayList<Order>();
 
 			for (Map.Entry<Integer, Order> entry : orderDAO.getOrders().entrySet()) {				
-				if(entry.getValue().getRestaurant() == manager.getId()) {				
+				if(entry.getValue().getRestaurant() == manager.getId()) {
 					orders.add(entry.getValue());
 				}
 		        
@@ -990,6 +990,89 @@ public class FoodDeliveryMain {
 		    
 		    return true;
 			
+		});
+		
+		post("/sendRequest", (req, res)-> {			
+			String idRestaurant = req.queryParams("idRestaurant");
+			String idOrder = req.queryParams("idOrder");
+			String username = req.queryParams("username");
+			
+			Request request = new Request();
+			request.setId(requestDAO.findNextId());
+			request.setOrderId(Integer.parseInt(idOrder));
+			request.setRestaurantId(Integer.parseInt(idRestaurant));
+			request.setDeliverer(username);
+			request.setManager(managerDAO.findManagerByRestaurant(Integer.parseInt(idRestaurant)).getUsername());
+			request.setApproved(false);
+			request.setDeleted(false);
+				
+			HashMap<Integer, Request> requests = requestDAO.getRequests();
+			requests.put(request.getId(), request);
+			requestDAO.setRequests(requests);
+			requestDAO.writeRequests();
+
+			return true;
+		});
+		
+		get("/managersRequests", (req, res)->{			
+			String username = req.queryParams("username");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+
+			ArrayList<Request> requests = new ArrayList<Request>();
+			for (Map.Entry<Integer, Request> entry : requestDAO.getRequests().entrySet()) {				
+				if(entry.getValue().getManager().equals(username) && entry.getValue().isApproved() == false && entry.getValue().isDeleted() == false) {
+					requests.add(entry.getValue());
+				}
+		        
+		    }	
+			return gsonReg.toJson(requests);
+			
+		});
+		
+		post("/approveRequest", (req, res)-> {			
+			String id = req.queryParams("id");
+			
+			Request request = requestDAO.findRequest(Integer.parseInt(id));
+			request.setApproved(true);
+						
+			HashMap<Integer, Request> requests = requestDAO.getRequests();
+			requests.put(request.getId(), request);
+			requestDAO.setRequests(requests);
+			requestDAO.writeRequests();
+			
+			Order order = orderDAO.findOrder(request.getOrderId());
+			order.setStatus("U TRANSPORTU");
+
+			HashMap<Integer, Order> orders = orderDAO.getOrders();
+			orders.put(order.getId(),order);
+			orderDAO.setOrders(orders);
+			orderDAO.write();
+			
+			Deliverer deliverer = delivererDAO.findDelivererProfile(request.getDeliverer());
+			ArrayList<Integer> ord = deliverer.getOrders();
+			ord.add(request.getOrderId());
+			deliverer.setOrders(ord);
+
+			HashMap<String, Deliverer> deliverers = delivererDAO.getDeliverers();
+			deliverers.put(deliverer.getUsername(),deliverer);
+			delivererDAO.setDeliverers(deliverers);
+			delivererDAO.writeDeliverer();
+			
+			return true;
+		});
+		
+		post("/refuseRequest", (req, res)-> {			
+			String id = req.queryParams("id");
+			
+			Request request = requestDAO.findRequest(Integer.parseInt(id));
+			request.setDeleted(true);
+
+			HashMap<Integer, Request> requests = requestDAO.getRequests();
+			requests.put(request.getId(),request);
+			requestDAO.setRequests(requests);
+			requestDAO.writeRequests();
+		
+			return true;
 		});
 		
 	}

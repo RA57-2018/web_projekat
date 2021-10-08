@@ -135,6 +135,9 @@ Vue.component("add-article", {
         <li v-if="activeUser == true && role =='manager'">
             <a href="/#/ManagerOrders">Porudzbine</a>
         </li>
+        <li v-if="activeUser == true && role =='manager'">
+            <a href="/#/Requests">Zahtevi</a>
+        </li>
 	</ul>
    
    <form @submit="formSubmit">

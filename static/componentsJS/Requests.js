@@ -1,17 +1,13 @@
-Vue.component("managerOrders", {
-    name: "managerOrders",
+Vue.component("requests", {
+    name: "requests",
     data: function () {
       return {
         orders:[],
         role:"",
+        requests:[],
+        deliverers:[],
         username:"",
         activeUser: false,
-        priceSearch: "",
-        dateFrom: "",
-        dateTo: "",
-        sorting: "",
-        filterStatus: "",
-        buyers: [],
     };
     },
     mounted: function(){
@@ -25,12 +21,24 @@ Vue.component("managerOrders", {
         this.load();					
     },
     methods: {        
-        load(){
+    load(){
             axios.get('/managerOrders?username=' + this.username)
             .then(response => {           
-            	this.orders=response.data;                 
-        });  
-        this.findBuyers();          
+            	this.orders = response.data;                 
+        }); 
+        
+            axios.get('/managersRequests?username=' + this.username)
+	        .then(response => {          
+            	this.requests = response.data;        
+        });
+        
+            axios.get('/deliverers')
+	        .then(response => {          
+            	this.deliverers = response.data;
+        
+        });
+         
+         
     },
 	myRestaurant: function(){
 	    var parameter = "username=" + this.username;
@@ -47,38 +55,56 @@ Vue.component("managerOrders", {
             router.replace({ path: `/` })
 			
     },
-    findBuyers: function(){
-            axios.get('/buyers')
-            .then(response => {           
-            	this.buyers=response.data;                  
-        	});	        
-        	
-	},
-    findBuyer: function(value){
-		let i = 0;
-		for(i; i<this.buyers.length; i++){
-			if(value === this.buyers[i].username){				    
-				return this.buyers[i].name + " " + this.buyers[i].surname;				
+	orderDate: function(id){
+			let i = 0;
+			for(i; i<this.orders.length; i++){
+				if(this.orders[i].id == id){				    
+					return this.orders[i].date;
+				}
 			}
-		}		
 	},
-	changeStatus: function(id){			
-		axios
-        .post('/changeStatusManager',{},{params:{id: id}}
-        )
-	    .then(function(response){             
-       		alert("Promenjen status porudzbine!");       			
-        });
-		this.load();			
+	orderPrice: function(id){
+			let i = 0;
+			for(i; i< this.orders.length; i++){
+				if(this.orders[i].id == id){				    
+					return this.orders[i].price;
+				}
+			}
 	},
-	changeStatusWaitDelivery: function(id){			
-		axios
-        .post('/changeStatusWaitDelivery',{},{params:{id: id}}
-        )
-	    .then(function(response){             
-       		alert("Promenjen status porudzbine!");       			
-        });
-		this.load();			
+	delivererName: function(username){
+			let i = 0;
+			for(i; i<this.deliverers.length; i++){
+				if(this.deliverers[i].username == username){				    
+					return this.deliverers[i].name;
+				}
+			}
+	},
+	delivererSurname: function(username){
+			let i = 0;
+			for(i; i<this.deliverers.length; i++){
+				if(this.deliverers[i].username == username){				    
+					return this.deliverers[i].surname;
+				}
+			}
+	},
+	approveRequest: function(id){			
+			axios
+            .post('/approveRequest',{},{params:{id: id}})
+	         .then(function(response){             
+       			alert("Zahtev odobren!");      			
+            });
+            
+			this.load();
+						
+	},
+	refuseRequest: function(id){			
+			axios
+            .post('/refuseRequest',{},{params:{id: id}})
+	         .then(function(response){              
+       			alert("Zahtev odbijen!");       			
+            });
+            
+			this.load();						
 	},
        
 	}, 
@@ -125,12 +151,18 @@ Vue.component("managerOrders", {
         <li v-if="activeUser == true && role =='manager'">
             <a href="/#/ManagerOrders">Porudzbine</a>
         </li>
+        <li v-if="activeUser == true && role =='deliverer'">
+            <a href="/#/DeliveryOrders">Porudzbine</a>
+        </li>
+        <li v-if="activeUser == true && role =='deliverer'">
+            <a href="/#/OrdersForOneDeliverer">Moje porudzbine</a>
+        </li>
         <li v-if="activeUser == true && role =='manager'">
             <a href="/#/Requests">Zahtevi</a>
         </li>
 	</ul>
    	
-   	  <h1>Porudzbine</h1>
+   	  <h1>Zahtevi</h1>
 	  <br />
 	  <br />
 	  <br />
@@ -140,17 +172,18 @@ Vue.component("managerOrders", {
       		<tr>
             	<th>Datum</th>
                 <th>Cena</th>
-                <th>Status</th> 
-                <th>Kupac</th>   
-                <th>Izmena statusa</th>                        
+                <th>Ime dostavljaca</th> 
+                <th>Prezime dostavljaca</th>   
+                <th>Odobri</th>  
+                <th>Odbij</th>                      
             </tr>
-            <tr v-for="order in orders">
-            	<td>{{order.date}}</td>
-                <td>{{order.price}} din</td>
-                <td>{{order.status}} </td>
-                <td>{{findBuyer(order.buyer)}} </td> 
-                <td  v-if="order.status ==='OBRADA'"><button v-on:click="changeStatus(order.id)">U pripremi</button></td>
-                <td  v-if="order.status ==='U PRIPREMI'"><button v-on:click="changeStatusWaitDelivery(order.id)">Ceka dostavljaca</button></td>             
+            <tr v-for="request in requests">
+            	<td>{{orderDate(request.orderId)}}</td>
+                <td>{{orderPrice(request.orderId)}} din</td>
+                <td>{{delivererName(request.deliverer)}}</td>
+                <td>{{delivererSurname(request.deliverer)}}</td>
+                <td ><button v-on:click="approveRequest(request.id)">Odobri zahtev</button></td>
+                <td ><button v-on:click="refuseRequest(request.id)">Odbij zahtev</button></td>                
             </tr>
             
 

@@ -91,6 +91,8 @@ public class DAODeliverer {
 	
 	public Deliverer addDeliverer(Deliverer deliverer) {
 
+		ArrayList<Integer> orders = new ArrayList<Integer>();
+		deliverer.setOrders(orders);
 		deliverer.setDeleted(false);
 		deliverers.put(deliverer.getUsername(),deliverer);
 		try {
