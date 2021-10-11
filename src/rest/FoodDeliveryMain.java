@@ -1085,6 +1085,66 @@ public class FoodDeliveryMain {
 			return true;
 		});
 		
+		get("/restaurantOrders", (req, res)->{			
+			String id = req.queryParams("id");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			ArrayList<Order> orders = new ArrayList<Order>();
+			for (Map.Entry<Integer, Order> entry : orderDAO.getOrders().entrySet()) {				
+				if(entry.getValue().getRestaurant() == Integer.parseInt(id)) {				
+					orders.add(entry.getValue());
+				}
+		        
+		    }	
+			return gsonReg.toJson(orders);
+			
+		});
+		
+		get("/comments", (req, res)->{			
+			String username = req.queryParams("username");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			Manager manager = managerDAO.findManagerProfile(username);
+			ArrayList<Comment> comments = new ArrayList<Comment>();
+			
+			for (Map.Entry<Integer, Comment> entry : commentDAO.getComments().entrySet()) {				
+				if(entry.getValue().getRestaurant() == manager.getId() && entry.getValue().isApproved() == false && entry.getValue().isViewComment() == true) {				
+					comments.add(entry.getValue());
+				}		        
+		    }	
+			return gsonReg.toJson(comments);
+			
+		});
+		
+		post("/approveComment", (req, res)-> {			
+			String id = req.queryParams("id");
+			Comment comment = commentDAO.findComment(Integer.parseInt(id));
+			
+			comment.setApproved(true);
+			comment.setViewComment(true);
+			
+			HashMap<Integer, Comment> comments = commentDAO.getComments();
+			comments.put(comment.getId(),comment);
+			commentDAO.setComments(comments);
+			commentDAO.writeComment();
+		
+			return true;
+		});
+		
+		post("/refuseComment", (req, res)-> {			
+			String id = req.queryParams("id");
+			Comment comment = commentDAO.findComment(Integer.parseInt(id));
+			
+			comment.setViewComment(false);
+			
+			HashMap<Integer, Comment> comments = commentDAO.getComments();
+			comments.put(comment.getId(),comment);
+			commentDAO.setComments(comments);
+			commentDAO.writeComment();
+		
+			return true;
+		});
+		
 	}
 	
 	

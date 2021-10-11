@@ -137,6 +137,9 @@ Vue.component("profile", {
         <li v-if="activeUser == true && role =='manager'">
             <a href="/#/Requests">Zahtevi</a>
         </li>
+        <li v-if="activeUser == true && role =='manager'">
+            <a href="/#/ManagerComments">Komentari</a>
+        </li>
 	</ul>
    
    <h2>Profil</h2>

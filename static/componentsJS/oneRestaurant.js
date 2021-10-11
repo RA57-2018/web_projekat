@@ -12,6 +12,8 @@ Vue.component("restaurant", {
       typeUser: {},
       articles: [],
       quantityA: null,
+      orders: [],
+      delivered: false,
     }
   },
   methods: {
@@ -96,6 +98,28 @@ Vue.component("restaurant", {
             router.replace({ path: `/` })
 			
     },
+    restaurantOrders: function(){    	
+    	let id = this.$route.params.id;
+    	axios.get('/restaurantOrders?id=' + id)
+		.then(response => {          
+           this.orders = response.data;
+           this.checkOrders();
+           
+        });
+    		
+    },
+    checkOrders: function(){    	
+    	let i = 0;
+		for(i; i<this.orders.length; i++){
+			if(this.orders[i].buyer == this.uName && this.orders[i].status== 'DOSTAVLJENA'){			    
+				this.delivered = true;
+			}
+		}
+    		
+    },
+    leaveComment: function(id) {
+    	router.push({ path: `/comment/${id}` })
+    },
    	
   },
   mounted: function() {
@@ -106,7 +130,8 @@ Vue.component("restaurant", {
             this.activeUser = true;
     }
     
-    this.findRestaurant();     
+    this.findRestaurant(); 
+    this.restaurantOrders();    
     
     },
   template: `
@@ -147,9 +172,6 @@ Vue.component("restaurant", {
         <li v-if="activeUser == true && role =='buyer'">
             <a href="/#/basket">Moja korpa</a>
         </li> 
-         <li v-if="activeUser == true && role =='buyer'">
-            <a href="/#/Comment">Komentar</a>
-        </li>
         <li v-if="activeUser == true && role =='buyer'">
             <a href="/#/orderTable">Moja porudzbina</a>
         </li>
@@ -158,6 +180,9 @@ Vue.component("restaurant", {
         </li>
         <li v-if="activeUser == true && role =='manager'">
             <a href="/#/Requests">Zahtevi</a>
+        </li>
+        <li v-if="activeUser == true && role =='manager'">
+            <a href="/#/ManagerComments">Komentari</a>
         </li>
 	</ul>
   
@@ -170,7 +195,8 @@ Vue.component("restaurant", {
 	  	<ul>
 			<li style="float:left"><b>Tip:</b> {{ restaurant.type }}</li><br />
 			<li style="float:left"><b>Status:</b> {{ restaurant.status }}</li><br />
-			<li style="float:left"><b>Lokacija:</b> {{ location.address.streetName}} {{location.address.number}}, {{ location.address.city}} {{ location.address.postalCode}} </li><br />
+			<li style="float:left"><b>Lokacija:</b> {{ location.address.streetName}} {{location.address.number}}, {{ location.address.city}} {{ location.address.postalCode}} </li><br /><br />
+			<li style="float:left"><button v-if="role=='buyer' && delivered==true" type="button" v-on:click="leaveComment(restaurant.id)">Ostavite komentar</button></li><br />
 		</ul>
 	  </div>
 

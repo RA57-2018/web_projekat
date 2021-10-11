@@ -160,6 +160,9 @@ Vue.component("requests", {
         <li v-if="activeUser == true && role =='manager'">
             <a href="/#/Requests">Zahtevi</a>
         </li>
+        <li v-if="activeUser == true && role =='manager'">
+            <a href="/#/ManagerComments">Komentari</a>
+        </li>
 	</ul>
    	
    	  <h1>Zahtevi</h1>
