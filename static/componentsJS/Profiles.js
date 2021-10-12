@@ -123,7 +123,7 @@ Vue.component("profile", {
             <a href="/#/basket">Moja korpa</a>
         </li> 
         <li v-if="activeUser == true && role =='buyer'">
-            <a href="/#/orderTable">Moja porudzbina</a>
+            <a href="/#/orderTable">Moje porudzbine</a>
         </li>
         <li v-if="activeUser == true && role =='manager'">
             <a href="/#/ManagerOrders">Porudzbine</a>
