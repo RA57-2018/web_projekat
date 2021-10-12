@@ -1145,6 +1145,36 @@ public class FoodDeliveryMain {
 			return true;
 		});
 		
+		get("/allComments", (req, res)->{			
+			String id = req.queryParams("id");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			ArrayList<Comment> comments = new ArrayList<Comment>();
+			for (Map.Entry<Integer, Comment> entry : commentDAO.getComments().entrySet()) {				
+				if(entry.getValue().getRestaurant() == Integer.parseInt(id) && ((entry.getValue().isApproved() == false && entry.getValue().isViewComment() == false) || (entry.getValue().isApproved() == true && entry.getValue().isViewComment() == true))) {				
+					comments.add(entry.getValue());
+				}
+		        
+		    }	
+			return gsonReg.toJson(comments);
+			
+		});
+		
+		get("/buyersComments", (req, res)->{			
+			String id = req.queryParams("id");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			ArrayList<Comment> comments = new ArrayList<Comment>();
+			for (Map.Entry<Integer, Comment> entry : commentDAO.getComments().entrySet()) {				
+				if(entry.getValue().getRestaurant() == Integer.parseInt(id) && entry.getValue().isApproved() == true && entry.getValue().isViewComment() == true) {				
+					comments.add(entry.getValue());
+				}
+		        
+		    }	
+			return gsonReg.toJson(comments);
+			
+		});
+		
 	}
 	
 	

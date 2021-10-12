@@ -14,6 +14,9 @@ Vue.component("restaurant", {
       quantityA: null,
       orders: [],
       delivered: false,
+      buyers: [],
+      buyersComments: [],
+      allComments: [],
     }
   },
   methods: {
@@ -120,6 +123,35 @@ Vue.component("restaurant", {
     leaveComment: function(id) {
     	router.push({ path: `/comment/${id}` })
     },
+    findComments(){
+        let id = this.$route.params.id;
+        axios.get('/allComments?id=' + id)
+		.then(response => {          
+           this.allComments = response.data;
+        
+        });
+                    
+        axios.get('/buyersComments?id=' + id)
+    	.then(response => {           
+           this.buyersComments = response.data;
+         
+    	}); 
+    	
+        axios.get('/buyers')
+        .then(response => {              
+           this.buyers = response.data;
+            
+        });    	       
+
+    },
+    findBuyer: function(value){
+		let i = 0;
+		for(i; i<this.buyers.length; i++){
+			if(value === this.buyers[i].username){				    
+				return this.buyers[i].name + " " + this.buyers[i].surname;				
+			}
+		}		
+	},
    	
   },
   mounted: function() {
@@ -131,7 +163,8 @@ Vue.component("restaurant", {
     }
     
     this.findRestaurant(); 
-    this.restaurantOrders();    
+    this.restaurantOrders();  
+    this.findComments();  
     
     },
   template: `
@@ -226,6 +259,33 @@ Vue.component("restaurant", {
 
       </div>
 	  </div>
+	  	  
+	  
+    <div class="split">
+    				
+    	<h3>Komentari</h3>
+    	
+          <table> 
+               <tr>                          
+                 <th>Ime i prezime kupca</th>
+                 <th>Tekst</th>
+                 <th>Ocena</th>
+               </tr>
+               
+               <tr v-if="role == 'buyer' || role == 'deliverer' || activeUser == false" v-for="comment in buyersComments">                            
+                  <td>{{findBuyer(comment.buyer)}}</td>
+                  <td>{{comment.text}}</td>
+                  <td>{{comment.rating}}</td>
+			   </tr>
+			                  
+               <tr v-if="role == 'administrator' || role == 'manager'" v-for="comment in allComments">                            
+                  <td>{{findBuyer(comment.buyer)}}</td>
+                  <td>{{comment.text}}</td>
+                  <td>{{comment.rating}}</td>
+			   </tr>
+          </table>
+          
+     </div>	  
 
 		
   </div>

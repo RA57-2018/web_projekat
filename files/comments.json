@@ -1,1 +1,1 @@
-{"1":{"id":1,"buyer":"pera","restaurant":1,"text":"Prijatno osoblje, ukusna hrana i veoma brza dostava!","rating":5,"approved":true,"viewComment":true}}
+{"1":{"id":1,"buyer":"pera","restaurant":1,"text":"Prijatno osoblje, ukusna hrana i veoma brza dostava!","rating":5,"approved":true,"viewComment":true},"2":{"id":2,"buyer":"pera","restaurant":3,"text":"Jako losa usluga!","rating":1,"approved":false,"viewComment":false},"3":{"id":3,"buyer":"ana","restaurant":3,"text":"Odlican restoran!","rating":5,"approved":true,"viewComment":true}}
