@@ -163,3 +163,13 @@ tr:nth-child(even) {
   overflow-x: hidden;
   padding-top: 20px;
 }
+
+.option {
+  width: 13%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+

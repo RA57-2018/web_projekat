@@ -11,6 +11,10 @@ Vue.component("deliver-food", {
             searchName: "",
             searchType: "",
             searchLocation: "",
+            searchRating: "",
+            searchOpen: "",
+            id: null,
+            allComments: [],
       }  
 	},
     methods: {
@@ -149,16 +153,36 @@ Vue.component("deliver-food", {
 			
 		},
 	search: function(){
-		if(this.searchName == "" && this.searchType == "" && this.searchLocation == ""){
+		if(this.searchName == "" && this.searchType == "" && this.searchLocation == "" && this.searchRating == "" && this.searchOpen == ""){
 			alert("Unesite parametar za pretragu!");
 		}else{
-			var searchParameters = "searchName=" + this.searchName+ "&searchType=" + this.searchType+ "&searchLocation=" + this.searchLocation;
+			var searchParameters = "searchName=" + this.searchName + "&searchType=" + this.searchType + "&searchLocation=" + this.searchLocation + "&searchRating=" + this.searchRating + "&searchOpen=" + this.searchOpen;
 			axios.get("/searchRestaurants?" + searchParameters)
 				.then(response => {
 					this.restaurantList = response.data;
 				})
 		}
 	},
+	average: function(id){			
+    		let middleValue = 0;
+			let numberRating = 0;
+			for(let i = 0; i<this.allComments.length; i++)
+			{
+				if(id == this.allComments[i].restaurant)
+                {
+					middleValue = middleValue + this.allComments[i].rating;
+					numberRating++;
+				}
+			}
+			if(middleValue == 0){
+				middleValue = "Neocenjen";
+			}
+			else{
+				middleValue = (middleValue/numberRating).toFixed(2);
+			}
+			return middleValue;
+	},
+    
     },
   mounted: function(){
     axios.get("/restaurants")
@@ -172,7 +196,11 @@ Vue.component("deliver-food", {
 			.then(response => {
 				this.locationList = response.data;
 			});
-			
+	
+	axios.get("/ratings")
+			.then(response => {          
+          		 this.allComments = response.data;
+    });		
 			
 	localStorage.removeItem('role');
     localStorage.removeItem('uName');
@@ -240,15 +268,27 @@ Vue.component("deliver-food", {
 	
 	<div>
 		<input type="text" v-model="searchName" placeholder="Pretrazite po imenu" style="margin: 0.3em; width: 12em;">
-		<label>Tip</label>
-		    	<select v-model="searchType" style="margin: 0.3em; width: 12em;">
+		<label><b>Tip</b></label>
+		    	<select v-model="searchType" class="option">
     				<option value="italijanski">italijanski</option>
     				<option value="rostilj">rostilj</option>
     				<option value="kineski">kineski</option>
-    				<option value="">nijedan</option>
+    				<option value="">Nijedan</option>
     			</select>
 		<input type="text" v-model="searchLocation" placeholder="Pretrazite po gradu" style="margin: 0.3em; width: 12em;">
-		<button v-on:click="search">Pretrazi</button>
+		<label><b>Ocena</b></label>
+		    	<select v-model="searchRating" class="option">
+    				<option value="1">1</option>
+    				<option value="2">2</option>
+    				<option value="3">3</option>
+    				<option value="4">4</option>
+    				<option value="5">5</option>
+    				<option value="0">Neocenjeni</option>
+    				<option value="">Svi</option>
+    			</select>
+    	<input type="radio" v-model="searchOpen" value="otvoren"><label><b>Otvoren &nbsp</b></label>
+		<button v-on:click="search">Pretrazi</button><br />
+
 	</div>
 
 
@@ -263,6 +303,7 @@ Vue.component("deliver-food", {
 			<li style="float:left"><b>Tip:</b> {{ restaurant.type }}</li><br />
 			<li style="float:left"><b>Status:</b> {{ restaurant.status }}</li><br />
 			<li style="float:left"><b>Lokacija:</b> {{ (restaurantLocation(restaurant.location)).address.streetName}} {{(restaurantLocation(restaurant.location)).address.number}}, {{ (restaurantLocation(restaurant.location)).address.city}} {{ (restaurantLocation(restaurant.location)).address.postalCode}} </li><br />
+			<li style="float:left"><b>Ocena:</b> {{ average(restaurant.id) }}</li><br /><br />
 			<li style="float:left"><button type="button" v-on:click="checkRestaurant(restaurant.id)">Detaljnije</button></li>
 		</ul>
 	  </div>
@@ -281,6 +322,7 @@ Vue.component("deliver-food", {
 			<li style="float:left"><b>Tip:</b> {{ restaurant.type }}</li><br />
 			<li style="float:left"><b>Status:</b> {{ restaurant.status }}</li><br />
 			<li style="float:left"><b>Lokacija:</b> {{ (restaurantLocation(restaurant.location)).address.streetName}} {{(restaurantLocation(restaurant.location)).address.number}}, {{ (restaurantLocation(restaurant.location)).address.city}} {{ (restaurantLocation(restaurant.location)).address.postalCode}} </li><br />
+			<li style="float:left"><b>Ocena:</b> {{ average(restaurant.id) }}</li><br /><br />
 			<li style="float:left"><button type="button" v-on:click="checkRestaurant(restaurant.id)">Detaljnije</button></li>
 		</ul>
 	  </div>

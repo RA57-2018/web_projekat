@@ -330,9 +330,9 @@ public class FoodDeliveryMain {
 			String searchName = (req.queryParams("searchName")).trim();
 			String searchType = (req.queryParams("searchType")).trim();
 			String searchLocation = (req.queryParams("searchLocation")).trim();
-			HashMap<Integer,Restaurant> restaurants = restaurantDAO.getRestaurants();
-			HashMap<Integer,Location> locations = locationDAO.getLocation();
-			return g.toJson(restaurantDAO.search(restaurants,locations,searchName,searchType,searchLocation));
+			String searchRating = (req.queryParams("searchRating")).trim();
+			String searchOpen = (req.queryParams("searchOpen")).trim();
+			return g.toJson(restaurantDAO.search(searchName,searchType,searchLocation,searchRating,searchOpen));
 		});
 		
         post("/addArticle", (req, res)-> {
@@ -1167,6 +1167,20 @@ public class FoodDeliveryMain {
 			ArrayList<Comment> comments = new ArrayList<Comment>();
 			for (Map.Entry<Integer, Comment> entry : commentDAO.getComments().entrySet()) {				
 				if(entry.getValue().getRestaurant() == Integer.parseInt(id) && entry.getValue().isApproved() == true && entry.getValue().isViewComment() == true) {				
+					comments.add(entry.getValue());
+				}
+		        
+		    }	
+			return gsonReg.toJson(comments);
+			
+		});
+		
+		get("/ratings", (req, res)->{			
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			
+			ArrayList<Comment> comments = new ArrayList<Comment>();
+			for (Map.Entry<Integer, Comment> entry : commentDAO.getComments().entrySet()) {				
+				if(entry.getValue().isApproved() == true && entry.getValue().isViewComment() == true) {				
 					comments.add(entry.getValue());
 				}
 		        

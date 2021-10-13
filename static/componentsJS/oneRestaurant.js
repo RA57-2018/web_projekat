@@ -17,6 +17,7 @@ Vue.component("restaurant", {
       buyers: [],
       buyersComments: [],
       allComments: [],
+      Comments: [],
     }
   },
   methods: {
@@ -152,6 +153,25 @@ Vue.component("restaurant", {
 			}
 		}		
 	},
+	average: function(id){			
+    		let middleValue = 0;
+			let numberRating = 0;
+			for(let i = 0; i<this.Comments.length; i++)
+			{
+				if(id == this.Comments[i].restaurant)
+                {
+					middleValue = middleValue + this.Comments[i].rating;
+					numberRating++;
+				}
+			}
+			if(middleValue == 0){
+				middleValue = "Neocenjen";
+			}
+			else{
+				middleValue = (middleValue/numberRating).toFixed(2);
+			}
+			return middleValue;
+	},
    	
   },
   mounted: function() {
@@ -161,6 +181,11 @@ Vue.component("restaurant", {
     if(this.role =="administrator" || this.role =="buyer" || this.role =="manager" || this.role =="deliverer"){
             this.activeUser = true;
     }
+    
+    axios.get("/ratings")
+			.then(response => {          
+          		 this.Comments = response.data;
+    });	
     
     this.findRestaurant(); 
     this.restaurantOrders();  
@@ -228,7 +253,8 @@ Vue.component("restaurant", {
 	  	<ul>
 			<li style="float:left"><b>Tip:</b> {{ restaurant.type }}</li><br />
 			<li style="float:left"><b>Status:</b> {{ restaurant.status }}</li><br />
-			<li style="float:left"><b>Lokacija:</b> {{ location.address.streetName}} {{location.address.number}}, {{ location.address.city}} {{ location.address.postalCode}} </li><br /><br />
+			<li style="float:left"><b>Lokacija:</b> {{ location.address.streetName}} {{location.address.number}}, {{ location.address.city}} {{ location.address.postalCode}} </li><br />
+			<li style="float:left"><b>Ocena:</b> {{ average(restaurant.id) }}</li><br /><br />
 			<li style="float:left"><button v-if="role=='buyer' && delivered==true" type="button" v-on:click="leaveComment(restaurant.id)">Ostavite komentar</button></li><br />
 		</ul>
 	  </div>

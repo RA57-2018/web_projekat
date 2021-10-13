@@ -71,7 +71,7 @@ private HashMap<Integer,Comment> comments;
 		return null;
 	}
 	
-	public ArrayList<Comment> nadjiKomentareRestorana(int id) {
+	public ArrayList<Comment> findRestaurantComments(int id) {
 		
 		ArrayList<Comment> commentsR = new ArrayList<Comment>();
 		

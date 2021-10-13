@@ -15,6 +15,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+
 public class DAORestaurant {
 	private HashMap<Integer,Restaurant> restaurants;
 	
@@ -66,40 +67,70 @@ public class DAORestaurant {
 		return null;
 	}
 	
-	public ArrayList<Restaurant> search(HashMap<Integer,Restaurant> restaurants,HashMap<Integer,Location> locations, String searchName, String searchType, String searchLocation) throws ParseException{
-		ArrayList<Restaurant> valid = new ArrayList<Restaurant>();
-	
-		for(Restaurant r : restaurants.values()) 
-		{
-			if((r.getName()).toLowerCase().contains(searchName.toLowerCase()) && (r.getType()).toLowerCase().contains(searchType.toLowerCase())) 
-			{			
-				valid.add(r);
-				
-			}
-									
-		}				
-		return valid;
-	}
-	
-	/* pokusaj provere adrese tj grada prilikom pretrage
-	public boolean check(HashMap<Integer,Restaurant> restaurants,HashMap<Integer,Location> locations, String searchLocation) {
-		for(Restaurant r : restaurants.values()) {
-			
-				for(Location l : locations.values()) 
-				{
-					if((l.getAddress().getCity()).toLowerCase().contains(searchLocation)) {	
-	
-						if(r.getId() == l.getId()) {
-							return true;
-						}
-					}
-	
-				}
-			
+	public ArrayList<Restaurant> search(String searchName, String searchType, String searchLocation, String searchRating, String searchOpen) throws ParseException{
+		ArrayList<Restaurant> restaurantName = new ArrayList<Restaurant>();
+		ArrayList<Restaurant> restaurantType = new ArrayList<Restaurant>();
+		ArrayList<Restaurant> restaurantLocation = new ArrayList<Restaurant>();
+		ArrayList<Restaurant> restaurantRating = new ArrayList<Restaurant>();
+		ArrayList<Restaurant> restaurantOpen = new ArrayList<Restaurant>();
+		DAOLocation locationDAO = new DAOLocation();
+		
+		if(!searchName.equals("")) {
+			for (Map.Entry<Integer, Restaurant> entry : restaurants.entrySet()) {
+				if(entry.getValue().getName().toLowerCase().equals(searchName.toLowerCase())) {	
+					restaurantName.add(entry.getValue());
+				}				 
+		    }	
+		}else{ 
+			restaurantName = findRestaurants(); 
 		}
-		return false;
+		
+		if(!searchType.equals("")) {	
+			for (int i = 0; i < restaurantName.size(); i++) {				
+				if(restaurantName.get(i).getType().toLowerCase().equals(searchType.toLowerCase())) {
+					restaurantType.add(restaurantName.get(i));							
+				}				 
+		    }	
+		}else{ 
+			restaurantType = restaurantName; 
+		}
+		
+		if(!searchLocation.equals("")) {		
+			for (int i = 0; i < restaurantType.size(); i++) {
+				Location location = locationDAO.locationRestaurant(restaurantType.get(i).getLocation());				
+				if(location.getAddress().getCity().toLowerCase().contains(searchLocation.toLowerCase())) {	
+					restaurantLocation.add(restaurantType.get(i));							
+				}			 
+		    }	
+		}else{ 
+			restaurantLocation = restaurantType; 
+		}
+		
+		if(!searchRating.equals("")) {			
+			for (int i = 0; i < restaurantLocation.size(); i++) {
+				double averageRating = averageRating(restaurantLocation.get(i).getId()); 
+				
+				if(averageRating == Double.parseDouble(searchRating)) {						
+					restaurantRating.add(restaurantLocation.get(i));							
+				}				 
+		    }	
+		}else{ 
+			restaurantRating = restaurantLocation; 
+		}
+		
+		if(!searchOpen.equals("")) {			
+			for (int i = 0; i < restaurantRating.size(); i++) {				
+				if(restaurantRating.get(i).getStatus().toLowerCase().equals(searchOpen.toLowerCase())) {
+					restaurantOpen.add(restaurantRating.get(i));
+				}				 
+		    }	
+		}else{ 
+			restaurantOpen = restaurantRating; 
+		}
+
+		return restaurantOpen;
 	}
-	*/	
+		
 
 	public int findManagerRestaurant(String username){
 
@@ -126,5 +157,41 @@ public class DAORestaurant {
 		}
 		
 		return idR;
+	}
+	
+	public ArrayList<Restaurant> findRestaurants(){
+		ArrayList<Restaurant> restaurant = new ArrayList<Restaurant>();
+		
+		for (Map.Entry<Integer, Restaurant> entry : restaurants.entrySet()) {	        
+			restaurant.add(entry.getValue());
+	        
+	    }				
+		return restaurant;
+	}
+	
+	public static double averageRating(int id) {
+		
+		double middleValue = 0;
+		int numberRating = 0;
+				
+		DAOComment comments = new DAOComment();
+		ArrayList<Comment> comment = comments.findRestaurantComments(id);
+		
+		for(int i = 0; i < comment.size(); i++)
+		{
+			middleValue = middleValue + comment.get(i).getRating();
+			numberRating++;
+		
+		}
+		
+		double average = 0;
+		
+		if(middleValue != 0) {
+			middleValue = (middleValue/numberRating);
+			average = Math.round(middleValue*100.0)/100.0;
+		} 
+		
+		return average;
+		
 	}
 }
