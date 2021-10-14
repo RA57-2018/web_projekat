@@ -483,14 +483,11 @@ public class FoodDeliveryMain {
 		});
 		
 		get("/searchUsers", (req, res) -> {
-			String sortCriteria = (req.queryParams("sortCriteria")).trim();
-			String type = (req.queryParams("type")).trim();
-			String role = (req.queryParams("role")).trim();
-			String username = (req.queryParams("username")).trim();
-			String surname = (req.queryParams("surname")).trim();
-			String name = (req.queryParams("name")).trim();
+			String searchName = (req.queryParams("searchName")).trim();
+			String searchSurname = (req.queryParams("searchSurname")).trim();
+			String searchUsername = (req.queryParams("searchUsername")).trim();
 			
-			return g.toJson(userDAOus.search(name, surname, username, type, role, sortCriteria));
+			return g.toJson(userDAOus.search(searchName, searchSurname, searchUsername));
 		});
 		
 		post("/delete", (req, res)-> {

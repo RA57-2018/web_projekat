@@ -10,11 +10,10 @@ Vue.component("user-view", {
 	        username: "",
 	        points: "",
 	        sortCriteria: "",
+	        sortType: "",
             searchName: "",
             searchSurname: "",
             searchUsername: "",
-            filterRole: "",
-            filterType: "",
             activeUser: false,
       }  
 	},
@@ -55,15 +54,187 @@ Vue.component("user-view", {
             this.users = response.data;
         });
     },
-    search: function(){
-    	var par = "name=" + this.searchName + "&surname="+this.searchSurname + "&username=" + this.searchUsername + "&role=" + this.filterRole + "&type=" + this.filterType + "&sortCriteria=" + this.sortCriteria;
-    	console.log(par);
-        axios.get('/searchUsers?' + par)
-                    .then(response => {
-                    	this.users=response.data;
-        });
-    },
-    
+    sortThisUser: function(){
+		if(this.sortCriteria != "ime" && this.sortCriteria != "prezime" && this.sortCriteria != "korisnicko ime" && this.sortCriteria != "broj bodova")
+		{
+			alert("Morate uneti kriterijum sortiranja pretrage!");
+		}
+		else if(this.sortType != "opadajuce" && this.sortType != "rastuce")
+		{
+			alert("Morate uneti smer sortiranja pretrage!");
+		}
+		else
+		{
+			if(this.sortCriteria == "prezime")
+			{
+				this.users.sort(this.compareSurname)
+			}
+			else if(this.sortCriteria == "korisnicko ime")
+			{
+				this.users.sort(this.compareUsername)
+			}
+			else if(this.sortCriteria == "broj bodova")
+			{
+				this.users.sort(this.comparePoints)
+			}
+			else
+			{
+				this.users.sort(this.compareData);
+			}
+									
+		}
+	},
+	compareData: function(o,t){
+		let first, second;
+		if(this.sortCriteria == "ime")
+		{
+			first = o.name;
+			second = t.name;
+		}
+		if(first < second)
+		{
+			if(this.sortType == 'rastuce')
+			{
+				return -1;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+		else if(first > second)
+		{
+			if(this.sortType == 'rastuce')
+			{
+				return 1;
+			}
+			else
+			{
+				return -1;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+
+	},
+	compareSurname: function(o, t){
+		let f, s;
+		if(this.sortCriteria == "prezime")
+		{
+			f = o.surname;
+			s = t.surname;
+		}
+		if(f < s)
+		{
+			if(this.sortType == 'rastuce')
+			{
+				return -1;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+		else if(f > s)
+		{
+			if(this.sortType == 'rastuce')
+			{
+				return 1;
+			}
+			else
+			{
+				return -1;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+		
+	},
+	compareUsername: function(o, t){
+		let f1, s1;
+		if(this.sortCriteria == "korisnicko ime")
+		{
+			f1 = o.username;
+			s1 = t.username;
+		}
+		if(f1 < s1)
+		{
+			if(this.sortType == 'rastuce')
+			{
+				return -1;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+		else if(f1 > s1)
+		{
+			if(this.sortType == 'rastuce')
+			{
+				return 1;
+			}
+			else
+			{
+				return -1;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+		
+	},
+	comparePoints: function(o, t){
+		let ff, ss;
+		if(this.sortCriteria == "broj bodova")
+		{
+			ff = o.points;
+			ss = t.points;
+		}
+		if(ff < ss)
+		{
+			if(this.sortType == 'rastuce')
+			{
+				return -1;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+		else if(ff > ss)
+		{
+			if(this.sortType == 'rastuce')
+			{
+				return 1;
+			}
+			else
+			{
+				return -1;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+		
+	},
+	search: function(){
+		if(this.searchName == "" && this.searchSurname == "" && this.searchUsername == ""){
+			alert("Unesite parametar za pretragu!");
+		}else{
+			var searchParameters = "searchName=" + this.searchName + "&searchSurname=" + this.searchSurname + "&searchUsername=" + this.searchUsername;
+			axios.get("/searchUsers?" + searchParameters)
+				.then(response => {
+					this.users = response.data;
+				})
+		}
+	},
     block: function(username){
     	axios
         .post('/block',{},{params:{user: username}}
@@ -137,51 +308,30 @@ Vue.component("user-view", {
 	<h2>Pregled korisnika</h2>
 	<div>
 		<div>
-          	<table>
-	          <tr><td>Ime: &nbsp</td><td><input type="text" v-model="searchName"  placeholder="Ime..."></td></tr>
-	          <tr><td>Prezime: &nbsp</td><td><input type="text" v-model="searchSurname"  placeholder="Prezime..."></td></tr>
-	          <tr><td>Korisnicko ime: &nbsp</td><td><input type="text" v-model="searchUsername"  placeholder="Korisnicko ime..."></td></tr>
-	         
-	      	  <tr><td><button v-on:click="search">Pretrazi</button></td></tr>
-	      	</table>
-	      </div>
-	
-		  <div>
-          	<table>
-	          <tr><td>Unesite tip korisnika: &nbsp</td><td><select style="width:210px; height:40px;"  v-model="filterType">
-	                        <option  value="zlatni" >Zlatni</option>
-	                        <option  value="srebrni">Srebrni</option>
-	                         <option  value="bronzani">Bronzani</option>
-	                    </select></td></tr>
-	          <tr><td>Unesite ulogu: &nbsp</td><td><select style="width:210px; height:40px;"  v-model="filterRole">
-	                        <option  value="administrator" >Administrator</option>
-	                        <option  value="dostavljac">Dostavljac</option>
-	                        <option  value="menadzer" >Menadzer</option>
-	                        <option  value="kupac">Kupac</option>
+    	<label for="sortCriteria"><b>Sortiranje</b></label><br />
+    	<label><b>Kriterijum</b></label>
+    	
+		<select v-model="sortCriteria" style="margin: 0.6em; width: 15em;">
+						<option value="ime">Ime korisnika</option>
+						<option value="prezime">Prezime korisnika</option>
+						<option value="korisnicko ime">Korisnicko ime korisnika</option>
+						<option value="broj bodova">Broj bodova</option>
+		</select>    	
 
-	                    </select></td></tr>
-	          
-	                    
-   			</table>
-   			<br> 
-   		 </div>
-		 <div>
-          	<table>
-	          <tr><td>Sortiraj: &nbsp</td><td><select style="width:210px; height:40px;"  v-model="sortCriteria">
-	                        <option  value="ime-rastuce" ><i>Ime - rastuce</i></option>
-	                        <option  value="ime-opadajuce"><i>Ime - opadajuce</i></option>
-	                        <option  value="prezime-rastuce" ><i>Prezime - rastuce</i></option>
-	                        <option  value="prezime-opadajuce"><i>Prezime - opadajuce</i></option>
-	                        <option  value="kIme-rastuce" ><i>Korisnicko ime - rastuce</i></option>
-	                        <option  value="kIme-opadajuce"><i>Korisnicko ime- opadajuce</i></option>
-	                         <option  value="brBodova-rastuce" ><i>Broj sakupljenih bodova - rastuce</i></option>
-	                        <option  value="brBodova-opadajuce"><i>Broj sakupljenih bodova - opadajuce</i></option>
-	                    </select></td></tr>
-	                    
-   			</table>
-   			<br>
-	                    
-   		 </div>
+        <label><b>Smer</b></label>
+		<select v-model="sortType" style="margin: 0.6em; width: 15em;">
+						<option value="rastuce">Rastuce</option>
+						<option value="opadajuce">Opadajuce</option>
+		</select>
+		<button v-on:click="sortThisUser">Sortiraj</button>
+	</div>
+	<div>
+		<input type="text" v-model="searchName" placeholder="Pretrazite po imenu" style="margin: 0.3em; width: 12em;">
+		<input type="text" v-model="searchSurname" placeholder="Pretrazite po prezimenu" style="margin: 0.3em; width: 12em;">
+		<input type="text" v-model="searchUsername" placeholder="Pretrazite po prezimenu" style="margin: 0.3em; width: 12em;">
+		<button v-on:click="search">Pretrazi</button>
+	</div>
+		
 		</div>
 		
 		<div>
