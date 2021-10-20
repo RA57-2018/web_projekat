@@ -1186,6 +1186,53 @@ public class FoodDeliveryMain {
 			
 		});
 		
+		get("/searchDeliveryOrders", (req, res) -> {
+			String searchRestaurant = (req.queryParams("searchRestaurant")).trim();
+			String priceFrom = (req.queryParams("priceFrom")).trim();
+			String priceTo = (req.queryParams("priceTo")).trim();
+			String dateFrom = (req.queryParams("dateFrom")).trim();
+			String dateTo = (req.queryParams("dateTo")).trim();
+			String filterType = (req.queryParams("filterType")).trim();									
+			
+			return g.toJson(orderDAO.searchDeliveryOrders(searchRestaurant, priceFrom, priceTo, dateFrom, dateTo, filterType));
+		});
+		
+		get("/searchManagerOrders", (req, res) -> {
+			String priceFrom = (req.queryParams("priceFrom")).trim();
+			String priceTo = (req.queryParams("priceTo")).trim();
+			String dateFrom = (req.queryParams("dateFrom")).trim();
+			String dateTo = (req.queryParams("dateTo")).trim();
+			String filterStatus = (req.queryParams("filterStatus")).trim();		
+			String username = (req.queryParams("username")).trim();				
+			
+			return g.toJson(orderDAO.searchManager(priceFrom, priceTo, dateFrom, dateTo, filterStatus, username));
+		});
+		
+		get("/searchOrdersForOneDeliverer", (req, res) -> {
+			String searchRestaurant = (req.queryParams("searchRestaurant")).trim();
+			String priceFrom = (req.queryParams("priceFrom")).trim();
+			String priceTo = (req.queryParams("priceTo")).trim();
+			String dateFrom = (req.queryParams("dateFrom")).trim();
+			String dateTo = (req.queryParams("dateTo")).trim();
+			String filterType = (req.queryParams("filterType")).trim();		
+			String username = (req.queryParams("username")).trim();
+			
+			return g.toJson(orderDAO.searchDeliverer(searchRestaurant, priceFrom, priceTo, dateFrom, dateTo, filterType, username));
+		});
+		
+		get("/searchBuyersOrders", (req, res) -> {
+			String searchRestaurant = (req.queryParams("searchRestaurant")).trim();
+			String priceFrom = (req.queryParams("priceFrom")).trim();
+			String priceTo = (req.queryParams("priceTo")).trim();
+			String dateFrom = (req.queryParams("dateFrom")).trim();
+			String dateTo = (req.queryParams("dateTo")).trim();
+			String filterType = (req.queryParams("filterType")).trim();	
+			String filterStatus = (req.queryParams("filterStatus")).trim();	
+			String username = (req.queryParams("username")).trim();
+			
+			return g.toJson(orderDAO.searchBuyer(searchRestaurant, priceFrom, priceTo, dateFrom, dateTo, filterType, filterStatus, username));
+		});
+		
 	}
 	
 	

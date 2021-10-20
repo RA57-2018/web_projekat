@@ -6,7 +6,8 @@ Vue.component("managerOrders", {
         role:"",
         username:"",
         activeUser: false,
-        priceSearch: "",
+        priceFrom: "",
+        priceTo: "",
         dateFrom: "",
         dateTo: "",
         sorting: "",
@@ -80,6 +81,17 @@ Vue.component("managerOrders", {
         });
 		this.load();			
 	},
+	search: function(){
+		if(this.priceFrom == "" && this.priceTo == "" && this.dateFrom == "" && this.dateTo == "" && this.filterStatus == ""){
+			alert("Unesite parametar za pretragu!");
+		}else{
+			var searchParameters = "priceFrom=" + this.priceFrom + "&priceTo=" + this.priceTo + "&dateFrom=" + this.dateFrom + "&dateTo=" + this.dateTo + "&filterStatus=" + this.filterStatus + "&username=" + this.username;
+			axios.get("/searchManagerOrders?" + searchParameters)
+				.then(response => {
+					this.orders = response.data;
+				})
+		}
+	},
        
 	}, 
     template: ` 		
@@ -138,6 +150,31 @@ Vue.component("managerOrders", {
 	  <br />
 	  <br />
 	  
+	  
+	<div>
+		<label><b>Status</b></label>
+		    	<select v-model="filterStatus" class="option">
+    				<option value="OBRADA">Obrada</option>
+    				<option value="U PRIPREMI">U pripremi</option>
+    				<option value="CEKA DOSTAVLJACA">Ceka dostavljaca</option>
+    				<option value="U TRANSPORTU">U transportu</option>
+    				<option value="DOSTAVLJENA">Dostavljena</option>
+    				<option value="OTKAZANA">Otkazana</option>
+    				<option value="">svi</option>
+    			</select><br />
+    			
+    	<label><b>Cena &nbsp</b></label>
+	    <label><b>od:</b></label><input type="text" v-model="priceFrom" style="margin: 0.3em; width: 12em;">
+	    <label><b>do:</b></label><input type="text" v-model="priceTo" style="margin: 0.3em; width: 12em;"><br />
+    	
+
+		<label><b>Datum &nbsp</b></label>
+	    <label><b>od:</b></label><input type="date" v-model="dateFrom" placeholder="Od" style="margin: 0.3em; width: 12em;">
+	    <label><b>do:</b></label><input type="date" v-model="dateTo" placeholder="Do" style="margin: 0.3em; width: 12em;">&nbsp;
+		<button v-on:click="search">Pretrazi</button>
+	</div>  
+	  
+	<br />
       
       <table align="center"> 
       		<tr>

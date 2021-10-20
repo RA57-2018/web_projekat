@@ -23,22 +23,22 @@ public class DAOUserUs {
 	ArrayList<Deliverer> deliverers = new ArrayList<Deliverer>();
 	private DAOBuyer b;
 	ArrayList<DAOUser> users = new ArrayList<DAOUser>();
-	private DAOBuyer kC;
-	private DAODeliverer dC;
-	private DAOAdministrator aC;
-	private DAOManager mC;
+	private DAOBuyer bD;
+	private DAODeliverer dD;
+	private DAOAdministrator aD;
+	private DAOManager mD;
 	
 	public DAOUserUs() {
 		
-		kC=new DAOBuyer();
-		dC=new DAODeliverer();
-		aC=new DAOAdministrator();
-		mC=new DAOManager();
+		bD=new DAOBuyer();
+		dD=new DAODeliverer();
+		aD=new DAOAdministrator();
+		mD=new DAOManager();
 		
-		buyers = kC.findBuyers();
-		deliverers = dC.findDeliverers();
-		administrators = aC.findAdministrators();
-		managers = mC.findManagers();
+		buyers = bD.findBuyers();
+		deliverers = dD.findDeliverers();
+		administrators = aD.findAdministrators();
+		managers = mD.findManagers();
 		
 		try {
 			this.readUsers();
@@ -61,34 +61,73 @@ public class DAOUserUs {
 	}
 	
 public ArrayList<DAOUser> search(String searchName, String searchSurname, String searchUsername) throws ParseException{
+	ArrayList<DAOUser> allUsers = new ArrayList<DAOUser>();
 	ArrayList<DAOUser> userName = new ArrayList<DAOUser>();
 	ArrayList<DAOUser> userSurname = new ArrayList<DAOUser>();
 	ArrayList<DAOUser> userUsername = new ArrayList<DAOUser>();
 	
+	bD=new DAOBuyer();
+	dD=new DAODeliverer();
+	aD=new DAOAdministrator();
+	mD=new DAOManager(); 
+	
+	for(int i=0; i<users.size(); i++) {
+		
+		if(users.get(i).getRole().equals("kupac")) {			
+			Buyer buyer = bD.findBuyerProfile(users.get(i).getUsername());
+			if(!buyer.isBlock() && !buyer.isBlocked()) {
+				allUsers.add(users.get(i));
+			}
+		}else if(users.get(i).getRole().equals("menadzer")) {			
+			Manager manager = mD.findManagerProfile(users.get(i).getUsername());
+			if(!manager.isBlock()) {
+				allUsers.add(users.get(i));
+			}
+		}else if(users.get(i).getRole().equals("administrator")) {			
+			Administrator admin = aD.findAdministratorProfile(users.get(i).getUsername());
+			if(!admin.isBlock()) {
+				allUsers.add(users.get(i));
+			}
+		}else {			
+			Deliverer deliverer = dD.findDelivererProfile(users.get(i).getUsername());
+			if(!deliverer.isBlock()) {
+				allUsers.add(users.get(i));
+			}
+		}
+		
+	}
+	
 	if(!searchName.equals("")) {
-		for (int i=0; i<users.size(); i++) {
-			if(users.get(i).getName().equals(searchName)) {	
-				userName.add(users.get(i));
+		for (int i=0; i<allUsers.size(); i++) {
+			if(allUsers.get(i).getName().toLowerCase().equals(searchName.toLowerCase())) {	
+				userName.add(allUsers.get(i));
 			}	
 	    }	
-	}else if(!searchSurname.equals("")) {	
-		for (int i=0; i<users.size(); i++) {
-			if(users.get(i).getSurname().equals(searchSurname)) {	
-				userSurname.add(users.get(i));
+	}else {
+		userName = allUsers;
+	}
+		
+	if(!searchSurname.equals("")) {	
+		for (int i=0; i<userName.size(); i++) {
+			if(userName.get(i).getSurname().toLowerCase().equals(searchSurname.toLowerCase())) {	
+				userSurname.add(userName.get(i));
 			}	
 	    }		
 	}else {
 		userSurname = userName;
-	} if(!searchUsername.equals("")) {		
-		for (int i=0; i<users.size(); i++) {
-			if(users.get(i).getUsername().equals(searchUsername)) {	
-				userUsername.add(users.get(i));
+	} 
+	
+	if(!searchUsername.equals("")) {		
+		for (int i=0; i<userSurname.size(); i++) {
+			if(userSurname.get(i).getUsername().toLowerCase().equals(searchUsername.toLowerCase())) {	
+				userUsername.add(userSurname.get(i));
 			}	
 	    }	
 	}
 	else {
 		userUsername = userSurname;
 	}
+	
 		return userUsername;
 	}
 	

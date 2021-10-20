@@ -327,8 +327,8 @@ Vue.component("user-view", {
 	</div>
 	<div>
 		<input type="text" v-model="searchName" placeholder="Pretrazite po imenu" style="margin: 0.3em; width: 12em;">
-		<input type="text" v-model="searchSurname" placeholder="Pretrazite po prezimenu" style="margin: 0.3em; width: 12em;">
-		<input type="text" v-model="searchUsername" placeholder="Pretrazite po prezimenu" style="margin: 0.3em; width: 12em;">
+		<input type="text" v-model="searchSurname" placeholder="Pretrazite po prezimenu" style="margin: 0.3em; width: 15em;">
+		<input type="text" v-model="searchUsername" placeholder="Pretrazite po korisnickom imenu" style="margin: 0.3em; width: 18em;">
 		<button v-on:click="search">Pretrazi</button>
 	</div>
 		
@@ -340,7 +340,7 @@ Vue.component("user-view", {
                             <th>Ime</th>
                             <th>Prezime</th>
                             <th>Korisnicko ime</th>
-                            <th>Uloga</th
+                            <th>Uloga</th>
                             <th>Tip kupca</th>
                             <th>Sakupljeni bodovi</th>
                             <th></th>

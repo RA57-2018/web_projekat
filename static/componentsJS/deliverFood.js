@@ -273,7 +273,7 @@ Vue.component("deliver-food", {
     				<option value="italijanski">italijanski</option>
     				<option value="rostilj">rostilj</option>
     				<option value="kineski">kineski</option>
-    				<option value="">Nijedan</option>
+    				<option value="">svi</option>
     			</select>
 		<input type="text" v-model="searchLocation" placeholder="Pretrazite po gradu" style="margin: 0.3em; width: 12em;">
 		<label><b>Ocena</b></label>

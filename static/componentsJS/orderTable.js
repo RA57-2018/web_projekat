@@ -8,8 +8,9 @@ Vue.component("ordertable", {
         username:"",
         activeUser: false,
         restaurant: null,
-        restaurantSearch: "",
-        priceSearch: "",
+        searchRestaurant: "",
+        priceFrom: "",
+        priceTo: "",
         dateFrom: "",
         dateTo: "",
         sorting: "",
@@ -75,6 +76,17 @@ Vue.component("ordertable", {
             router.replace({ path: `/` })
 			
     },
+	search: function(){
+		if(this.searchRestaurant == "" && this.priceFrom == "" && this.priceTo == "" && this.dateFrom == "" && this.dateTo == "" && this.filterType == "" && this.filterStatus == ""){
+			alert("Unesite parametar za pretragu!");
+		}else{
+			var searchParameters = "searchRestaurant=" + this.searchRestaurant + "&priceFrom=" + this.priceFrom + "&priceTo=" + this.priceTo + "&dateFrom=" + this.dateFrom + "&dateTo=" + this.dateTo + "&filterType=" + this.filterType + "&filterStatus=" + this.filterStatus + "&username=" + this.username;
+			axios.get("/searchBuyersOrders?" + searchParameters)
+				.then(response => {
+					this.orders = response.data;
+				})
+		}
+	},
        
 	},
  
@@ -124,6 +136,40 @@ Vue.component("ordertable", {
 	  <br />
 	  <br />
 	  <br />
+	  
+	  
+	<div>
+		<label><b>Restoran &nbsp</b></label><input type="text" v-model="searchRestaurant" placeholder="Unesite ime restorana" style="margin: 0.3em; width: 15em;">&nbsp&nbsp
+		<label><b>Tip</b></label>
+		    	<select v-model="filterType" class="option">
+    				<option value="italijanski">italijanski</option>
+    				<option value="rostilj">rostilj</option>
+    				<option value="kineski">kineski</option>
+    				<option value="">svi</option>
+    			</select>&nbsp;&nbsp
+    			
+    	<label><b>Status</b></label>
+		    	<select v-model="filterStatus" class="option">
+    				<option value="OBRADA">Obrada</option>
+    				<option value="U PRIPREMI">U pripremi</option>
+    				<option value="CEKA DOSTAVLJACA">Ceka dostavljaca</option>
+    				<option value="U TRANSPORTU">U transportu</option>
+    				<option value="DOSTAVLJENA">Dostavljena</option>
+    				<option value="OTKAZANA">Otkazana</option>
+    				<option value="">svi</option>
+    			</select><br />
+    			
+		<label><b>Cena &nbsp</b></label>
+	    <label><b>od:</b></label><input type="text" v-model="priceFrom" style="margin: 0.3em; width: 12em;">
+	    <label><b>do:</b></label><input type="text" v-model="priceTo" style="margin: 0.3em; width: 12em;"><br />
+
+		<label><b>Datum &nbsp</b></label>
+	    <label><b>od:</b></label><input type="date" v-model="dateFrom" placeholder="Od" style="margin: 0.3em; width: 12em;">
+	    <label><b>do:</b></label><input type="date" v-model="dateTo" placeholder="Do" style="margin: 0.3em; width: 12em;">&nbsp;&nbsp
+		<button v-on:click="search">Pretrazi</button>
+	</div>
+	
+	<br />
 	  
       
       <table align="center"> 
