@@ -10,7 +10,7 @@ Vue.component("managerOrders", {
         priceTo: "",
         dateFrom: "",
         dateTo: "",
-        sorting: "",
+        sortCriteria: "",
         filterStatus: "",
         buyers: [],
     };
@@ -92,6 +92,98 @@ Vue.component("managerOrders", {
 				})
 		}
 	},
+	sortThis: function(){
+			if(this.sortCriteria != "cena" && this.sortCriteria != "datum")
+			{
+				alert("Morate uneti kriterijum sortiranja pretrage!");
+			}
+			else if(this.sortType != "opadajuce" && this.sortType != "rastuce")
+			{
+				alert("Morate uneti smer sortiranja pretrage!");
+			}
+			else
+			{
+				if(this.sortCriteria == "cena")
+				{
+					this.orders.sort(this.comparePrice);
+				}
+				else
+				{
+					this.orders.sort(this.compareDate);
+				}
+										
+			}
+		},
+comparePrice: function(o,t){
+			let first, second;
+			if(this.sortCriteria == "cena")
+			{
+				first = o.price;
+				second = t.price;
+			}
+			if(first < second)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return -1;
+				}
+				else
+				{
+					return 1;
+				}
+			}
+			else if(first > second)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return 1;
+				}
+				else
+				{
+					return -1;
+				}
+			}
+			else
+			{
+				return 0;
+			}
+
+		},
+	compareDate: function(o,t){
+			let first, second;
+			if(this.sortCriteria == "datum")
+			{
+				first = o.date;
+				second = t.date;
+			}
+			if(first < second)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return -1;
+				}
+				else
+				{
+					return 1;
+				}
+			}
+			else if(first > second)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return 1;
+				}
+				else
+				{
+					return -1;
+				}
+			}
+			else
+			{
+				return 0;
+			}
+
+		},
        
 	}, 
     template: ` 		
@@ -150,6 +242,24 @@ Vue.component("managerOrders", {
 	  <br />
 	  <br />
 	  
+	
+	<div>
+    	<label for="sortCriteria"><b>Sortiranje</b></label><br />
+    	<label><b>Kriterijum</b></label>
+    	
+		<select v-model="sortCriteria" style="margin: 0.6em; width: 15em;">
+						<option value="cena">Cena porudzbine</option>
+						<option value="datum">Datum porudzbine</option>
+		</select>    	
+
+        <label><b>Smer</b></label>
+		<select v-model="sortType" style="margin: 0.6em; width: 15em;">
+						<option value="rastuce">Rastuce</option>
+						<option value="opadajuce">Opadajuce</option>
+		</select>
+		<button v-on:click="sortThis">Sortiraj</button>
+	</div>
+	
 	  
 	<div>
 		<label><b>Status</b></label>

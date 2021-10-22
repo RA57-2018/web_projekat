@@ -37,8 +37,16 @@ Vue.component("deliver-food", {
 				}
 			}
 		},
+	restaurantComments: function(id){
+			let i = 0;
+			for(i ; i < this.allComments.length; i++){
+				if(this.allComments[i].restaurant == id){
+					return this.allComments[i];
+				}
+			}
+		},
 	sortThis: function(){
-			if(this.sortCriteria != "naziv" && this.sortCriteria != "lokacija")
+			if(this.sortCriteria != "naziv" && this.sortCriteria != "lokacija" && this.sortCriteria != "ocena")
 			{
 				alert("Morate uneti kriterijum sortiranja pretrage!");
 			}
@@ -52,9 +60,13 @@ Vue.component("deliver-food", {
 				{
 					this.restaurantList.sort(this.compareLocations)
 				}
-				else
+				else if(this.sortCriteria == "naziv")
 				{
 					this.restaurantList.sort(this.compareData);
+				}
+				else
+				{
+					this.restaurantList.sort(this.compareRatings);
 				}
 										
 			}
@@ -93,6 +105,38 @@ Vue.component("deliver-food", {
 				return 0;
 			}
 
+		},
+    compareRatings: function(o, t){
+			let f = this.restaurantComments(o.id);
+			let s = this.restaurantComments(t.id);
+
+			if(f.rating > s.rating)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return 1;
+				}
+				else
+				{
+					return -1;
+				}
+			}
+			else if(f.rating < s.rating)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return -1;
+				}
+				else
+				{
+					return 1;
+				}
+			}
+			else
+			{
+				return 0;
+			}		
+			
 		},
     compareLocations: function(o, t){
 			let f = this.restaurantLocation(o.location);
@@ -255,6 +299,7 @@ Vue.component("deliver-food", {
 		<select v-model="sortCriteria" style="margin: 0.6em; width: 15em;">
 						<option value="naziv">Naziv restorana</option>
 						<option value="lokacija">Lokacija</option>
+						<option value="ocena">Ocena</option>
 		</select>    	
 
         <label><b>Smer</b></label>

@@ -14,7 +14,10 @@ Vue.component("user-view", {
             searchName: "",
             searchSurname: "",
             searchUsername: "",
+            filterRole: "",
+            filterType: "",
             activeUser: false,
+            buyers: [],
       }  
 	},
 	mounted: function(){
@@ -25,7 +28,8 @@ Vue.component("user-view", {
             this.activeUser = true;
         }
         
-        this.load();					
+        this.load();	
+        this.findBuyers();				
     },
     methods: {
         Delete(event){          
@@ -225,10 +229,10 @@ Vue.component("user-view", {
 		
 	},
 	search: function(){
-		if(this.searchName == "" && this.searchSurname == "" && this.searchUsername == ""){
+		if(this.searchName == "" && this.searchSurname == "" && this.searchUsername == "" && this.filterRole == "" && this.filterType == ""){
 			alert("Unesite parametar za pretragu!");
 		}else{
-			var searchParameters = "searchName=" + this.searchName + "&searchSurname=" + this.searchSurname + "&searchUsername=" + this.searchUsername;
+			var searchParameters = "searchName=" + this.searchName + "&searchSurname=" + this.searchSurname + "&searchUsername=" + this.searchUsername + "&filterRole=" + this.filterRole + "&filterType=" + this.filterType;
 			axios.get("/searchUsers?" + searchParameters)
 				.then(response => {
 					this.users = response.data;
@@ -261,6 +265,21 @@ Vue.component("user-view", {
             router.replace({ path: `/` })
 			
     },
+    findBuyers: function(){
+        axios.get('/buyers')
+            .then(response => {           
+            	this.buyers=response.data;                  
+        	});
+        			
+	},
+	findType: function(value){
+		let i = 0;
+		for(i; i<this.buyers.length; i++){
+			if(value === this.buyers[i].username){				    
+				return this.buyers[i].type.type;				
+			}
+		}
+	},
 	
    },
 	template: ` 
@@ -306,8 +325,8 @@ Vue.component("user-view", {
 	</ul>
 	
 	<h2>Pregled korisnika</h2>
+
 	<div>
-		<div>
     	<label for="sortCriteria"><b>Sortiranje</b></label><br />
     	<label><b>Kriterijum</b></label>
     	
@@ -325,14 +344,37 @@ Vue.component("user-view", {
 		</select>
 		<button v-on:click="sortThisUser">Sortiraj</button>
 	</div>
+	
+	
 	<div>
 		<input type="text" v-model="searchName" placeholder="Pretrazite po imenu" style="margin: 0.3em; width: 12em;">
 		<input type="text" v-model="searchSurname" placeholder="Pretrazite po prezimenu" style="margin: 0.3em; width: 15em;">
-		<input type="text" v-model="searchUsername" placeholder="Pretrazite po korisnickom imenu" style="margin: 0.3em; width: 18em;">
+		<input type="text" v-model="searchUsername" placeholder="Pretrazite po korisnickom imenu" style="margin: 0.3em; width: 18em;"><br />
+		
+		<label><b>Uloga</b></label>
+		    	<select v-model="filterRole" class="option">
+    				<option value="kupac">Kupac</option>
+    				<option value="dostavljac">Dostavljac</option>
+    				<option value="menadzer">Menadzer</option>
+    				<option value="administrator">Administrator</option>
+    				<option value="">svi</option>
+    			</select>&nbsp;&nbsp;
+    			
+    	<label><b>Tip korisnika</b></label>
+		    	<select v-model="filterType" class="option">
+    				<option value="zlatni">Zlatni</option>
+    				<option value="srebrni">Srebrni</option>
+    				<option value="bronzani">Bronzani</option>
+    				<option value="normalan">Normalan</option>
+    				<option value="">svi</option>
+    			</select>&nbsp;&nbsp;
+    			    			
 		<button v-on:click="search">Pretrazi</button>
 	</div>
+	
+	<br />
 		
-		</div>
+
 		
 		<div>
 			<table> 
@@ -351,7 +393,7 @@ Vue.component("user-view", {
                             <td> {{user.surname}}</td>
                             <td> {{user.username}}</td>
                             <td> {{user.role}} </td>
-                            <td> {{user.type}} </td>
+                            <td> {{findType(user.username)}} </td>
                             <td v-if="user.role=='kupac'"> {{user.points}} </td>
                             <td v-if="user.role=='administrator'">&nbsp</td>
                             <td v-if="user.role=='dostavljac'">&nbsp</td>

@@ -60,11 +60,14 @@ public class DAOUserUs {
 		this.users = gson.fromJson(br, token);
 	}
 	
-public ArrayList<DAOUser> search(String searchName, String searchSurname, String searchUsername) throws ParseException{
+public ArrayList<DAOUser> search(String searchName, String searchSurname, String searchUsername,String filterRole, String filterType) throws ParseException{
 	ArrayList<DAOUser> allUsers = new ArrayList<DAOUser>();
 	ArrayList<DAOUser> userName = new ArrayList<DAOUser>();
 	ArrayList<DAOUser> userSurname = new ArrayList<DAOUser>();
 	ArrayList<DAOUser> userUsername = new ArrayList<DAOUser>();
+	ArrayList<DAOUser> userRole = new ArrayList<DAOUser>();
+	ArrayList<DAOUser> userType = new ArrayList<DAOUser>();
+
 	
 	bD=new DAOBuyer();
 	dD=new DAODeliverer();
@@ -128,7 +131,100 @@ public ArrayList<DAOUser> search(String searchName, String searchSurname, String
 		userUsername = userSurname;
 	}
 	
-		return userUsername;
+	if(!filterRole.equals("")) {		
+		if(filterRole.equals("kupac")) {			
+			for(int i=0; i<userUsername.size(); i++) {
+				for (int j = 0; j < buyers.size(); j++) {
+					if(buyers.get(j).getUsername().equals(userUsername.get(i).getUsername())) {
+						
+						DAOUser user = new DAOUser();
+						user.setName(buyers.get(j).getName());
+						user.setSurname(buyers.get(j).getSurname());
+						user.setUsername(buyers.get(j).getUsername());
+						user.setRole("kupac");
+						user.setPoints(buyers.get(j).getPoints());
+						user.setTypeUser(buyers.get(j).getType());
+						userRole.add(user);
+						
+					}											
+			    }
+			}
+		}else if(filterRole.equals("dostavljac")) {
+			for(int i=0; i<userUsername.size(); i++) {
+				for (int j = 0; j < deliverers.size(); j++) {
+					if(deliverers.get(j).getUsername().equals(userUsername.get(i).getUsername())) {
+						
+						DAOUser user = new DAOUser();
+						user.setName(deliverers.get(j).getName());
+						user.setSurname(deliverers.get(j).getSurname());
+						user.setUsername(deliverers.get(j).getUsername());
+						user.setRole("dostavljac");
+						userRole.add(user);
+						
+					}											
+			    }
+			}
+		}else if(filterRole.equals("menadzer")) {
+			for(int i=0; i<userUsername.size(); i++) {
+				for (int j = 0; j < managers.size(); j++) {
+					if(managers.get(j).getUsername().equals(userUsername.get(i).getUsername())) {
+						
+						DAOUser user = new DAOUser();
+						user.setName(managers.get(j).getName());
+						user.setSurname(managers.get(j).getSurname());
+						user.setUsername(managers.get(j).getUsername());
+						user.setRole("menadzer");
+						userRole.add(user);
+						
+					}											
+			    }
+			}
+		}else{
+			for(int i=0; i<userUsername.size(); i++) {
+				for (int j = 0; j < administrators.size(); j++) {
+					if(administrators.get(j).getUsername().equals(userUsername.get(i).getUsername())) {
+						
+						DAOUser user = new DAOUser();
+						user.setName(administrators.get(j).getName());
+						user.setSurname(administrators.get(j).getSurname());
+						user.setUsername(administrators.get(j).getUsername());
+						user.setRole("administrator");
+						userRole.add(user);
+						
+					}											
+			    }
+			}						
+		}
+		
+	}else{ 
+		userRole = userUsername; 
+	}
+	
+	if(!filterType.equals("")) {		
+		for(int i=0; i<userRole.size(); i++) {			
+			for (int j = 0; j < buyers.size(); j++) {	
+				for(int k = 0; k < users.size(); k++) {
+					if(buyers.get(j).getType().getType().equals(filterType) && users.get(k).getUsername().equals(buyers.get(j).getUsername()) && users.get(k).getUsername().equals(userRole.get(i).getUsername())) {
+
+						DAOUser user = new DAOUser();
+						user.setName(users.get(k).getName());
+						user.setSurname(users.get(k).getSurname());
+						user.setUsername(users.get(k).getUsername());
+						user.setPoints(users.get(k).getPoints());
+						user.setRole("kupac");
+						user.setTypeUser(users.get(k).getTypeUser());
+						
+						userType.add(user);
+					}							
+				}				 
+		    }							
+		}
+		
+	}else{ 
+		userType = userRole; 
+	}
+	
+		return userType;
 	}
 	
 	public ArrayList<DAOUser> getUsers() {

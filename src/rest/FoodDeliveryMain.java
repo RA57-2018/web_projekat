@@ -486,8 +486,10 @@ public class FoodDeliveryMain {
 			String searchName = (req.queryParams("searchName")).trim();
 			String searchSurname = (req.queryParams("searchSurname")).trim();
 			String searchUsername = (req.queryParams("searchUsername")).trim();
+			String filterRole = (req.queryParams("filterRole")).trim();
+			String filterType = (req.queryParams("filterType")).trim();
 			
-			return g.toJson(userDAOus.search(searchName, searchSurname, searchUsername));
+			return g.toJson(userDAOus.search(searchName, searchSurname, searchUsername,filterRole, filterType));
 		});
 		
 		post("/delete", (req, res)-> {
@@ -1192,9 +1194,11 @@ public class FoodDeliveryMain {
 			String priceTo = (req.queryParams("priceTo")).trim();
 			String dateFrom = (req.queryParams("dateFrom")).trim();
 			String dateTo = (req.queryParams("dateTo")).trim();
-			String filterType = (req.queryParams("filterType")).trim();									
+			String filterType = (req.queryParams("filterType")).trim();		
 			
-			return g.toJson(orderDAO.searchDeliveryOrders(searchRestaurant, priceFrom, priceTo, dateFrom, dateTo, filterType));
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			return gsonReg.toJson(orderDAO.searchDeliveryOrders(searchRestaurant, priceFrom, priceTo, dateFrom, dateTo, filterType));
 		});
 		
 		get("/searchManagerOrders", (req, res) -> {
@@ -1203,9 +1207,11 @@ public class FoodDeliveryMain {
 			String dateFrom = (req.queryParams("dateFrom")).trim();
 			String dateTo = (req.queryParams("dateTo")).trim();
 			String filterStatus = (req.queryParams("filterStatus")).trim();		
-			String username = (req.queryParams("username")).trim();				
+			String username = (req.queryParams("username")).trim();		
 			
-			return g.toJson(orderDAO.searchManager(priceFrom, priceTo, dateFrom, dateTo, filterStatus, username));
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			return gsonReg.toJson(orderDAO.searchManager(priceFrom, priceTo, dateFrom, dateTo, filterStatus, username));
 		});
 		
 		get("/searchOrdersForOneDeliverer", (req, res) -> {
@@ -1217,7 +1223,9 @@ public class FoodDeliveryMain {
 			String filterType = (req.queryParams("filterType")).trim();		
 			String username = (req.queryParams("username")).trim();
 			
-			return g.toJson(orderDAO.searchDeliverer(searchRestaurant, priceFrom, priceTo, dateFrom, dateTo, filterType, username));
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			return gsonReg.toJson(orderDAO.searchDeliverer(searchRestaurant, priceFrom, priceTo, dateFrom, dateTo, filterType, username));
 		});
 		
 		get("/searchBuyersOrders", (req, res) -> {
@@ -1230,7 +1238,9 @@ public class FoodDeliveryMain {
 			String filterStatus = (req.queryParams("filterStatus")).trim();	
 			String username = (req.queryParams("username")).trim();
 			
-			return g.toJson(orderDAO.searchBuyer(searchRestaurant, priceFrom, priceTo, dateFrom, dateTo, filterType, filterStatus, username));
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			return gsonReg.toJson(orderDAO.searchBuyer(searchRestaurant, priceFrom, priceTo, dateFrom, dateTo, filterType, filterStatus, username));
 		});
 		
 	}

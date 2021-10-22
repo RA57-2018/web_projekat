@@ -13,7 +13,7 @@ Vue.component("ordertable", {
         priceTo: "",
         dateFrom: "",
         dateTo: "",
-        sorting: "",
+        sortCriteria: "",
         filterType: "",
         filterStatus: "",
     };
@@ -87,6 +87,142 @@ Vue.component("ordertable", {
 				})
 		}
 	},
+	restaurantName: function(id){
+			let i = 0;
+			for(i ; i < this.restaurants.length; i++){
+				if(this.restaurants[i].id == id){
+					return this.restaurants[i];
+				}
+			}
+		},
+	sortThis: function(){
+			if(this.sortCriteria != "naziv" && this.sortCriteria != "cena" && this.sortCriteria != "datum")
+			{
+				alert("Morate uneti kriterijum sortiranja pretrage!");
+			}
+			else if(this.sortType != "opadajuce" && this.sortType != "rastuce")
+			{
+				alert("Morate uneti smer sortiranja pretrage!");
+			}
+			else
+			{
+				if(this.sortCriteria == "naziv")
+				{
+					this.orders.sort(this.compareName)
+				}
+				else if(this.sortCriteria == "cena")
+				{
+					this.orders.sort(this.comparePrice);
+				}
+				else
+				{
+					this.orders.sort(this.compareDate);
+				}
+										
+			}
+		},
+	compareName: function(o, t){
+			let f = this.restaurantName(o.restaurant);
+			let s = this.restaurantName(t.restaurant);
+
+			if(f.name > s.name)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return 1;
+				}
+				else
+				{
+					return -1;
+				}
+			}
+			else if(f.name < s.name)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return -1;
+				}
+				else
+				{
+					return 1;
+				}
+			}
+			else
+			{
+				return 0;
+			}		
+			
+		},
+	comparePrice: function(o,t){
+			let first, second;
+			if(this.sortCriteria == "cena")
+			{
+				first = o.price;
+				second = t.price;
+			}
+			if(first < second)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return -1;
+				}
+				else
+				{
+					return 1;
+				}
+			}
+			else if(first > second)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return 1;
+				}
+				else
+				{
+					return -1;
+				}
+			}
+			else
+			{
+				return 0;
+			}
+
+		},
+	compareDate: function(o,t){
+			let first, second;
+			if(this.sortCriteria == "datum")
+			{
+				first = o.date;
+				second = t.date;
+			}
+			if(first < second)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return -1;
+				}
+				else
+				{
+					return 1;
+				}
+			}
+			else if(first > second)
+			{
+				if(this.sortType == 'rastuce')
+				{
+					return 1;
+				}
+				else
+				{
+					return -1;
+				}
+			}
+			else
+			{
+				return 0;
+			}
+
+		},
        
 	},
  
@@ -138,6 +274,25 @@ Vue.component("ordertable", {
 	  <br />
 	  
 	  
+	<div>
+    	<label for="sortCriteria"><b>Sortiranje</b></label><br />
+    	<label><b>Kriterijum</b></label>
+    	
+		<select v-model="sortCriteria" style="margin: 0.6em; width: 15em;">
+						<option value="naziv">Naziv restorana</option>
+						<option value="cena">Cena porudzbine</option>
+						<option value="datum">Datum porudzbine</option>
+		</select>    	
+
+        <label><b>Smer</b></label>
+		<select v-model="sortType" style="margin: 0.6em; width: 15em;">
+						<option value="rastuce">Rastuce</option>
+						<option value="opadajuce">Opadajuce</option>
+		</select>
+		<button v-on:click="sortThis">Sortiraj</button>
+	</div>   
+	  
+	
 	<div>
 		<label><b>Restoran &nbsp</b></label><input type="text" v-model="searchRestaurant" placeholder="Unesite ime restorana" style="margin: 0.3em; width: 15em;">&nbsp&nbsp
 		<label><b>Tip</b></label>
