@@ -68,13 +68,13 @@ Vue.component("add-restaurant", {
 			    alert("Naziv ulice mora sadrzati samo slova i veliko pocetno slovo!")
 			    e.preventDefault();
 			}else if(!this.Number(this.number)){
-			    alert("Broj ulice mora biti ceo broj!")
+			    alert("Broj ulice mora biti ceo broj i ne moze poceti nulom!")
 			    e.preventDefault();
 			}else if(!this.Word(this.city)){
 			    alert("Naziv grada mora sadrzati samo slova i veliko pocetno slovo!")
 			    e.preventDefault();
 			}else if(!this.Number(this.postalCode)){
-			    alert("Postanski broj mora biti ceo broj!")
+			    alert("Postanski broj mora biti ceo broj i ne moze poceti nulom!")
 			    e.preventDefault();
 			}else{
 			    this.restaurants = {}
@@ -101,13 +101,13 @@ Vue.component("add-restaurant", {
 			}
         },
     Number: function (value) {
-       return /^[0-9]+$/.test(value);
+       return /^[1-9][0-9]*$/.test(value);
       },
     Float: function(value){
        return /^[0-9]+(\.)?[0-9]*$/.test(value);
       }, 
     Word: function(value){
-       return /^[A-Z][a-zA-Z]*$/.test(value);
+       return /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/.test(value);
       },
 	createManager: function (e) {
       e.preventDefault();
@@ -155,7 +155,7 @@ Vue.component("add-restaurant", {
 
 },
     mounted: function () {  
-        this.username = window.localStorage.getItem('uName');
+     
 	    this.role = window.localStorage.getItem('role');
 	    
 	    if(this.role =="administrator" || this.role =="buyer" || this.role =="manager" || this.role =="deliverer"){
@@ -168,6 +168,27 @@ Vue.component("add-restaurant", {
 						this.managerList.push(response.data[i]);
 				}
 			});
+			
+	
+	map = new ol.Map({
+            target: 'map',
+            layers: [
+              new ol.layer.Tile({
+                source: new ol.source.OSM()
+              })
+            ],
+            view: new ol.View({
+              center: ol.proj.fromLonLat([19.83,45.26]),
+              zoom: 13
+            })
+          });
+          
+	        t=this;
+	        map.on('singleclick', function (evt) {	            
+	            coordinate = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
+	            t.longitude = coordinate[0];
+	            t.latitude = coordinate[1];
+	        });
 
     },
 
@@ -251,6 +272,8 @@ Vue.component("add-restaurant", {
                <label>Zatvoren</label>
         </div><br />
         
+        <center><div style="width:70%; height:400px;" id="map"></div></center><br />
+        
         <label><b>Geografska duzina</b></label><br />
         <input type="text" placeholder="Unesite geografsku duzinu" required v-model="longitude"><br />
             
@@ -272,8 +295,8 @@ Vue.component("add-restaurant", {
         <label><b>Slika</b></label><br />
         <input type="file" v-on:change="logoChange"><br />
         
-        <img v-if="!logoShow" src="" width="300" height="300">
-        <img v-if="logoShow" :src="logoShow" width="300" height="300"><br /><br />
+        <img v-if="!logoShow" src="" style="width:80%; height:400px;">
+        <img v-if="logoShow" :src="logoShow" style="width:80%; height:400px;"><br /><br />
           	
 
         <label><b>Menadzer</b></label><br />
