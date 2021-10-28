@@ -229,22 +229,22 @@ Vue.component("deliver-food", {
     
     },
   mounted: function(){
-    axios.get("/restaurants")
+    	axios.get("/restaurants")
 			.then(response => {
 				for(let i = 0; i < response.data.length; i++){
 						this.restaurantList.push(response.data[i]);
 				}
 			});
 			
-	axios.get("/restaurantsLocations")
+		axios.get("/restaurantsLocations")
 			.then(response => {
 				this.locationList = response.data;
 			});
 	
-	axios.get("/ratings")
+		axios.get("/ratings")
 			.then(response => {          
           		 this.allComments = response.data;
-    });		
+    		});		
 			
 	localStorage.removeItem('role');
     localStorage.removeItem('uName');
@@ -332,7 +332,7 @@ Vue.component("deliver-food", {
     				<option value="">Svi</option>
     			</select>
     	<input type="radio" v-model="searchOpen" value="otvoren"><label><b>Otvoren &nbsp</b></label>
-		<button v-on:click="search">Pretrazi</button><br />
+		<button v-on:click="search">Pretrazi</button>
 
 	</div>
 

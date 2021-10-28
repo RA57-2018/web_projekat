@@ -408,22 +408,19 @@ public class FoodDeliveryMain {
 		get("/users", (req, res)->{
 			ArrayList<DAOUser> users=userDAOus.getUsers();
 			ArrayList<DAOUser> retUsers=new ArrayList<DAOUser>();
-			for(int i=0; i<users.size(); i++) {
-				
+			
+			for(int i=0; i<users.size(); i++) {				
 				if(users.get(i).getRole().equals("kupac")) {
-					
 					Buyer b = buyerDAO.findBuyerProfile(users.get(i).getUsername());
 					if(!b.isBlock() && !b.isBlocked()) {
 						retUsers.add(users.get(i));
 					}
-				}else if(users.get(i).getRole().equals("menadzer")) {
-					
+				}else if(users.get(i).getRole().equals("menadzer")) {					
 					Manager m = managerDAO.findManagerProfile(users.get(i).getUsername());
 					if(!m.isBlock()) {
 						retUsers.add(users.get(i));
 					}
-				}else if(users.get(i).getRole().equals("administrator")) {
-					
+				}else if(users.get(i).getRole().equals("administrator")) {					
 					Administrator a = administratorDAO.findAdministratorProfile(users.get(i).getUsername());
 					if(!a.isBlock()) {
 						retUsers.add(users.get(i));
