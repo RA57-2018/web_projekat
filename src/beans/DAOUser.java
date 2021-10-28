@@ -1,9 +1,5 @@
 package beans;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class DAOUser {
 	
 	private String name;

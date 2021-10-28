@@ -107,7 +107,7 @@ Vue.component("add-restaurant", {
        return /^[0-9]+(\.)?[0-9]*$/.test(value);
       }, 
     Word: function(value){
-       return /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/.test(value);
+       return /^[A-Z][a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/.test(value);
       },
 	createManager: function (e) {
       e.preventDefault();

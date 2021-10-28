@@ -61,7 +61,6 @@ public class FoodDeliveryMain {
 	private static DAOArticles articlesDAO = new DAOArticles();
 	private static DAOArticleInBasket articlesInBasketDAO = new DAOArticleInBasket();
 	private static DAOOrder orderDAO = new DAOOrder();
-	private static DAOUser userDAO = new DAOUser();
 	private static DAOUserUs userDAOus = new DAOUserUs();
 	private static DAORequest requestDAO = new DAORequest();
 	private static DAOCanceling cancelingDAO = new DAOCanceling();
@@ -123,7 +122,7 @@ public class FoodDeliveryMain {
 
             String userName = " ";
             ArrayList<String> answer = new ArrayList<String>();
-            if(buyerDAO.findUsername(buyer.getUsername()) != null) {
+            if(userDAOus.findUser(buyer.getUsername()) != null) {
                 answer.add(userName);
                 return g.toJson(answer);
             }else {
@@ -162,6 +161,7 @@ public class FoodDeliveryMain {
 			Restaurant rest = restaurant.getRestaurant();
 			rest.setId(id);
 			rest.setLocation(locationId);
+			rest.setArticles(id);
 			
 								
 			if(rest.getLogo() == null) {
@@ -195,6 +195,12 @@ public class FoodDeliveryMain {
 			locations.put(locationId, location);
 			locationDAO.setLocation(locations);
 			locationDAO.writeLocation();
+			
+			HashMap<Integer,ArrayList<Artical>> articles = articlesDAO.getArticles();
+			ArrayList<Artical> article = new ArrayList<Artical>();
+			articles.put(id, article);
+			articlesDAO.setArticles(articles);
+			articlesDAO.writeArticle();
 	
 			return true;
 			
@@ -238,21 +244,25 @@ public class FoodDeliveryMain {
 			if(u != null) {
 				Administrator administrator = gsonReg.fromJson(reqBody, Administrator.class);
 				administratorDAO.changeAdministrator(name,administrator);
+				userDAOus.changeUser(administrator.getName(), administrator.getSurname(), name);
 			}else {
 				u = buyerDAO.findBuyerProfile(name);
 				if(u != null) {
 					Buyer buyer = gsonReg.fromJson(reqBody, Buyer.class);
 					buyerDAO.changeBuyer(name,buyer);
+					userDAOus.changeUser(buyer.getName(), buyer.getSurname(), name);
 				}else {
 					u = managerDAO.findManagerProfile(name);
 					if(u != null) {
 						Manager manager = gsonReg.fromJson(reqBody, Manager.class);
 						managerDAO.changeManager(name,manager);
+						userDAOus.changeUser(manager.getName(), manager.getSurname(), name);
 					}else {
 						u = delivererDAO.findDelivererProfile(name);
 						if(u != null) {
 							Deliverer deliverer = gsonReg.fromJson(reqBody, Deliverer.class);
 							delivererDAO.changeDeliverer(name,deliverer);
+							userDAOus.changeUser(deliverer.getName(), deliverer.getSurname(), name);
 						}	
 					}
 				}	
@@ -355,6 +365,7 @@ public class FoodDeliveryMain {
 				String m = "a" + idA;
 				
 				artical.setId(m);
+				artical.setDeleted(false);
 				
 				artical.setRestaurant(id);
 				
@@ -534,6 +545,13 @@ public class FoodDeliveryMain {
 			Manager manager = gsonReg.fromJson(reqBody, Manager.class);
 			manager.setRole("menadzer");
 			managerDAO.addManager(manager);
+			DAOUser user = new DAOUser();
+            user.setName(manager.getName());
+            user.setSurname(manager.getSurname());
+            user.setUsername(manager.getUsername());
+            user.setRole("menadzer");
+            user.setPoints(0);
+            userDAOus.add(user);
 
 			return true;
 			

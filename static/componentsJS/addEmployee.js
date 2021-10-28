@@ -55,7 +55,7 @@ Vue.component("add-employee", {
       
     },
     Word: function(value){
-       return /^[A-Z][a-zA-Z]*$/.test(value);
+       return /^[A-Z][a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/.test(value);
     },
 	myRestaurant: function(){
 	    var parameter = "username=" + this.username;

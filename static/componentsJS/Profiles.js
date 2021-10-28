@@ -57,6 +57,17 @@ Vue.component("profile", {
         },
         formSubmit: function(e){
             e.preventDefault();
+            if(!this.name || !this.surname || !this.username || !this.password  || !this.date || !this.gender){
+				this.showErrorMessage = true;
+				alert("Neophodno je uneti sve podatke!")
+				e.preventDefault();
+			}else if(!this.Word(this.name)){
+			    alert("Ime mora sadrati samo slova i veliko pocetno slovo!")
+			    e.preventDefault();
+			}else if(!this.Word(this.surname)){
+			    alert("Prezime mora sadrati samo slova i veliko pocetno slovo!")
+			    e.preventDefault();
+      		}else{
                 axios
                 .post('/updateProfile',{name: this.name, surname: this.surname, username : this.username, password: this.password,
                     birthDate : this.date, gender : this.gender}, {params:{username:this.username}})
@@ -67,6 +78,10 @@ Vue.component("profile", {
                 .catch((err) => {
                   console.log(err);
                 });
+             }
+        },
+    	Word: function(value){
+       		return /^[A-Z][a-zA-Z]+(?:[\s-][A-Z][a-zA-Z]+)*$/.test(value);
         },
 	    myRestaurant: function(){
 	    	var parameter = "username=" + this.username;

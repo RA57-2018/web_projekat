@@ -56,7 +56,7 @@ Vue.component("registration", {
       
     },
     Word: function(value){
-       return /^[A-Z][a-zA-Z]*$/.test(value);
+       return /^[A-Z][a-zA-Z]+(?:[\s-][A-Z][a-zA-Z]+)*$/.test(value);
       },
    },
    template: ` 

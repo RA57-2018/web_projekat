@@ -10,7 +10,6 @@ const OneRestaurant = { template: '<restaurant></restaurant>' }
 const AddArticle = { template: '<add-article></add-article>' }
 const OneArticle = { template: '<one-article></one-article>' }
 const Basket = { template: '<basket></basket>' }
-const Order = { template: '<order></order>' }
 const OrderTable = { template: '<ordertable></ordertable>' }
 const SuspiciousUser = { template: '<suspicioususers></suspicioususers>' }
 const ManagerOrders = { template: '<managerOrders></managerOrders>' }
@@ -35,7 +34,6 @@ const router = new VueRouter({
 	    { path: '/add-article', component: AddArticle},
 	    { path: '/oneArticle/:id', component: OneArticle},
 	    { path: '/basket', component: Basket},
-	    { path: '/order', component: Order},
 	    { path: '/ordertable', component: OrderTable},
 	    { path: '/suspicioususers', component: SuspiciousUser},
 	    { path: '/managerOrders', component: ManagerOrders},

@@ -1,7 +1,5 @@
 package beans;
 
-import java.util.ArrayList;
-
 public class Restaurant {
 
 	private int id;
@@ -10,7 +8,6 @@ public class Restaurant {
 	private int articles;
 	private String status;
 	private int location;
-	//private Location locations;
 	private String logo;
 	private String manager;
 	
@@ -59,15 +56,6 @@ public class Restaurant {
 	public void setArticals(int articles) {
 		this.articles = articles;
 	}
-	/*
-	public Location getLocations() {
-		return locations;
-	}
-
-	public void setLocations(Location locations) {
-		this.locations = locations;
-	}
-	*/
 	public int getArticles() {
 		return articles;
 	}

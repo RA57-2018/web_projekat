@@ -7,9 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import static java.util.Objects.isNull;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -83,20 +83,25 @@ public class DAOArticles {
 			e.printStackTrace();
 		}
 
-			for (Map.Entry<Integer, ArrayList<Artical>> entry : articles.entrySet()) {
-		        if(entry.getKey() == id) {	 
-		        	for(ArrayList<Artical> l : articles.values()) 
-		    		{		
-		        		for (Artical i : l) {
-		    		    	if(i.getRestaurant() == id) {
-		    		        	l.add(artical);	 
-		    		        	break;
-		    				}
-		    		      }
-		        	
-		    		}
-		        }
-		    }
+		int br=0;			
+	 
+	    for(ArrayList<Artical> l : articles.values()) {		
+	    	for (Artical i : l) {
+		    	if(i.getRestaurant() == id) {
+		    		 l.add(artical);	
+		    		 br++;
+		    		 break;
+		    	}
+	    	}
+	        	
+	    }
+	        
+	        
+	    if(br==0) {
+			ArrayList<Artical> article = new ArrayList<Artical>();
+			article.add(artical);
+			articles.put(id, article);			
+	    }	    
 		
     }
     

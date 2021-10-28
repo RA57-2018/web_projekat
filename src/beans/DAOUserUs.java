@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -21,7 +19,6 @@ public class DAOUserUs {
 	ArrayList<Administrator> administrators = new ArrayList<Administrator>();
 	ArrayList<Manager> managers = new ArrayList<Manager>();
 	ArrayList<Deliverer> deliverers = new ArrayList<Deliverer>();
-	private DAOBuyer b;
 	ArrayList<DAOUser> users = new ArrayList<DAOUser>();
 	private DAOBuyer bD;
 	private DAODeliverer dD;
@@ -251,5 +248,22 @@ public ArrayList<DAOUser> search(String searchName, String searchSurname, String
 		writer.flush();
 		writer.close();
 	}
+	
+	public void changeUser(String name, String surname, String username) {
+		for(int i=0; i<users.size(); i++) {			
+			if(users.get(i).getUsername().equals(username)) {				
+				users.get(i).setName(name);
+				users.get(i).setSurname(surname);;
+			}
+		}
+		
+		try {
+			writeUsers();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    }
 	
 }
