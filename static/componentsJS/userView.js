@@ -52,6 +52,9 @@ Vue.component("user-view", {
                 }
             }
         },
+    refresh(){
+        this.load();
+    	},
     load(){
     	axios.get('/users')
 		.then(response => {
@@ -385,7 +388,8 @@ Vue.component("user-view", {
                             <th>Uloga</th>
                             <th>Tip kupca</th>
                             <th>Sakupljeni bodovi</th>
-                            <th></th>
+                            <th>Blokiraj</th>
+                            <th>Obrisi</th>
                             
                         </tr>
                         <tr v-for="user in users">
@@ -399,6 +403,7 @@ Vue.component("user-view", {
                             <td v-if="user.role=='dostavljac'">&nbsp</td>
                             <td v-if="user.role=='menadzer'">&nbsp</td>
                       		<td v-if="user.role=='kupac' || user.role=='menadzer' || user.role=='dostavljac' "> <button v-on:click="block(user.username)">Blokiraj</button></td>
+                      		<td v-if="user.role=='kupac' || user.role=='menadzer' || user.role=='dostavljac' "> <button @click="Delete" :id="user.username">Obrisi</button></td>
                         </tr>
 
                     </table>

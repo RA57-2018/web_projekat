@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -75,22 +74,22 @@ public ArrayList<DAOUser> search(String searchName, String searchSurname, String
 		
 		if(users.get(i).getRole().equals("kupac")) {			
 			Buyer buyer = bD.findBuyerProfile(users.get(i).getUsername());
-			if(!buyer.isBlock() && !buyer.isBlocked()) {
+			if(!buyer.isBlock() && !buyer.isBlocked() && !buyer.isDeleted()) {
 				allUsers.add(users.get(i));
 			}
 		}else if(users.get(i).getRole().equals("menadzer")) {			
 			Manager manager = mD.findManagerProfile(users.get(i).getUsername());
-			if(!manager.isBlock()) {
+			if(!manager.isBlock() && !manager.isDeleted()) {
 				allUsers.add(users.get(i));
 			}
 		}else if(users.get(i).getRole().equals("administrator")) {			
 			Administrator admin = aD.findAdministratorProfile(users.get(i).getUsername());
-			if(!admin.isBlock()) {
+			if(!admin.isBlock() && !admin.isDeleted()) {
 				allUsers.add(users.get(i));
 			}
 		}else {			
 			Deliverer deliverer = dD.findDelivererProfile(users.get(i).getUsername());
-			if(!deliverer.isBlock()) {
+			if(!deliverer.isBlock() && !deliverer.isDeleted()) {
 				allUsers.add(users.get(i));
 			}
 		}

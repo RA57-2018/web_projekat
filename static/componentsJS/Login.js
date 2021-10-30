@@ -20,7 +20,7 @@ Vue.component("login", {
                     alert("Pogresno korisnicko ime ili lozinka!");                    
                 }else{
                 	if(JSON.parse(JSON.stringify(response.data))[0]==="blokiran"){
-                		alert("Nalog vam je blokiran!");
+                		alert("Nalog vam je blokiran ili obrisan!");
                 	}
                 	else{
                 		alert("Prijava uspesna!")

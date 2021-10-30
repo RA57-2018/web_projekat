@@ -47,6 +47,7 @@ import beans.Request;
 import beans.Restaurant;
 import beans.RestaurantDAO;
 import beans.User;
+import beans.UserType;
 import beans.DAORequest;
 
 public class FoodDeliveryMain {
@@ -78,7 +79,7 @@ public class FoodDeliveryMain {
 			String userN = " ";
 			ArrayList<String> response = new ArrayList<String>();
 			if(buyerDAO.findBuyer(name, pass) != null) {
-				if(!buyerDAO.findBuyer(name, pass).isDeleted() && !buyerDAO.findBuyer(name, pass).isBlock()) {
+				if(!buyerDAO.findBuyer(name, pass).isDeleted() && !buyerDAO.findBuyer(name, pass).isBlock() && !buyerDAO.findBuyer(name, pass).isBlocked()) {
 				    userN = name;
 					response.add(userN);
 					response.add("buyer");
@@ -412,22 +413,22 @@ public class FoodDeliveryMain {
 			for(int i=0; i<users.size(); i++) {				
 				if(users.get(i).getRole().equals("kupac")) {
 					Buyer b = buyerDAO.findBuyerProfile(users.get(i).getUsername());
-					if(!b.isBlock() && !b.isBlocked()) {
+					if(!b.isBlock() && !b.isBlocked() && !b.isDeleted()) {
 						retUsers.add(users.get(i));
 					}
 				}else if(users.get(i).getRole().equals("menadzer")) {					
 					Manager m = managerDAO.findManagerProfile(users.get(i).getUsername());
-					if(!m.isBlock()) {
+					if(!m.isBlock() && !m.isDeleted()) {
 						retUsers.add(users.get(i));
 					}
 				}else if(users.get(i).getRole().equals("administrator")) {					
 					Administrator a = administratorDAO.findAdministratorProfile(users.get(i).getUsername());
-					if(!a.isBlock()) {
+					if(!a.isBlock() && !a.isDeleted()) {
 						retUsers.add(users.get(i));
 					}
 				}else {
 					Deliverer d = delivererDAO.findDelivererProfile(users.get(i).getUsername());
-					if(!d.isBlock()) {
+					if(!d.isBlock() && !d.isDeleted()) {
 						retUsers.add(users.get(i));
 					}
 					
@@ -674,6 +675,28 @@ public class FoodDeliveryMain {
 			articlesInBasketDAO.writeArticleInBasket();
 			Buyer b = buyerDAO.findBuyerProfile(basket.getUser());
 			int points=(int) (basket.getPrice()/1000 * 133) + b.getPoints();
+			
+			if(points >= 500 && points < 750) {
+				UserType type = new UserType();
+				type.setType("bronzani");
+				type.setDiscount(3);
+				type.setScore(1000);
+				b.setType(type);
+			}else if(points >= 750 && points < 1000) {
+				UserType type = new UserType();
+				type.setType("srebrni");
+				type.setDiscount(5);
+				type.setScore(1000);
+				b.setType(type);
+			}else if(points >= 1000) {
+				UserType type = new UserType();
+				type.setType("zlatni");
+				type.setDiscount(10);
+				type.setScore(1000);
+				b.setType(type);
+			}
+			
+			
 			HashMap<String, Buyer> buyers = buyerDAO.getBuyers();
 			
 			double oldPrice = 0;
@@ -946,6 +969,32 @@ public class FoodDeliveryMain {
 			int points= b.getPoints() - (int)(o.getPrice()/1000 * 133*4);
 			if(points<0) {
 				points=0;
+			}
+			
+			if(points >= 500 && points < 750) {
+				UserType type = new UserType();
+				type.setType("bronzani");
+				type.setDiscount(3);
+				type.setScore(1000);
+				b.setType(type);
+			}else if(points >= 750 && points < 1000) {
+				UserType type = new UserType();
+				type.setType("srebrni");
+				type.setDiscount(5);
+				type.setScore(1000);
+				b.setType(type);
+			}else if(points >= 1000) {
+				UserType type = new UserType();
+				type.setType("zlatni");
+				type.setDiscount(10);
+				type.setScore(1000);
+				b.setType(type);
+			}else if(points < 500) {
+				UserType type = new UserType();
+				type.setType("normalan");
+				type.setDiscount(0);
+				type.setScore(1000);
+				b.setType(type);
 			}
 			
 			
